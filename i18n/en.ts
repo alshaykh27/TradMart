@@ -15,7 +15,12 @@ export const en: Dictionary = {
   products: {
     title: "Products",
     description: "Browse all the products available in the store.",
-    comingSoon: "Products will be displayed here soon.",
+    empty: "No products are currently available.",
+    back: "Back to products",
+    currency: "EGP",
+    notAvailable: "Currently unavailable",
+    notFoundTitle: "Product not found",
+    notFoundBody: "Sorry, we couldn't find this product.",
   },
   footer: {
     rights: "All rights reserved",

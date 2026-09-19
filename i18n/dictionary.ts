@@ -12,7 +12,12 @@ export type Dictionary = {
   products: {
     title: string;
     description: string;
-    comingSoon: string;
+    empty: string;
+    back: string;
+    currency: string;
+    notAvailable: string;
+    notFoundTitle: string;
+    notFoundBody: string;
   };
   footer: {
     rights: string;

@@ -15,7 +15,12 @@ export const ar: Dictionary = {
   products: {
     title: "المنتجات",
     description: "استعرض جميع المنتجات المتوفرة في المتجر.",
-    comingSoon: "سيتم عرض المنتجات هنا قريباً.",
+    empty: "لا توجد منتجات متاحة حالياً.",
+    back: "العودة إلى المنتجات",
+    currency: "ج.م",
+    notAvailable: "غير متوفر حالياً",
+    notFoundTitle: "المنتج غير موجود",
+    notFoundBody: "عذراً، لم نتمكن من العثور على هذا المنتج.",
   },
   footer: {
     rights: "جميع الحقوق محفوظة",
