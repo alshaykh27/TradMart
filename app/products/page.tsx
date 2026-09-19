@@ -17,7 +17,7 @@ export default async function ProductsPage() {
   const { data, error } = await client
     .from("products")
     .select("id, name, price, image_url, stock")
-    .eq("status", "active")
+    .eq("is_published", true)
     .order("updated_at", { ascending: false })
     .limit(96);
 

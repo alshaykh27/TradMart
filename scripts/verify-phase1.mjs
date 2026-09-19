@@ -65,6 +65,7 @@ async function main() {
           price: 12.5,
           stock: 3,
           status: "active",
+          is_published: true,
         },
         { onConflict: "safka_product_id" },
       )
@@ -75,20 +76,23 @@ async function main() {
     productId = inserted?.id;
     check("inserted product has a uuid id", typeof productId === "string" && productId.length === 36);
 
-    // 2. Anon can read the active product (RLS select policy).
-    const { count: anonActiveCount } = await anon
+    // 2. Anon can read the published product (RLS select policy).
+    const { count: anonPublishedCount } = await anon
       .from("products")
-      .select("*", { count: "exact", head: true })
+      .select("id", { count: "exact", head: true })
       .eq("safka_product_id", TEST_SKU);
-    check("anon can read an active product", anonActiveCount === 1, `count=${anonActiveCount}`);
+    check("anon can read a published product", anonPublishedCount === 1, `count=${anonPublishedCount}`);
 
-    // 3. Anon cannot read an inactive product (RLS filters it out).
-    await admin.from("products").update({ status: "inactive" }).eq("id", productId);
-    const { count: anonInactiveCount } = await anon
+    // 3. Anon cannot read an unpublished product (RLS filters it out).
+    await admin
       .from("products")
-      .select("*", { count: "exact", head: true })
+      .update({ status: "inactive", is_published: false })
+      .eq("id", productId);
+    const { count: anonUnpublishedCount } = await anon
+      .from("products")
+      .select("id", { count: "exact", head: true })
       .eq("safka_product_id", TEST_SKU);
-    check("anon cannot read an inactive product", anonInactiveCount === 0, `count=${anonInactiveCount}`);
+    check("anon cannot read an unpublished product", anonUnpublishedCount === 0, `count=${anonUnpublishedCount}`);
 
     // 4. updated_at trigger fires on update.
     await admin.from("products").update({ status: "active", name: "منتج اختبار محدث" }).eq("id", productId);

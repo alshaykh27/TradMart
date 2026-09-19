@@ -20,7 +20,7 @@ export async function generateMetadata({
     .from("products")
     .select("name")
     .eq("id", id)
-    .eq("status", "active")
+    .eq("is_published", true)
     .maybeSingle();
 
   return {
@@ -36,9 +36,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const { data: product, error } = await client
     .from("products")
-    .select("*")
+    .select("id, name, description, price, image_url, stock, is_published")
     .eq("id", id)
-    .eq("status", "active")
+    .eq("is_published", true)
     .maybeSingle();
 
   if (error || !product) {

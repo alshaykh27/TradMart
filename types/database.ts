@@ -19,6 +19,9 @@ export type Database = {
           image_url: string | null;
           stock: number;
           status: string;
+          is_published: boolean;
+          cost_price: number | null;
+          commission: number | null;
           created_at: string;
           updated_at: string;
         };
@@ -31,6 +34,9 @@ export type Database = {
           image_url?: string | null;
           stock?: number;
           status?: string;
+          is_published?: boolean;
+          cost_price?: number | null;
+          commission?: number | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -43,6 +49,9 @@ export type Database = {
           image_url?: string | null;
           stock?: number;
           status?: string;
+          is_published?: boolean;
+          cost_price?: number | null;
+          commission?: number | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -135,6 +144,24 @@ export type Database = {
           facebook_pixel_id?: string | null;
           created_at?: string;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      webhook_logs: {
+        Row: {
+          id: number;
+          payload: Json;
+          received_at: string;
+        };
+        Insert: {
+          id?: number;
+          payload: Json;
+          received_at?: string;
+        };
+        Update: {
+          id?: number;
+          payload?: Json;
+          received_at?: string;
         };
         Relationships: [];
       };

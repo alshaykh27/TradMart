@@ -68,6 +68,7 @@ function mapProduct(product: SafkaProduct) {
     image_url: product.image ?? product.images?.[0] ?? null,
     stock: available ? 1 : 0,
     status: product.is_active ? "active" : "inactive",
+    is_published: false,
   };
 }
 

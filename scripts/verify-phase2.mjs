@@ -82,31 +82,30 @@ async function main() {
     `rows=${ids?.length ?? 0} unique=${uniqueIds.size}`,
   );
 
-  // 4. Active products exist and are anon-readable (RLS).
-  const { count: activeCount, error: activeError } = await admin
+  // 4. Published products and anon visibility match (RLS).
+  const { count: publishedCount, error: publishedError } = await admin
     .from("products")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "active");
-  check("active products exist", !activeError && activeCount > 0, `active=${activeCount}`);
+    .select("id", { count: "exact", head: true })
+    .eq("is_published", true);
+  check("published products can be counted", !publishedError, publishedError?.message);
 
   const { count: anonVisibleCount, error: anonError } = await anon
     .from("products")
-    .select("*", { count: "exact", head: true });
+    .select("id", { count: "exact", head: true });
   check(
-    "anon sees exactly the active products (RLS)",
-    !anonError && anonVisibleCount === activeCount,
-    `anon=${anonVisibleCount} active=${activeCount}`,
+    "anon sees exactly the published products (RLS)",
+    !anonError && anonVisibleCount === publishedCount,
+    `anon=${anonVisibleCount} published=${publishedCount}`,
   );
 
-  // 5. A sample active product has the fields the storefront needs.
+  // 5. A sample product has the fields the storefront needs.
   const { data: sample, error: sampleError } = await admin
     .from("products")
     .select("safka_product_id, name, price, image_url, stock, status")
-    .eq("status", "active")
     .limit(1)
     .single();
   check(
-    "sample active product has name, price, image",
+    "sample product has name, price, image",
     !sampleError &&
       typeof sample?.name === "string" &&
       sample.name.length > 0 &&
