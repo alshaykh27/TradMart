@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "verify:phase1": "node --env-file=.env.local scripts/verify-phase1.mjs"
+    "verify:phase1": "node --env-file=.env.local scripts/verify-phase1.mjs",
+    "sync:products": "node --env-file=.env.local scripts/sync-safka-products.ts",
+    "verify:phase2": "node --env-file=.env.local scripts/verify-phase2.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
