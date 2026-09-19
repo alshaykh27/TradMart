@@ -39,9 +39,14 @@ alter table public.webhook_logs enable row level security;
 revoke all on public.webhook_logs from anon, authenticated;
 
 -- ---------------------------------------------------------------------------
--- Merchant cost/commission are secrets: hide the columns from browser roles.
+-- Merchant cost/commission are secrets: grant the browser roles only the
+-- columns the storefront needs. (A column-level REVOKE alone does not block a
+-- table-level SELECT grant, so revoke the table grant and re-grant columns.)
 -- ---------------------------------------------------------------------------
-revoke select (cost_price) on public.products from anon, authenticated;
-revoke select (commission) on public.products from anon, authenticated;
+revoke select on public.products from anon, authenticated;
+grant select (
+  id, safka_product_id, name, description, price, image_url, stock, status,
+  is_published, created_at, updated_at
+) on public.products to anon, authenticated;
 
 notify pgrst, 'reload schema';
