@@ -1,23 +1,37 @@
 /**
  * Defensive parser for Safka "Product Hook" webhook payloads.
  *
- * Safka's official docs live inside the merchant dashboard and are not
- * publicly fetchable, so this maps the payload leniently: any of several
- * common key names per field, plus a scan of `properties` for cost /
- * commission / stock when Safka sends them as key/value properties. Numbers
- * are coerced and clamped; only http(s) image URLs are kept. The route
- * handler sanitizes the description before it is stored or rendered.
+ * Learned from a real captured payload:
+ *   { "product": { "_id", "name", "barcode", "sale_price", "images[]",
+ *     "image", "description", "note", "media_url", "properties[]",
+ *     "is_active", "faqs", "commission" } }
+ *
+ * Semantics (verified against the Safka Public API getProduct):
+ *   - The top-level `sale_price` in the hook = cost + merchant commission
+ *     (display price). The API's own `sale_price` field returns the COST
+ *     (e.g. hook 540 - commission 50 = API 490).
+ *   - `properties[].value` is the available stock (no separate stock field
+ *     exists in the API product shape).
+ *   - `commission` is the merchant's per-unit commission.
+ *   - Multiple `properties` entries are variants and are stored as JSON.
+ *
+ * The route handler sanitizes the description before it is stored/rendered.
  */
 
 export type NormalizedProductHook = {
   safka_product_id: string;
+  barcode: string | null;
   name: string;
   description: string | null;
   image_url: string | null;
+  images: string[];
   price: number;
   cost_price: number | null;
   commission: number | null;
   stock: number;
+  status: "active" | "inactive";
+  variants: Record<string, string | number | boolean | null>[] | null;
+  media_url: string | null;
 };
 
 const MAX_AMOUNT = 9_999_999_900;
@@ -67,13 +81,26 @@ function toStock(value: unknown): number {
   return Math.max(0, Math.trunc(amount));
 }
 
-function firstImage(value: unknown): string | null {
-  const urls = Array.isArray(value) ? value : [value];
-  for (const item of urls) {
-    const url = firstText(item, ["url", "src", "image"]);
-    if (url && /^https?:\/\/.+/.test(url)) return url;
+function asUrl(value: unknown): string | null {
+  const picked = isRecordish(value) ? pick(value, ["url", "src", "image"]) : value;
+  const text = typeof picked === "string" ? picked.trim() : "";
+  if (!text || !/^https?:\/\/.+/.test(text)) return null;
+  return text;
+}
+
+function collectImages(source: Recordish): string[] {
+  const out: string[] = [];
+  const add = (url: string | null) => {
+    if (url && !out.includes(url)) out.push(url);
+  };
+  const gallery = pick(source, ["images", "gallery"]);
+  if (Array.isArray(gallery)) {
+    for (const item of gallery) add(asUrl(item));
+  } else {
+    add(asUrl(gallery));
   }
-  return null;
+  add(asUrl(pick(source, ["image", "main_image", "thumbnail"])));
+  return out;
 }
 
 function fromProperties(source: Recordish, needles: string[]): unknown {
@@ -90,33 +117,74 @@ function fromProperties(source: Recordish, needles: string[]): unknown {
   return undefined;
 }
 
+function readProperties(source: Recordish): Recordish[] {
+  const raw = pick(source, ["properties", "variants", "options"]);
+  return Array.isArray(raw)
+    ? (raw.filter((entry): entry is Recordish => isRecordish(entry)))
+    : [];
+}
+
 export function normalizeProductHook(payload: unknown): NormalizedProductHook | null {
   if (!isRecordish(payload)) return null;
   const source = isRecordish(payload.product) ? (payload.product as Recordish) : payload;
 
-  const id = firstText(source, ["id", "code", "_id", "product_id", "productId", "sku", "sku_code"]);
+  const barcode = firstText(source, ["barcode"]);
+  const id =
+    firstText(source, ["id", "code", "_id", "product_id", "productId", "sku", "sku_code"]) ??
+    barcode;
   if (!id) return null;
 
   const name = firstText(source, ["name", "title", "product_name"]) ?? "Safka product";
   const description = firstText(source, ["description", "details", "full_description"]);
+  const media_url = firstText(source, ["media_url", "mediaUrl", "drive_url"]);
 
-  const image_url = firstImage(pick(source, ["images", "image", "main_image", "media_url", "thumbnail"]));
+  const images = collectImages(source);
+  const image_url = images[0] ?? null;
 
-  const cost = toAmount(
-    pick(source, ["cost_price", "costPrice", "purchase_price", "purchasePrice", "original_price", "originalPrice", "cost"]) ??
-      fromProperties(source, ["cost", "purchase", "original"]),
+  const properties = readProperties(source);
+  const isActive = source.is_active !== false;
+
+  let stock = 0;
+  if (properties.length > 0) {
+    for (const entry of properties) {
+      if (entry.is_available !== false) stock += toStock(entry.value);
+    }
+  } else {
+    stock = toStock(
+      pick(source, ["stock", "quantity", "available_quantity", "availableQuantity", "in_stock", "remaining"]),
+    );
+  }
+  const allPropertiesAvailable =
+    properties.length === 0 || properties.some((entry) => entry.is_available !== false);
+
+  const variants: Record<string, string | number | boolean | null>[] | null =
+    properties.length > 1 ? properties.map((entry) => ({
+      _id: firstText(entry, ["_id", "id"]),
+      key: firstText(entry, ["key", "name", "label"]),
+      value: toStock(entry.value),
+      min: toAmount(entry.min),
+      sale_price: toAmount(entry.sale_price),
+      is_available: entry.is_available !== false,
+    })) : null;
+
+  const suggested = toAmount(
+    pick(source, ["sale_price", "salePrice", "suggested_price", "suggestedPrice", "selling_price", "price", "list_price"]),
   );
   const commission = toAmount(
     pick(source, ["commission", "commission_amount", "commissionAmount", "referral_fee", "referralFee"]) ??
       fromProperties(source, ["commission", "referral"]),
   );
-  const suggested = toAmount(
-    pick(source, ["sale_price", "salePrice", "suggested_price", "suggestedPrice", "selling_price", "price", "list_price"]),
+  const explicitCost = toAmount(
+    pick(source, ["cost_price", "costPrice", "purchase_price", "purchasePrice", "original_price", "originalPrice", "cost"]) ??
+      fromProperties(source, ["cost", "purchase", "original"]),
   );
-  const stock = toStock(
-    pick(source, ["stock", "quantity", "available_quantity", "availableQuantity", "in_stock", "remaining"]) ??
-      fromProperties(source, ["stock", "quantity"]),
-  );
+
+  let cost: number | null;
+  if (suggested !== null && commission !== null) {
+    cost = Math.max(0, suggested - commission);
+  } else {
+    cost = explicitCost;
+  }
 
   let price: number;
   if (cost !== null && commission !== null) price = cost + commission;
@@ -127,12 +195,17 @@ export function normalizeProductHook(payload: unknown): NormalizedProductHook | 
 
   return {
     safka_product_id: id.slice(0, 200),
+    barcode,
     name: name.slice(0, 500),
     description,
     image_url,
+    images,
     price: clampAmount(Math.max(0, price)),
     cost_price: cost === null ? null : clampAmount(cost),
     commission: commission === null ? null : clampAmount(commission),
-    stock,
+    stock: isActive && allPropertiesAvailable ? stock : 0,
+    status: isActive ? "active" : "inactive",
+    variants,
+    media_url,
   };
 }

@@ -13,10 +13,14 @@ export type Database = {
         Row: {
           id: string;
           safka_product_id: string;
+          barcode: string | null;
           name: string;
           description: string | null;
           price: number;
           image_url: string | null;
+          images: Json | null;
+          variants: Json | null;
+          media_url: string | null;
           stock: number;
           status: string;
           is_published: boolean;
@@ -28,10 +32,14 @@ export type Database = {
         Insert: {
           id?: string;
           safka_product_id: string;
-          name: string;
+          barcode?: string | null;
+          name?: string;
           description?: string | null;
           price?: number;
           image_url?: string | null;
+          images?: Json | null;
+          variants?: Json | null;
+          media_url?: string | null;
           stock?: number;
           status?: string;
           is_published?: boolean;
@@ -43,10 +51,14 @@ export type Database = {
         Update: {
           id?: string;
           safka_product_id?: string;
+          barcode?: string | null;
           name?: string;
           description?: string | null;
           price?: number;
           image_url?: string | null;
+          images?: Json | null;
+          variants?: Json | null;
+          media_url?: string | null;
           stock?: number;
           status?: string;
           is_published?: boolean;

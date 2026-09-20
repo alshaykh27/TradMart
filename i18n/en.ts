@@ -21,6 +21,9 @@ export const en: Dictionary = {
     notAvailable: "Currently unavailable",
     notFoundTitle: "Product not found",
     notFoundBody: "Sorry, we couldn't find this product.",
+    gallery: "Image gallery",
+    variants: "Available options",
+    available: "In stock",
   },
   footer: {
     rights: "All rights reserved",

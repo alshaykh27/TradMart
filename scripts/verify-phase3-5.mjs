@@ -34,6 +34,7 @@ const admin = createClient(url, serviceRoleKey, authOptions);
 const anon = createClient(url, anonKey, authOptions);
 
 const TEST_SKU = "__phase3-5_verification__";
+const TEST_BARCODE = "TMP3P5-BARCODE-1";
 let failures = 0;
 
 function check(name, condition, detail = "") {
@@ -68,6 +69,9 @@ async function main() {
           stock: 1,
           status: "active",
           is_published: false,
+          barcode: TEST_BARCODE,
+          images: ["https://example.com/a.jpg", "https://example.com/b.jpg"],
+          media_url: "https://example.com/internal",
         },
         { onConflict: "safka_product_id" },
       )
@@ -103,6 +107,24 @@ async function main() {
       .select("id, commission")
       .eq("safka_product_id", TEST_SKU);
     check("anon cannot select commission", anonCommissionError !== null, anonCommissionError?.message);
+
+    const { error: anonBarcodeError } = await anon
+      .from("products")
+      .select("id, barcode")
+      .eq("safka_product_id", TEST_SKU);
+    check("anon cannot select barcode", anonBarcodeError !== null, anonBarcodeError?.message);
+
+    const { error: anonMediaUrlError } = await anon
+      .from("products")
+      .select("id, media_url")
+      .eq("safka_product_id", TEST_SKU);
+    check("anon cannot select media_url", anonMediaUrlError !== null, anonMediaUrlError?.message);
+
+    const { error: anonGalleryError } = await anon
+      .from("products")
+      .select("id, images, variants")
+      .eq("safka_product_id", TEST_SKU);
+    check("anon can select images and variants", anonGalleryError === null, anonGalleryError?.message);
 
     const { data: adminRow, error: adminRowError } = await admin
       .from("products")

@@ -21,6 +21,9 @@ export const ar: Dictionary = {
     notAvailable: "غير متوفر حالياً",
     notFoundTitle: "المنتج غير موجود",
     notFoundBody: "عذراً، لم نتمكن من العثور على هذا المنتج.",
+    gallery: "معرض الصور",
+    variants: "الخيارات المتاحة",
+    available: "متوفر",
   },
   footer: {
     rights: "جميع الحقوق محفوظة",

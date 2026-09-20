@@ -18,6 +18,9 @@ export type Dictionary = {
     notAvailable: string;
     notFoundTitle: string;
     notFoundBody: string;
+    gallery: string;
+    variants: string;
+    available: string;
   };
   footer: {
     rights: string;
