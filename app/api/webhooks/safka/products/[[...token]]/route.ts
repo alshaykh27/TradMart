@@ -7,19 +7,49 @@ import { sanitizeHtmlDescription } from "@/lib/sanitize";
 
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
-function tokenMatches(token: string | undefined, expected: string | undefined): boolean {
-  if (!token || !expected || token.length !== expected.length) return false;
-  return timingSafeEqual(Buffer.from(token), Buffer.from(expected));
+/**
+ * Compare in constant time. Whitespace is trimmed so a trailing newline/space
+ * in the Safka-side URL never causes a spurious 401.
+ */
+function secretMatches(token: string | undefined, expected: string | undefined): boolean {
+  if (!token || !expected) return false;
+  const candidate = token.trim();
+  if (candidate.length !== expected.length) return false;
+  return timingSafeEqual(Buffer.from(candidate), Buffer.from(expected));
+}
+
+/**
+ * Accept the token either as a query string (?token=...) or as a path segment
+ * (/api/webhooks/safka/products/<token>). The path segment is URL-decoded
+ * before the constant-time compare; the query value is already decoded by
+ * URLSearchParams.
+ */
+async function extractToken(
+  request: Request,
+  segments: string[] | undefined,
+): Promise<string | undefined> {
+  const queryToken = new URL(request.url).searchParams.get("token");
+  if (queryToken) return queryToken;
+
+  const raw = segments && segments.length > 0 ? segments[0] : undefined;
+  if (!raw) return undefined;
+
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
 }
 
 function toJsonArray(value: string[] | null): Json | null {
   return value && value.length > 0 ? (value as Json) : null;
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request, context: { params: Promise<{ token?: string[] }> }) {
   try {
-    const token = new URL(request.url).searchParams.get("token") ?? undefined;
-    if (!tokenMatches(token, WEBHOOK_SECRET)) {
+    const { token: segments } = await context.params;
+    const token = await extractToken(request, segments);
+    if (!secretMatches(token, WEBHOOK_SECRET)) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
     }
 
