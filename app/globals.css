@@ -5,10 +5,104 @@
     "Segoe UI", Tahoma, sans-serif;
 }
 
+@theme {
+  /* TradeMart design tokens — general-store friendly, category-agnostic */
+  --color-brand: #ff6b35;
+  --color-brand-dark: #e14f1d;
+  --color-brand-soft: #fff0e6;
+  --color-navy: #0f172a;
+  --color-navy-soft: #334155;
+  --color-cream: #fff9f5;
+  --color-success: #10b981;
+
+  --radius-card: 1.375rem;
+
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+  --shadow-lift: 0 12px 32px -12px rgb(15 23 42 / 0.22);
+  --shadow-glow: 0 10px 30px -8px rgb(255 107 53 / 0.55);
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-float-slow: float 11s ease-in-out infinite;
+  --animate-mesh: mesh 16s ease-in-out infinite alternate;
+  --animate-shimmer: shimmer 1.8s linear infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes mesh {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-4%, 6%) scale(1.12);
+  }
+  100% {
+    transform: translate(5%, -4%) scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    rgb(229 231 235 / 0.9) 40%,
+    rgb(255 255 255 / 0.95) 50%,
+    rgb(229 231 235 / 0.9) 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+/* Soft radial mesh used behind the hero */
+.mesh-hero {
+  background:
+    radial-gradient(60% 55% at 78% 18%, rgb(255 107 53 / 0.22), transparent 62%),
+    radial-gradient(52% 48% at 18% 22%, rgb(16 185 129 / 0.14), transparent 60%),
+    radial-gradient(70% 60% at 50% 105%, rgb(15 23 42 / 0.06), transparent 70%);
+}
+
+/* Ground glass panel */
+.glass {
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Respect reduced motion globally (CSS-driven motion included) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

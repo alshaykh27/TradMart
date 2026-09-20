@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import { defaultLocale, direction } from "@/i18n/config";
+import Providers from "@/components/Providers";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -18,6 +19,12 @@ export const metadata: Metadata = {
     "TradeMart — متجرك الإلكتروني للتسوّق أونلاين بأسعار تنافسية وتوصيل سريع.",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#ff6b35",
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -25,8 +32,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       dir={direction[defaultLocale]}
       className={`${cairo.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-slate-50 text-slate-900">
-        {children}
+      <body
+        className="flex min-h-full flex-col bg-cream text-navy"
+        suppressHydrationWarning
+      >
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
