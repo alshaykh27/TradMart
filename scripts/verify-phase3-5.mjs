@@ -52,8 +52,8 @@ async function main() {
   console.log("\nTradeMart Phase 3.5 verification\n");
 
   check(
-    "WEBHOOK_SECRET is a 64-char hex token",
-    typeof webhookSecret === "string" && /^[0-9a-f]{64}$/.test(webhookSecret),
+    "WEBHOOK_SECRET is a 48-char URL-safe token",
+    typeof webhookSecret === "string" && /^[A-Za-z0-9_-]{48}$/.test(webhookSecret),
     `length=${webhookSecret?.length ?? 0}`,
   );
 

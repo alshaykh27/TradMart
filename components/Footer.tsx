@@ -46,6 +46,11 @@ export default function Footer({ dict }: { dict: Dictionary }) {
                 {dict.nav.products}
               </Link>
             </li>
+            <li>
+              <Link href="/cart" className="text-cream/85 transition-colors hover:text-brand">
+                {dict.nav.cart}
+              </Link>
+            </li>
           </ul>
         </nav>
 

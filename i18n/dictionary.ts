@@ -73,6 +73,49 @@ export type Dictionary = {
       returns: string;
     };
   };
+  cart: {
+    title: string;
+    subtitle: string;
+    emptyTitle: string;
+    emptyHint: string;
+    browse: string;
+    loading: string;
+    unavailable: string;
+    decrease: string;
+    increase: string;
+    remove: string;
+    subtotal: string;
+    shipping: string;
+    total: string;
+  };
+  checkout: {
+    title: string;
+    subtitle: string;
+    name: string;
+    namePlaceholder: string;
+    phone: string;
+    phonePlaceholder: string;
+    country: string;
+    countryPlaceholder: string;
+    city: string;
+    cityPlaceholder: string;
+    governorate: string;
+    governoratePlaceholder: string;
+    address: string;
+    addressPlaceholder: string;
+    codNote: string;
+    placeOrder: string;
+    placing: string;
+    invalidDetails: string;
+    genericError: string;
+  };
+  order: {
+    successTitle: string;
+    successBody: string;
+    orderNumber: string;
+    paymentNote: string;
+    continue: string;
+  };
   footer: {
     blurb: string;
     quick: string;

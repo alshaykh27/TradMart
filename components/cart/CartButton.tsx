@@ -9,7 +9,7 @@ export default function CartButton({ dict }: { dict: Dictionary }) {
 
   return (
     <motion.a
-      href="/products"
+      href="/cart"
       aria-label={dict.nav.cart}
       className="relative grid size-10 place-items-center rounded-full text-slate-700 transition-colors hover:bg-brand-soft hover:text-brand"
       whileTap={{ scale: 0.92 }}

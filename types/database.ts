@@ -69,6 +69,30 @@ export type Database = {
         };
         Relationships: [];
       };
+      governorate_pricing: {
+        Row: {
+          governorate_id: string;
+          name_ar: string;
+          name_en: string;
+          safka_shipping_fee: number;
+          updated_at: string;
+        };
+        Insert: {
+          governorate_id: string;
+          name_ar: string;
+          name_en?: string;
+          safka_shipping_fee: number;
+          updated_at?: string;
+        };
+        Update: {
+          governorate_id?: string;
+          name_ar?: string;
+          name_en?: string;
+          safka_shipping_fee?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       orders: {
         Row: {
           id: string;
@@ -77,7 +101,11 @@ export type Database = {
           phone: string;
           country: string;
           city: string;
+          governorate: string | null;
+          shipping_governorate: string | null;
           address: string;
+          subtotal: number;
+          shipping_fee: number;
           total: number;
           status: string;
           created_at: string;
@@ -88,9 +116,13 @@ export type Database = {
           safka_order_id?: string | null;
           customer_name: string;
           phone: string;
-          country: string;
+country: string;
           city: string;
+          governorate?: string | null;
+          shipping_governorate?: string | null;
           address: string;
+          subtotal?: number;
+          shipping_fee?: number;
           total?: number;
           status?: string;
           created_at?: string;
@@ -103,7 +135,10 @@ export type Database = {
           phone?: string;
           country?: string;
           city?: string;
+          governorate?: string | null;
           address?: string;
+          subtotal?: number;
+          shipping_fee?: number;
           total?: number;
           status?: string;
           created_at?: string;
@@ -140,6 +175,7 @@ export type Database = {
           id: string;
           store_name: string;
           facebook_pixel_id: string | null;
+          shipping_markup: number;
           created_at: string;
           updated_at: string;
         };
@@ -147,6 +183,7 @@ export type Database = {
           id?: string;
           store_name?: string;
           facebook_pixel_id?: string | null;
+          shipping_markup?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -154,6 +191,7 @@ export type Database = {
           id?: string;
           store_name?: string;
           facebook_pixel_id?: string | null;
+          shipping_markup?: number;
           created_at?: string;
           updated_at?: string;
         };

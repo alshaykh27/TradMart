@@ -63,6 +63,13 @@ export default function MobileMenu({ dict }: { dict: Dictionary }) {
               >
                 {dict.nav.products}
               </Link>
+              <Link
+                href="/cart"
+                onClick={() => setOpen(false)}
+                className="block rounded-xl px-4 py-3 text-base font-semibold text-slate-800 transition-colors hover:bg-brand-soft hover:text-brand"
+              >
+                {dict.nav.cart}
+              </Link>
             </nav>
           </motion.div>
         )}

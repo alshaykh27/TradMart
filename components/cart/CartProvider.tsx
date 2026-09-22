@@ -17,6 +17,8 @@ type CartContextValue = {
   items: CartItem[];
   count: number;
   add: (productId: string, qty?: number) => void;
+  setQty: (productId: string, qty: number) => void;
+  remove: (productId: string) => void;
   reset: () => void;
 };
 
@@ -104,6 +106,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
           }
           return [...prev, { productId, qty }];
         });
+      },
+      setQty: (productId: string, qty: number) => {
+        applyUpdate((prev) => {
+          if (qty <= 0) return prev.filter((item) => item.productId !== productId);
+          return prev.map((item) =>
+            item.productId === productId ? { ...item, qty } : item,
+          );
+        });
+      },
+      remove: (productId: string) => {
+        applyUpdate((prev) => prev.filter((item) => item.productId !== productId));
       },
       reset: () => applyUpdate(() => EMPTY),
     }),
