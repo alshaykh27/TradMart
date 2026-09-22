@@ -6,6 +6,7 @@ import { computeOrderTotals, roundMoney } from "./pricing";
 import { buildOrderLines, OrderValidationError } from "./lines";
 import { resolveSafkaPropertyId } from "@/lib/safka/order-payload";
 import { sendSafkaOrder } from "@/lib/safka/orders";
+import { sendNewOrderTelegramAlert } from "@/lib/notify/telegram";
 import type { SafkaOrderLineInput } from "@/lib/safka/order-payload";
 
 export { OrderValidationError } from "./lines";
@@ -185,9 +186,27 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
     throw new Error("Could not save order items");
   }
 
-  // Best-effort forwarding to Safka, gated by SAFKA_ORDERS_ENABLED (default
-  // off). Never fails the local order; when disabled the exact payload that
-  // would be sent is logged instead of being transmitted.
+  // New-order alert (Telegram) so the merchant knows to open /admin and send
+  // this order to Safka manually. Best-effort — never fails the checkout, and
+  // skipped (with a log) when Telegram is not configured.
+  try {
+    await sendNewOrderTelegramAlert({
+      orderId,
+      customerName,
+      phone,
+      governorate: governorateName,
+      city,
+      total: totals.total,
+    });
+  } catch {
+    // Alerts are best-effort; the local order is already persisted.
+  }
+
+  // Best-effort forwarding to Safka. The checkout path (mode "checkout") is
+  // deliberately gated on BOTH SAFKA_ORDERS_ENABLED and SAFKA_AUTO_FORWARD, so
+  // enabling the admin's manual "إرسال إلى سافكا" button can never cause
+  // automatic sends. Never fails the local order; when not allowed, the exact
+  // payload that would be sent is logged (no secrets).
   const productById = new Map((products ?? []).map((product) => [product.id, product]));
   const safkaLines: SafkaOrderLineInput[] = rows.map((row) => {
     const product = productById.get(row.product_id);
@@ -200,16 +219,19 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
   });
 
   try {
-    const outcome = await sendSafkaOrder({
-      clientName: customerName,
-      phone,
-      address,
-      city,
-      shippingGovernorate,
-      total: totals.subtotal,
-      note: "",
-      lines: safkaLines,
-    });
+    const outcome = await sendSafkaOrder(
+      {
+        clientName: customerName,
+        phone,
+        address,
+        city,
+        shippingGovernorate,
+        total: totals.subtotal,
+        note: "",
+        lines: safkaLines,
+      },
+      { mode: "checkout" },
+    );
     if (outcome.sent && outcome.safkaOrderId) {
       await admin
         .from("orders")
