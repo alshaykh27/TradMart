@@ -219,24 +219,37 @@ country: string;
         Row: {
           id: string;
           store_name: string;
-          facebook_pixel_id: string | null;
           shipping_markup: number;
+          /** Public. Renamed from facebook_pixel_id in Phase 8. */
+          meta_pixel_id: string | null;
+          /** Server-only. Never leaves the server. */
+          meta_capi_token: string | null;
+          /** Public. */
+          tiktok_pixel_id: string | null;
+          /** Server-only. Never leaves the server. */
+          tiktok_api_token: string | null;
           created_at: string;
           updated_at: string;
         };
         Insert: {
           id?: string;
           store_name?: string;
-          facebook_pixel_id?: string | null;
           shipping_markup?: number;
+          meta_pixel_id?: string | null;
+          meta_capi_token?: string | null;
+          tiktok_pixel_id?: string | null;
+          tiktok_api_token?: string | null;
           created_at?: string;
           updated_at?: string;
         };
         Update: {
           id?: string;
           store_name?: string;
-          facebook_pixel_id?: string | null;
           shipping_markup?: number;
+          meta_pixel_id?: string | null;
+          meta_capi_token?: string | null;
+          tiktok_pixel_id?: string | null;
+          tiktok_api_token?: string | null;
           created_at?: string;
           updated_at?: string;
         };

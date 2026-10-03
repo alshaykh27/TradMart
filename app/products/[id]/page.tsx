@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import ProductGallery from "@/components/ProductGallery";
 import OrderNowButton from "@/components/OrderNowButton";
+import TrackViewContent from "@/components/marketing/TrackViewContent";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeHtmlDescription } from "@/lib/sanitize";
 import { defaultLocale, getDictionary } from "@/i18n";
@@ -105,6 +106,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <Header dict={dict} />
 
+      <TrackViewContent
+        productId={product.id}
+        productName={product.name}
+        price={Number(product.price)}
+      />
+
       <main className="flex-1 pb-28 lg:pb-0">
         <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
           <nav aria-label={dict.products.title}>
@@ -154,12 +161,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <OrderNowButton productId={product.id} dict={dict} full={false} />
+                <OrderNowButton
+                  productId={product.id}
+                  dict={dict}
+                  full={false}
+                  productName={product.name}
+                  price={Number(product.price)}
+                />
                 <OrderNowButton
                   productId={product.id}
                   dict={dict}
                   variant="ghost"
                   full={false}
+                  productName={product.name}
+                  price={Number(product.price)}
                 />
               </div>
 
@@ -284,7 +299,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </span>
           </p>
           <div className="flex-1">
-            <OrderNowButton productId={product.id} dict={dict} full />
+            <OrderNowButton
+              productId={product.id}
+              dict={dict}
+              full
+              productName={product.name}
+              price={Number(product.price)}
+            />
           </div>
         </div>
       </div>

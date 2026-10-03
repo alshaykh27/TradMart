@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { useCart } from "@/components/cart/CartProvider";
+import { trackMarketingEvent } from "@/lib/marketing/browser";
 import type { Dictionary } from "@/i18n";
 
 type CardProduct = {
@@ -42,6 +43,16 @@ export default function ProductCard({
   const { add } = useCart();
   const reducedMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
+
+  function handleAddToCart() {
+    add(product.id, 1);
+    trackMarketingEvent("AddToCart", {
+      contentIds: [product.id],
+      contentNames: [product.name],
+      value: Number(product.price),
+      numItems: 1,
+    });
+  }
 
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
@@ -132,8 +143,8 @@ export default function ProductCard({
           <motion.button
             type="button"
             whileTap={{ scale: 0.96 }}
-            onClick={() => add(product.id, 1)}
-            disabled={unavailable}
+onClick={handleAddToCart}
+              disabled={unavailable}
             className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-navy py-2.5 text-sm font-bold text-white transition-colors hover:bg-brand disabled:cursor-not-allowed disabled:bg-slate-300"
           >
             <svg

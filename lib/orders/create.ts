@@ -1,4 +1,5 @@
 import "server-only";
+import { randomUUID } from "node:crypto";
 import type { TablesInsert } from "@/types/database";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getShippingSettings } from "@/lib/settings";
@@ -43,9 +44,17 @@ export type CreateOrderInput = {
 
 export type CreateOrderResult = {
   orderId: string;
+  /**
+   * Shared dedup key for the Purchase event. Minted here, server-side, so the
+   * Conversions API / TikTok Events API send and the browser pixel send all use
+   * the identical value and the platform counts the order once, not twice.
+   */
+  eventId: string;
   subtotal: number;
   shippingFee: number;
   total: number;
+  currency: "EGP";
+  items: { productId: string; qty: number; price: number }[];
 };
 
 /** Validation failures map to 422 in the route handler. */
@@ -244,8 +253,15 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
 
   return {
     orderId,
+    eventId: randomUUID(),
     subtotal: totals.subtotal,
     shippingFee: totals.shippingFee,
     total: totals.total,
+    currency: "EGP",
+    items: rows.map((row) => ({
+      productId: row.product_id,
+      qty: row.quantity,
+      price: row.price,
+    })),
   };
 }

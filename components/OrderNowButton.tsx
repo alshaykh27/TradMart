@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useCart } from "@/components/cart/CartProvider";
+import { trackMarketingEvent } from "@/lib/marketing/browser";
 import type { Dictionary } from "@/i18n";
 
 export default function OrderNowButton({
@@ -9,19 +10,38 @@ export default function OrderNowButton({
   dict,
   variant = "primary",
   full = false,
+  productName,
+  price,
 }: {
   productId: string;
   dict: Dictionary;
   variant?: "primary" | "ghost";
   full?: boolean;
+  /**
+   * Optional product facts for the AddToCart event. The detail page passes
+   * them; anywhere else (e.g. the sticky bar without props) the event still
+   * fires, just without content names/value.
+   */
+  productName?: string;
+  price?: number;
 }) {
   const { add } = useCart();
+
+  function handleClick() {
+    add(productId, 1);
+    trackMarketingEvent("AddToCart", {
+      contentIds: [productId],
+      contentNames: productName ? [productName] : null,
+      value: typeof price === "number" ? price : null,
+      numItems: 1,
+    });
+  }
 
   return (
     <motion.button
       type="button"
       whileTap={{ scale: 0.97 }}
-      onClick={() => add(productId, 1)}
+      onClick={handleClick}
       className={
         variant === "primary"
           ? `inline-flex h-12 items-center justify-center gap-2 rounded-full bg-brand px-7 text-base font-bold text-white shadow-glow transition-transform hover:-translate-y-0.5 active:scale-[0.98] ${

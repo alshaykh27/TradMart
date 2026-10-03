@@ -3,6 +3,7 @@ import { Cairo } from "next/font/google";
 import "./globals.css";
 import { defaultLocale, direction } from "@/i18n/config";
 import Providers from "@/components/Providers";
+import PixelScripts from "@/components/marketing/PixelScripts";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -37,6 +38,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         suppressHydrationWarning
       >
         <Providers>{children}</Providers>
+
+        {/*
+          Meta / TikTok browser pixels. Server Component, so only the two Pixel
+          IDs are interpolated — the access tokens stay on the server. Renders
+          nothing at all when neither platform is configured.
+        */}
+        <PixelScripts />
       </body>
     </html>
   );

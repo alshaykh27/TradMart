@@ -15,7 +15,8 @@
     "verify:phase3.5": "node --env-file=.env.local scripts/verify-phase3-5.mjs",
     "verify:phase4": "node --env-file=.env.local scripts/verify-phase4.mjs",
     "verify:phase6": "node --env-file=.env.local scripts/verify-phase6.mjs",
-    "verify:phase7": "node --env-file=.env.local scripts/verify-phase7.mjs"
+    "verify:phase7": "node --env-file=.env.local scripts/verify-phase7.mjs",
+    "verify:phase8": "node --env-file=.env.local scripts/verify-phase8.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

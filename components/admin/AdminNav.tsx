@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/admin/orders", label: "الطلبات" },
   { href: "/admin/products", label: "المنتجات" },
   { href: "/admin/settings", label: "الإعدادات" },
+  { href: "/admin/settings/marketing", label: "التسويق" },
 ];
 
 export default function AdminNav() {
@@ -24,8 +25,11 @@ export default function AdminNav() {
     }
   }
 
-  const isActive = (href: string) =>
-    href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
+  // Longest-prefix wins, so /admin/settings/marketing lights up only
+  // "التسويق" and not "الإعدادات" as well.
+  const activeHref = LINKS.filter(
+    (link) => link.href === "/admin" ? pathname === "/admin" : pathname.startsWith(link.href),
+  ).sort((a, b) => b.href.length - a.href.length)[0]?.href;
 
   return (
     <header className="sticky top-0 z-20 border-b border-navy/10 bg-white/85 backdrop-blur">
@@ -39,11 +43,11 @@ export default function AdminNav() {
             <Link
               key={link.href}
               href={link.href}
-              className={
-                isActive(link.href)
-                  ? "whitespace-nowrap rounded-full bg-brand px-3 py-1.5 font-semibold text-white"
-                  : "whitespace-nowrap rounded-full px-3 py-1.5 text-navy-soft hover:bg-brand-soft hover:text-navy"
-              }
+className={
+              link.href === activeHref
+                ? "whitespace-nowrap rounded-full bg-brand px-3 py-1.5 font-semibold text-white"
+                : "whitespace-nowrap rounded-full px-3 py-1.5 text-navy-soft hover:bg-brand-soft hover:text-navy"
+            }
             >
               {link.label}
             </Link>

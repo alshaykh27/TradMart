@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/components/cart/CartProvider";
 import { createClient } from "@/lib/supabase/client";
+import { trackMarketingEvent } from "@/lib/marketing/browser";
 import type { Dictionary } from "@/i18n";
 
 type GovernorateOption = {
@@ -149,6 +150,23 @@ export default function CartView({ dict }: { dict: Dictionary }) {
   const setField = (name: keyof CheckoutForm, value: string) =>
     setForm((prev) => ({ ...prev, [name]: value }));
 
+  // InitiateCheckout: fired once when the cart page is opened with items in it.
+  // Mounted here rather than in app/cart/page.tsx because the line data is
+  // fetched client-side, so only the client component knows the totals. It must
+  // be rendered before the empty-cart early return below. A ref (not state) is
+  // the guard: it records that the side effect ran without triggering the
+  // cascading render that setState-in-effect would cause.
+  const checkoutTracked = useRef(false);
+  useEffect(() => {
+    if (checkoutTracked.current || items.length === 0 || lines.length === 0) return;
+    checkoutTracked.current = true;
+    trackMarketingEvent("InitiateCheckout", {
+      contentIds: lines.map((line) => line.id),
+      value: subtotal,
+      numItems: count,
+    });
+  }, [items.length, lines, subtotal, count]);
+
   function placeOrder() {
     startTransition(async () => {
       setError(null);
@@ -179,12 +197,30 @@ export default function CartView({ dict }: { dict: Dictionary }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        const result = (await response.json()) as { ok?: boolean; id?: string; error?: string };
+        const result = (await response.json()) as {
+          ok?: boolean;
+          id?: string;
+          total?: number;
+          eventId?: string;
+          error?: string;
+        };
 
         if (!response.ok || !result.ok || !result.id) {
           setError(result.error ?? dict.checkout.genericError);
           return;
         }
+
+        // Browser half of Purchase. eventId comes from the server, which used
+        // the SAME value for the Conversions API / TikTok Events API send, so
+        // the platform deduplicates the pair into one conversion. The server
+        // total is authoritative; the cart's own total omits the shipping
+        // markup the server adds.
+        trackMarketingEvent("Purchase", {
+          eventId: result.eventId ?? null,
+          contentIds: items.map((item) => item.productId),
+          value: typeof result.total === "number" ? result.total : subtotal,
+          numItems: count,
+        });
 
         reset();
         router.push(`/order/${result.id}`);
