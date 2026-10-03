@@ -26,8 +26,22 @@ describe("createSessionToken / verifySessionToken", () => {
     assert.equal(verifySessionToken(flippedExpires, SECRET), false);
 
     const [exp, sig] = token.split(".");
-    const flippedSig = `${exp}.${sig === "f".repeat(64) ? "e" : "f"}${sig.slice(1)}`;
-    assert.equal(verifySessionToken(flippedSig, SECRET), false);
+
+    // Corrupt a FIXED position with a guaranteed-different hex character, rather
+    // than overwriting the first character. The previous version prefixed "f"
+    // unconditionally, so whenever the signature already began with "f" the
+    // rewrite was a no-op: the "tampered" token equalled the original, verify()
+    // correctly returned true, and this assertion failed roughly 6% of runs.
+    const lastChar = sig.slice(-1);
+    const replacement = lastChar === "0" ? "1" : "0";
+    const tamperedSig = `${exp}.${sig.slice(0, -1)}${replacement}`;
+
+    // Guard the guard: if the rewrite ever stops changing the token, fail loudly
+    // here rather than as a confusing verify() mismatch.
+    assert.notEqual(tamperedSig, token, "tampering must actually alter the token");
+    assert.equal(sig.length, 64, "signature must stay 64 hex chars");
+    assert.match(tamperedSig, new RegExp(`^\\d+\\.[0-9a-f]{64}$`), "must stay well-formed hex");
+    assert.equal(verifySessionToken(tamperedSig, SECRET), false);
   });
 
   it("rejects expired tokens", () => {
