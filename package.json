@@ -16,7 +16,8 @@
     "verify:phase4": "node --env-file=.env.local scripts/verify-phase4.mjs",
     "verify:phase6": "node --env-file=.env.local scripts/verify-phase6.mjs",
     "verify:phase7": "node --env-file=.env.local scripts/verify-phase7.mjs",
-    "verify:phase8": "node --env-file=.env.local scripts/verify-phase8.mjs"
+    "verify:phase8": "node --env-file=.env.local scripts/verify-phase8.mjs",
+    "audit:security": "node --env-file=.env.local scripts/audit-security.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
@@ -24,7 +25,7 @@
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.116.0",
     "framer-motion": "^13.4.0",
-    "next": "16.3.5",
+    "next": "16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "sanitize-html": "^2.17.7",
@@ -40,7 +41,7 @@
     "@types/sanitize-html": "^2.16.1",
     "@types/three": "^0.186.0",
     "eslint": "^9",
-    "eslint-config-next": "16.3.5",
+    "eslint-config-next": "16.3.8",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

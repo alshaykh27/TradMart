@@ -1,10 +1,19 @@
 import { timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
 import { syncGovernoratePricing } from "@/lib/safka/governorate-sync";
+import { checkRateLimit, getClientIp } from "@/lib/orders/rate-limit";
 
 export const maxDuration = 60;
 
 const CRON_SECRET = process.env.CRON_SECRET;
+
+/**
+ * This route triggers outbound Safka API calls and a multi-row upsert, so it is
+ * expensive work for anyone who reaches it. Vercel fires it hourly; the ceiling
+ * is far above that so the schedule is never throttled, while a hammering caller
+ * is cut off.
+ */
+const CRON_RATE_LIMIT = { limit: 10, windowMs: 60_000 };
 
 /**
  * Vercel Cron — hourly refresh of the governorate shipping price list.
@@ -22,6 +31,14 @@ function secretMatches(token: string | undefined, expected: string | undefined):
 }
 
 export async function GET(request: Request) {
+  const rate = checkRateLimit(`cron-governorates:${getClientIp(request)}`, CRON_RATE_LIMIT);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(rate.retryAfterSeconds) } },
+    );
+  }
+
   if (CRON_SECRET) {
     const header = request.headers.get("authorization") ?? "";
     const token = header.startsWith("Bearer ") ? header.slice("Bearer ".length) : undefined;
@@ -34,7 +51,13 @@ export async function GET(request: Request) {
     const result = await syncGovernoratePricing();
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ ok: false, error: message }, { status: 502 });
+    // Log the real cause server-side; never echo an upstream message (it can
+    // carry Supabase/Safka hostnames, SQL fragments or internal ids) to the
+    // caller.
+    console.error("[cron] governorate sync failed:", error);
+    return NextResponse.json(
+      { ok: false, error: "Governorate sync failed" },
+      { status: 502 },
+    );
   }
 }

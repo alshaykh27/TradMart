@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { createClient } from "@/lib/supabase/server";
 import { defaultLocale, getDictionary } from "@/i18n";
-import { isValidSlug } from "@/lib/products/category";
+import { isValidSlug, escapeLikePattern } from "@/lib/products/category";
 
 export const metadata: Metadata = {
   title: "المنتجات",
@@ -54,7 +54,10 @@ export default async function ProductsPage({
     .order("updated_at", { ascending: false });
 
   if (query) {
-    builder = builder.ilike("name", `%${query}%`);
+    // `.ilike()` takes a single value (no filter grammar to break out of), but
+    // the LIKE wildcards are still neutralised so a search for "%" cannot turn
+    // into a match-everything scan.
+    builder = builder.ilike("name", `%${escapeLikePattern(query)}%`);
   }
 
   if (selectedCategory) {

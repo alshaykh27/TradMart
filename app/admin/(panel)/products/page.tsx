@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import AddManualProduct from "@/components/admin/AddManualProduct";
 import AdminProductList from "@/components/admin/AdminProductList";
 import type { CategoryOption } from "@/lib/products/category";
+import { buildProductSearchOrFilter } from "@/lib/products/category";
 
 export const metadata: Metadata = {
   title: "المنتجات",
@@ -80,9 +81,13 @@ export default async function AdminProductsPage({
   }
 
   if (q) {
-    query = query.or(
-      `name.ilike.%${q}%,safka_product_id.ilike.%${q}%,barcode.ilike.%${q}%`,
-    );
+    // `.or()` takes a raw PostgREST filter string, so the term is validated and
+    // its LIKE wildcards escaped by the builder. An unexpressible term (e.g.
+    // one carrying `,` or `.`) degrades to "no filter" rather than erroring.
+    const searchFilter = buildProductSearchOrFilter(q);
+    if (searchFilter) {
+      query = query.or(searchFilter);
+    }
   }
 
   const from = (page - 1) * LIMIT;

@@ -4,8 +4,20 @@ import type { Json, TablesInsert } from "@/types/database";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeProductHook } from "@/lib/safka/webhook";
 import { sanitizeHtmlDescription } from "@/lib/sanitize";
+import { checkRateLimit, getClientIp } from "@/lib/orders/rate-limit";
 
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
+/**
+ * Abuse ceiling, checked BEFORE the secret compare so an unauthenticated flood
+ * costs nothing more than a map lookup (no DB round-trip, no JSON parse, no
+ * constant-time compare). The shared secret remains the real authorisation;
+ * this only bounds how fast one caller can burn CPU or fill `webhook_logs`.
+ *
+ * Product hooks arrive in bursts when Safka bulk-syncs a catalogue, so the
+ * ceiling is deliberately generous — this is a DoS/abuse backstop, not a quota.
+ */
+const WEBHOOK_RATE_LIMIT = { limit: 120, windowMs: 60_000 };
 
 /**
  * Compare in constant time. Whitespace is trimmed so a trailing newline/space
@@ -46,6 +58,14 @@ function toJsonArray(value: string[] | null): Json | null {
 }
 
 export async function POST(request: Request, context: { params: Promise<{ token?: string[] }> }) {
+  const rate = checkRateLimit(`safka-webhook:${getClientIp(request)}`, WEBHOOK_RATE_LIMIT);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(rate.retryAfterSeconds) } },
+    );
+  }
+
   try {
     const { token: segments } = await context.params;
     const token = await extractToken(request, segments);

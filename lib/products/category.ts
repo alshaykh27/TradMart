@@ -205,6 +205,49 @@ export function isUuid(value: unknown): value is string {
   return typeof value === "string" && UUID_PATTERN.test(value.trim());
 }
 
+/**
+ * Characters that carry structural meaning inside a PostgREST filter
+ * expression: `,` separates clauses in `.or()`, `.` separates column from
+ * operator, `(` / `)` group clauses, `*` is the shorthand wildcard, and
+ * quotes can terminate a value. A search term containing any of them is
+ * rejected outright rather than escaped, because none of them legitimately
+ * appear in a product name, SKU or barcode.
+ */
+const POSTGREST_METACHARACTERS = /[,.()*"';\\]|^$|[\u0000-\u001F\u007F]/;
+
+/** Longest search term we will hand to an `ilike` filter. */
+const SEARCH_TERM_MAX_LENGTH = 80;
+
+/**
+ * Builds the `.or(...)` argument for the admin product search box, or returns
+ * null when the term cannot be expressed safely.
+ *
+ * PostgREST `.or()` takes a raw filter string, so interpolating an unvalidated
+ * term lets a caller append extra filter clauses (`q=a,price.gte.0`) or inject
+ * a wildcard. Values are therefore restricted to a conservative character set
+ * and the LIKE wildcards `%` / `_` are neutralised.
+ */
+export function buildProductSearchOrFilter(term: string): string | null {
+  const trimmed = term.trim();
+  if (!trimmed || trimmed.length > SEARCH_TERM_MAX_LENGTH) return null;
+  if (POSTGREST_METACHARACTERS.test(trimmed)) return null;
+
+  // Escape the SQL LIKE wildcards so a search for "50%" cannot become a
+  // match-everything pattern. Postgres uses backslash as the default escape.
+  const escaped = escapeLikePattern(trimmed);
+  return `name.ilike.%${escaped}%,safka_product_id.ilike.%${escaped}%,barcode.ilike.%${escaped}%`;
+}
+
+/**
+ * Escapes the SQL `LIKE` wildcards `%` and `_` (plus the escape character
+ * itself) so a user-supplied term is matched literally. Postgres treats
+ * backslash as the default LIKE escape character, so a doubled backslash is
+ * interpreted as a literal backslash by the LIKE parser.
+ */
+export function escapeLikePattern(value: string): string {
+  return value.replace(/([%_\\])/g, "\\$1");
+}
+
 export type CategoryOption = {
   id: string;
   name_ar: string;
