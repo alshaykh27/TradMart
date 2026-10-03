@@ -356,7 +356,7 @@ describe("no mojibake in the category files", () => {
     "lib/admin/category.ts",
     "components/admin/CategorySelect.tsx",
     "components/admin/AdminProductList.tsx",
-    "components/admin/BulkCategoriseBar.tsx",
+    "components/admin/BulkActionsBar.tsx",
     "components/admin/ProductRow.tsx",
     "components/admin/ManualProductForm.tsx",
     "app/page.tsx",
@@ -409,5 +409,114 @@ describe("product type carries category_id", () => {
     const source = await repoFile("types/database.ts");
     assert.match(source, /categories: \{/);
     assert.match(source, /slug: string;/);
+  });
+});
+
+/**
+ * The bulk route is the one place where a merchant action can touch many rows at
+ * once, so its blast radius is asserted here rather than trusted. The merchant
+ * publishes by hand, one product or one hand-picked batch at a time, so these
+ * tests pin the two properties that make that safe: a write can only ever
+ * address explicitly listed ids, and it can only ever do one thing per request.
+ */
+describe("bulk product route is scoped to hand-picked ids", () => {
+  const route = () => repoFile("app/api/admin/products/bulk/route.ts");
+
+  it("requires an explicit id list and caps its size", async () => {
+    const sql = await route();
+    assert.match(sql, /const ids = body\.ids;/);
+    assert.match(sql, /ids\.length > MAX_IDS/);
+    assert.match(sql, /MAX_IDS = 100/);
+  });
+
+  it("rejects the whole request unless every entry is a unique UUID", async () => {
+    const sql = await route();
+    // De-duplication alone would silently shrink the set, so a mismatch between
+    // the deduped count and the input count is an error, not a convenience.
+    assert.match(sql, /uniqueIds\.length !== ids\.length/);
+    assert.match(sql, /isUuid\(id\)/);
+  });
+
+  it("has no code path that widens the id set", async () => {
+    const sql = await route();
+    // No `.select()`-then-update-all, no filter-derived ids, no "all" escape
+    // hatch: every write is bound to the validated uniqueIds array.
+    assert.doesNotMatch(sql, /\.neq\("category_id"/);
+    assert.doesNotMatch(sql, /is_published=eq/);
+    assert.doesNotMatch(sql, /\.update\(update\)\s*;(?!\s*\.in\()/);
+    assert.match(sql, /\.update\(update\)\s*\.in\("id", uniqueIds\)/);
+  });
+
+  it("refuses a request that carries both actions or neither", async () => {
+    const sql = await route();
+    assert.match(sql, /if \(wantsCategory === wantsPublish\)/);
+    assert.match(sql, /حدّد إجراءً واحدًا/);
+  });
+
+  it("only accepts a boolean publish value", async () => {
+    const sql = await route();
+    assert.match(sql, /typeof body\.is_published !== "boolean"/);
+  });
+
+  it("cannot write price, cost, commission or stock", async () => {
+    const sql = await route();
+    const writable = sql.match(/const update: \{([^}]*)\}/)?.[1] ?? "";
+    assert.match(writable, /category_id\?: string \| null;/);
+    assert.match(writable, /is_published\?: boolean/);
+    for (const forbidden of ["price", "cost_price", "commission", "stock", "status"]) {
+      assert.doesNotMatch(writable, new RegExp(forbidden), `${forbidden} must not be bulk-writable`);
+    }
+  });
+
+  it("still requires an admin session", async () => {
+    const sql = await route();
+    assert.match(sql, /if \(\!\(await isAdmin\(\)\)\)/);
+  });
+});
+
+describe("bulk action bar cannot publish everything", () => {
+  const bar = () => repoFile("components/admin/BulkActionsBar.tsx");
+
+  it("offers no select-all-products or apply-to-filter control", async () => {
+    const source = await bar();
+    for (const forbidden of ["تحديد الكل", "كل المنتجات", "publishAll", "selectAllMatching"]) {
+      assert.doesNotMatch(source, new RegExp(forbidden), `${forbidden} must not exist`);
+    }
+  });
+
+  it("requires a second confirming click before publishing or unpublishing", async () => {
+    const source = await bar();
+    assert.match(source, /const \[confirming, setConfirming\] = useState<"publish" \| "unpublish" \| null>/);
+    // The first click only arms; the request fires from runPublish behind the panel.
+    assert.match(source, /onClick=\{\(\) => setConfirming\("publish"\)\}/);
+    assert.match(source, /onClick=\{\(\) => setConfirming\("unpublish"\)\}/);
+    assert.match(source, /onClick=\{\(\) => runPublish\(confirming\)\}/);
+    assert.match(source, /تراجع/);
+  });
+
+  it("sends exactly one action per request", async () => {
+    const source = await bar();
+    // One call may wrap its object across lines, so allow whitespace after the paren.
+    const bodies = source.match(/send\(\s*\{[^}]*\}/g) ?? [];
+    assert.equal(bodies.length, 2);
+    // Exactly one call carries category_id and exactly one carries is_published,
+    // and no single call may carry both.
+    assert.equal(bodies.filter((b) => /category_id/.test(b)).length, 1);
+    assert.equal(bodies.filter((b) => /is_published/.test(b)).length, 1);
+    for (const b of bodies) {
+      assert.doesNotMatch(
+        b,
+        /category_id[\s\S]*is_published|is_published[\s\S]*category_id/,
+        `a single request must not carry both actions: ${b}`,
+      );
+    }
+    assert.match(source, /\{ category_id: categoryId === "" \? null : categoryId \}/);
+    assert.match(source, /\{ is_published: action === "publish" \}/);
+  });
+
+  it("always sends the explicit selection, never a filter or a count", async () => {
+    const source = await bar();
+    assert.match(source, /JSON\.stringify\(\{ ids: selectedIds, \.\.\.body \}\)/);
+    assert.doesNotMatch(source, /searchParams|category=|status=/);
   });
 });

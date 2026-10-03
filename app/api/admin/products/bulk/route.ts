@@ -4,15 +4,29 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { isUuid } from "@/lib/products/category";
 
 /**
- * PATCH /api/admin/products/bulk — assigns one category to many products at
- * once, which is how the 446 already-synced products get categorised without
- * opening 446 editors.
+ * PATCH /api/admin/products/bulk — applies ONE action to a hand-picked set of
+ * products, so the merchant does not have to open 446 editors.
  *
- * Explicitly allowed to cross the manual/Safka boundary: category_id is
- * merchant metadata that Safka does not know about, so a bulk assignment is
- * valid for both sources. It deliberately cannot touch price, cost, commission,
- * publish state or anything else — one column only, so there is no way for this
- * route to corrupt a synced row.
+ * Exactly one of two actions per request, never both:
+ *   - `category_id`  assign or clear a section
+ *   - `is_published` publish or unpublish
+ * Requiring exactly one is deliberate: a body carrying both could set a section
+ * and the publish state in a single write, which is two decisions the merchant
+ * never made together.
+ *
+ * Scope rules, both enforced here rather than trusted from the client:
+ *   - `ids` is required, must be 1..MAX_IDS, must be unique, and every entry
+ *     must be a UUID. There is no "all products" or "everything matching this
+ *     filter" form — a bulk write can only ever address rows the caller listed
+ *     by id, so a filter can never widen the blast radius by accident.
+ *   - No other column is writable. Price, cost, commission and stock stay
+ *     off-limits, so this route cannot corrupt a synced row.
+ *
+ * category_id is allowed to cross the manual/Safka boundary: a section is
+ * merchant metadata that Safka does not know about. is_published is the same
+ * column the per-row toggle writes, and is deliberately NOT sent by the sync
+ * (unpublished rows are skipped) or by the category-only caller, so neither can
+ * change publish state through this route.
  */
 const MAX_IDS = 100;
 
@@ -49,23 +63,43 @@ export async function PATCH(request: Request) {
     );
   }
 
-  const categoryId = body.category_id;
-  let resolved: string | null;
-  if (categoryId === null || categoryId === "") {
-    resolved = null;
-  } else if (isUuid(categoryId)) {
-    resolved = (categoryId as string).trim();
-  } else {
+  const wantsCategory = "category_id" in body;
+  const wantsPublish = "is_published" in body;
+  if (wantsCategory === wantsPublish) {
     return NextResponse.json(
-      { ok: false, error: "القسم المحدد غير صالح" },
+      { ok: false, error: "حدّد إجراءً واحدًا: القسم أو حالة النشر" },
       { status: 422 },
     );
+  }
+
+  const update: { category_id?: string | null; is_published?: boolean } = {};
+
+  if (wantsCategory) {
+    const categoryId = body.category_id;
+    if (categoryId === null || categoryId === "") {
+      update.category_id = null;
+    } else if (isUuid(categoryId)) {
+      update.category_id = (categoryId as string).trim();
+    } else {
+      return NextResponse.json(
+        { ok: false, error: "القسم المحدد غير صالح" },
+        { status: 422 },
+      );
+    }
+  } else {
+    if (typeof body.is_published !== "boolean") {
+      return NextResponse.json(
+        { ok: false, error: "قيمة is_published غير صالحة" },
+        { status: 422 },
+      );
+    }
+    update.is_published = body.is_published;
   }
 
   const admin = createAdminClient();
   const { data, error } = await admin
     .from("products")
-    .update({ category_id: resolved })
+    .update(update)
     .in("id", uniqueIds)
     .select("id");
 
@@ -79,7 +113,7 @@ export async function PATCH(request: Request) {
       );
     }
     return NextResponse.json(
-      { ok: false, error: "تعذّر تصنيف المنتجات" },
+      { ok: false, error: "تعذّر تطبيق الإجراء على المنتجات" },
       { status: 502 },
     );
   }
@@ -88,6 +122,6 @@ export async function PATCH(request: Request) {
     ok: true,
     updated: data?.length ?? uniqueIds.length,
     requested: uniqueIds.length,
-    category_id: resolved,
+    ...update,
   });
 }

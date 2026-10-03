@@ -1,15 +1,17 @@
 "use client";
 import { useState } from "react";
 import ProductRow, { type AdminProduct } from "./ProductRow";
-import BulkCategoriseBar from "./BulkCategoriseBar";
+import BulkActionsBar from "./BulkActionsBar";
 import type { CategoryOption } from "@/lib/products/category";
 
 /**
- * The admin product list plus its bulk-categorisation mode.
+ * The admin product list plus its bulk-action mode (assign a section, publish or
+ * unpublish the rows the merchant picked).
  *
  * This is a Client Component because selection is interactive state. It receives
  * exactly one page of products from the server and can only ever act on the rows
- * it is holding — the selection can never silently span pages it did not render.
+ * it is holding — the selection can never silently span pages it did not render,
+ * and nothing here can address "all products" or "everything matching a filter".
  */
 export default function AdminProductList({
   products,
@@ -50,7 +52,7 @@ export default function AdminProductList({
               : "border border-navy/15 text-navy-soft hover:bg-brand-soft"
           }`}
         >
-          {bulkMode ? "إنهاء التصنيف الجماعي" : "تصنيف جماعي"}
+          {bulkMode ? "إنهاء الإجراءات الجماعية" : "إجراءات جماعية"}
         </button>
 
         {bulkMode ? (
@@ -65,7 +67,7 @@ export default function AdminProductList({
       </div>
 
       {bulkMode ? (
-        <BulkCategoriseBar
+        <BulkActionsBar
           categories={categories}
           selectedIds={selectedIds}
           pageCount={products.length}
