@@ -31,16 +31,9 @@ export const ar: Dictionary = {
     },
     categories: {
       label: "تسوق حسب القسم",
-      items: [
-        "إلكترونيات",
-        "موبايلات",
-        "منزل ومطبخ",
-        "موضة",
-        "جمال وعناية",
-        "أطفال",
-        "رياضة",
-        "أدوات",
-      ],
+      // The chip list is read from the `categories` table, not from here: the
+      // section names are merchant-editable data, not copy.
+      all: "كل الأقسام",
     },
     latest: {
       label: "أحدث المنتجات",
@@ -73,6 +66,12 @@ export const ar: Dictionary = {
   products: {
     title: "المنتجات",
     description: "استعرض جميع المنتجات المتوفرة في المتجر.",
+    categoryLabel: "القسم",
+    allCategories: "كل الأقسام",
+    search: "تصفية",
+    clearCategory: "إزالة تصفية القسم",
+    emptyCategoryTitle: "لا توجد منتجات في هذا القسم بعد",
+    emptyCategoryHint: "جرّب قسمًا آخر أو اعرض كل المنتجات.",
     empty: "لا توجد منتجات متاحة حالياً.",
     emptyTitle: "مافيش منتجات معروضة حالياً",
     emptyHint: "نصيف تشكيلة جديدة كل فترة — تابعنا على واتساب لتصلك المنتجات أولاً بأول.",
@@ -134,9 +133,27 @@ export const ar: Dictionary = {
   order: {
     successTitle: "تم استلام طلبك!",
     successBody: "هاتفك الشخص المتابع للطلب خلال ساعات ليؤكد التفاصيل.",
+    cancelledTitle: "طلبك ملغى",
+    cancelledBody: "تم إلغاء هذا الطلب. إن كنت ترى خطأً تواصل معنا.",
     orderNumber: "رقم الطلب",
     paymentNote: "سيتم التواصل معك لتأكيد الطلب ومواعيد التوصيل.",
     continue: "متابعة التسوق",
+    tracking: {
+      title: "حالة الطلب",
+      status: "الحالة الحالية",
+      steps: {
+        pending: "قيد الانتظار",
+        confirmed: "مؤكد",
+        shipped: "تم الشحن",
+        delivered: "تم التسليم",
+      },
+      cancelledLabel: "ملغي",
+      pending: "استلمنا طلبك وهو في قائمة المراجعة.",
+      confirmed: "تم تأكيد طلبك وجاهز للتسليم.",
+      shipped: "طلبك في الطريق إليك.",
+      delivered: "تم تسليم الطلب. شكرًا لثقتك.",
+      cancelled: "تم إلغاء هذا الطلب.",
+    },
   },
   footer: {
     blurb:

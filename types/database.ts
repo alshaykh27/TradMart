@@ -10,9 +10,13 @@ export type Database = {
   public: {
     Tables: {
       products: {
+        // safka_product_id is nullable: manually-added products (source =
+        // 'manual') are created by hand in the admin panel and have no Safka
+        // counterpart. Rows written by Safka always carry an id — the webhook
+        // normalizer returns null for a payload with neither _id nor barcode.
         Row: {
           id: string;
-          safka_product_id: string;
+          safka_product_id: string | null;
           barcode: string | null;
           name: string;
           description: string | null;
@@ -26,12 +30,20 @@ export type Database = {
           is_published: boolean;
           cost_price: number | null;
           commission: number | null;
+          // 'safka' = mirrored from the Safka API/webhook; 'manual' = created
+          // by hand. Safka writers must filter on source <> 'manual'.
+          source: "safka" | "manual";
+          // Storefront section. NULL = not categorised yet. Safka sends no
+          // category, so this is always assigned by hand in the admin panel —
+          // for synced AND manual products. Safka writers must never include it
+          // in their update payloads or a sync would wipe the assignment.
+          category_id: string | null;
           created_at: string;
           updated_at: string;
         };
         Insert: {
           id?: string;
-          safka_product_id: string;
+          safka_product_id?: string | null;
           barcode?: string | null;
           name?: string;
           description?: string | null;
@@ -45,25 +57,58 @@ export type Database = {
           is_published?: boolean;
           cost_price?: number | null;
           commission?: number | null;
+          source?: "safka" | "manual";
+          category_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          safka_product_id?: string | null;
+          barcode?: string | null;
+          name?: string;
+          description?: string | null;
+          price?: number;
+          image_url?: string | null;
+          images?: Json | null;
+          variants?: Json | null;
+          media_url?: string | null;
+          stock?: number;
+          status?: string;
+          is_published?: boolean;
+          cost_price?: number | null;
+          commission?: number | null;
+          source?: "safka" | "manual";
+          category_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      categories: {
+        Row: {
+          id: string;
+          name_ar: string;
+          slug: string;
+          icon: string | null;
+          display_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name_ar: string;
+          slug: string;
+          icon?: string | null;
+          display_order?: number;
           created_at?: string;
           updated_at?: string;
         };
         Update: {
           id?: string;
-          safka_product_id?: string;
-          barcode?: string | null;
-          name?: string;
-          description?: string | null;
-          price?: number;
-          image_url?: string | null;
-          images?: Json | null;
-          variants?: Json | null;
-          media_url?: string | null;
-          stock?: number;
-          status?: string;
-          is_published?: boolean;
-          cost_price?: number | null;
-          commission?: number | null;
+          name_ar?: string;
+          slug?: string;
+          icon?: string | null;
+          display_order?: number;
           created_at?: string;
           updated_at?: string;
         };

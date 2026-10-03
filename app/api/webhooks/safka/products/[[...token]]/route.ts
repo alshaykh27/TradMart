@@ -74,7 +74,16 @@ export async function POST(request: Request, context: { params: Promise<{ token?
       return NextResponse.json({ ok: false, error: "Unrecognized payload shape" }, { status: 422 });
     }
 
-    const row: TablesInsert<"products"> = {
+    // category_id is deliberately absent and must stay that way: Safka sends no
+    // category, so the storefront section is merchant metadata assigned in
+    // /admin/products. Including it here — or adding it to this row — would make
+    // every incoming hook wipe the merchant's categorisation. Preserved because
+    // both the .update() and the .upsert() below send only these columns.
+    //
+    // `satisfies` rather than a type annotation: this one object is sent to both
+    // .upsert() (needs Insert) and .update() (needs Update, which has no `id`),
+    // and the inferred literal type is assignable to both.
+    const row = {
       safka_product_id: product.safka_product_id,
       barcode: product.barcode,
       name: product.name,
@@ -89,8 +98,12 @@ export async function POST(request: Request, context: { params: Promise<{ token?
       stock: product.stock,
       status: product.status,
       is_published: true,
-    };
+      source: "safka",
+    } satisfies TablesInsert<"products">;
 
+    // Lookups are restricted to source <> 'manual': a hand-written product
+    // must never be claimed by an incoming hook, or a colliding barcode would
+    // overwrite it and force-publish it.
     let targetId: string | null = null;
 
     if (product.safka_product_id) {
@@ -98,6 +111,7 @@ export async function POST(request: Request, context: { params: Promise<{ token?
         .from("products")
         .select("id")
         .eq("safka_product_id", product.safka_product_id)
+        .neq("source", "manual")
         .maybeSingle();
       if (!byId.error && byId.data?.id) targetId = byId.data.id;
     }
@@ -107,6 +121,7 @@ export async function POST(request: Request, context: { params: Promise<{ token?
         .from("products")
         .select("id")
         .eq("barcode", product.barcode)
+        .neq("source", "manual")
         .maybeSingle();
       if (!byBarcode.error && byBarcode.data?.id) targetId = byBarcode.data.id;
     }

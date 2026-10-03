@@ -28,7 +28,7 @@ export type Dictionary = {
     };
     categories: {
       label: string;
-      items: string[];
+      all: string;
     };
     latest: {
       label: string;
@@ -51,6 +51,12 @@ export type Dictionary = {
   products: {
     title: string;
     description: string;
+    categoryLabel: string;
+    allCategories: string;
+    search: string;
+    clearCategory: string;
+    emptyCategoryTitle: string;
+    emptyCategoryHint: string;
     empty: string;
     emptyTitle: string;
     emptyHint: string;
@@ -112,9 +118,27 @@ export type Dictionary = {
   order: {
     successTitle: string;
     successBody: string;
+    cancelledTitle: string;
+    cancelledBody: string;
     orderNumber: string;
     paymentNote: string;
     continue: string;
+    tracking: {
+      title: string;
+      status: string;
+      steps: {
+        pending: string;
+        confirmed: string;
+        shipped: string;
+        delivered: string;
+      };
+      cancelledLabel: string;
+      pending: string;
+      confirmed: string;
+      shipped: string;
+      delivered: string;
+      cancelled: string;
+    };
   };
   footer: {
     blurb: string;

@@ -3,30 +3,64 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import OrderProgress from "@/components/order/OrderProgress";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { defaultLocale, getDictionary } from "@/i18n";
 
 export const metadata: Metadata = {
-  title: "تأكيد الطلب",
-  description: "تم استلام طلبك بنجاح.",
+  title: "تتبع الطلب",
+  description: "حالة طلبك وخطوات التوصيل.",
+  // Order pages are per-customer and hold PII — never indexable.
+  robots: { index: false, follow: false, nocache: true },
 };
+
+/**
+ * Fresh status on every request: the customer must never see a stale step.
+ * (Supabase reads are not `fetch`, so Next cannot infer dynamism from them.)
+ */
+export const dynamic = "force-dynamic";
+
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function formatPrice(value: number): string {
   return value.toLocaleString("ar-EG", { maximumFractionDigits: 2 });
 }
 
+function formatDateTime(iso: string): string {
+  return new Date(iso).toLocaleString("ar-EG", {
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
   const { id } = await params;
   const dict = getDictionary(defaultLocale);
+
+  // The URL segment IS the credential. Reject anything that is not a UUID
+  // before touching the database — no listing, no enumeration, and an
+  // unguessable 128-bit id is the only thing standing between a customer and
+  // someone else's order.
+  if (!UUID_PATTERN.test(id)) {
+    notFound();
+  }
+
   const admin = createAdminClient();
 
-  const { data: order } = await admin
+  // Narrow column lists on purpose: cost_price and commission are never read
+  // here, so they cannot leak into the payload.
+  const { data: order, error } = await admin
     .from("orders")
-    .select("id, customer_name, phone, country, city, governorate, address, subtotal, shipping_fee, total, status, created_at")
+    .select(
+      "id, customer_name, phone, country, city, governorate, address, subtotal, shipping_fee, total, status, created_at, updated_at",
+    )
     .eq("id", id)
     .maybeSingle();
 
-  if (!order) {
+  if (error || !order) {
     notFound();
   }
 
@@ -36,8 +70,12 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
     .eq("order_id", id);
 
   const productIds = [
-  ...new Set((items ?? []).map((item) => item.product_id).filter((value): value is string => Boolean(value))),
-];
+    ...new Set(
+      (items ?? [])
+        .map((item) => item.product_id)
+        .filter((value): value is string => Boolean(value)),
+    ),
+  ];
   const { data: products } = productIds.length
     ? await admin.from("products").select("id, name").in("id", productIds)
     : { data: [] };
@@ -45,6 +83,7 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
   const nameById = new Map((products ?? []).map((product) => [product.id, product.name]));
 
   const shortId = order.id.slice(0, 8);
+  const cancelled = order.status === "cancelled";
 
   return (
     <>
@@ -52,22 +91,55 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
 
       <main className="flex flex-1 flex-col">
         <section className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mx-auto flex size-16 place-items-center rounded-full bg-success/10 text-success">
-            <svg className="mx-auto" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M4 12.5l5 5L20 6.5" />
-            </svg>
+          <div
+            className={`mx-auto flex size-16 items-center justify-center rounded-full ${
+              cancelled ? "bg-rose-100 text-rose-600" : "bg-success/10 text-success"
+            }`}
+          >
+            {cancelled ? (
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 12.5l5 5L20 6.5" />
+              </svg>
+            )}
           </div>
 
           <div className="mt-5 text-center">
             <h1 className="text-2xl font-extrabold tracking-tight text-navy sm:text-3xl">
-              {dict.order.successTitle}
+              {cancelled ? dict.order.cancelledTitle : dict.order.successTitle}
             </h1>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 sm:text-base">
-              {dict.order.successBody}
+              {cancelled ? dict.order.cancelledBody : dict.order.successBody}
             </p>
           </div>
 
-          <div className="mt-8 overflow-hidden rounded-card border border-slate-200/80 bg-white shadow-soft">
+          <div className="mt-8">
+            <OrderProgress status={order.status} dict={dict} />
+          </div>
+
+          <div className="mt-6 overflow-hidden rounded-card border border-slate-200/80 bg-white shadow-soft">
             <div className="border-b border-slate-100 px-6 py-5">
               <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
                 {dict.order.orderNumber}
@@ -82,7 +154,9 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
                 <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
                   {dict.checkout.name}
                 </dt>
-                <dd className="mt-1 text-sm font-semibold text-slate-800">{order.customer_name}</dd>
+                <dd className="mt-1 text-sm font-semibold text-slate-800">
+                  {order.customer_name}
+                </dd>
               </div>
               <div>
                 <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
@@ -106,7 +180,17 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
                 <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
                   {dict.checkout.address}
                 </dt>
-                <dd className="mt-1 text-sm font-semibold text-slate-800">{order.address}</dd>
+                <dd className="mt-1 text-sm font-semibold text-slate-800">
+                  {order.address}
+                </dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                  آخر تحديث
+                </dt>
+                <dd className="mt-1 text-sm font-semibold text-slate-800">
+                  {formatDateTime(order.updated_at || order.created_at)}
+                </dd>
               </div>
             </dl>
 
@@ -117,10 +201,11 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
                   className="flex items-center justify-between gap-4 py-3"
                 >
                   <span className="line-clamp-2 text-sm font-semibold text-slate-800">
-                    {item.product_id ? nameById.get(item.product_id) ?? "—" : "—"}
+                    {item.product_id ? (nameById.get(item.product_id) ?? "—") : "—"}
                   </span>
                   <span className="shrink-0 text-sm font-semibold text-slate-500">
-                    {formatPrice(Number(item.price))} {dict.products.currency} × {item.quantity}
+                    {formatPrice(Number(item.price))} {dict.products.currency} ×{" "}
+                    {item.quantity}
                   </span>
                 </li>
               ))}

@@ -31,16 +31,9 @@ export const en: Dictionary = {
     },
     categories: {
       label: "Shop by category",
-      items: [
-        "Electronics",
-        "Phones",
-        "Home & Kitchen",
-        "Fashion",
-        "Beauty",
-        "Kids",
-        "Sports",
-        "Tools",
-      ],
+      // Chip labels come from the `categories` table (name_ar); only the
+      // section heading and this fallback link are copy.
+      all: "All categories",
     },
     latest: {
       label: "Latest products",
@@ -64,6 +57,12 @@ export const en: Dictionary = {
   products: {
     title: "Products",
     description: "Browse all the products available in the store.",
+    categoryLabel: "Category",
+    allCategories: "All categories",
+    search: "Apply",
+    clearCategory: "Clear category filter",
+    emptyCategoryTitle: "No products in this category yet",
+    emptyCategoryHint: "Try another category or browse everything.",
     empty: "No products are currently available.",
     emptyTitle: "No products to show yet",
     emptyHint: "We refresh our selection regularly — follow us on WhatsApp to get new drops first.",
@@ -125,9 +124,27 @@ export const en: Dictionary = {
   order: {
     successTitle: "Order received!",
     successBody: "Our team will call you within hours to confirm the details.",
+    cancelledTitle: "Your order was cancelled",
+    cancelledBody: "This order has been cancelled. If you think this is a mistake, contact us.",
     orderNumber: "Order number",
     paymentNote: "We'll contact you to confirm the order and delivery schedule.",
     continue: "Continue shopping",
+    tracking: {
+      title: "Order status",
+      status: "Current status",
+      steps: {
+        pending: "Pending",
+        confirmed: "Confirmed",
+        shipped: "Shipped",
+        delivered: "Delivered",
+      },
+      cancelledLabel: "Cancelled",
+      pending: "We received your order and it's being reviewed.",
+      confirmed: "Your order is confirmed and ready to ship.",
+      shipped: "Your order is on its way to you.",
+      delivered: "Order delivered. Thanks for your trust.",
+      cancelled: "This order was cancelled.",
+    },
   },
   footer: {
     blurb:

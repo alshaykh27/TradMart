@@ -13,7 +13,9 @@
     "sync:governorates": "node --env-file=.env.local scripts/sync-safka-governorates.mjs",
     "verify:phase2": "node --env-file=.env.local scripts/verify-phase2.mjs",
     "verify:phase3.5": "node --env-file=.env.local scripts/verify-phase3-5.mjs",
-    "verify:phase4": "node --env-file=.env.local scripts/verify-phase4.mjs"
+    "verify:phase4": "node --env-file=.env.local scripts/verify-phase4.mjs",
+    "verify:phase6": "node --env-file=.env.local scripts/verify-phase6.mjs",
+    "verify:phase7": "node --env-file=.env.local scripts/verify-phase7.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

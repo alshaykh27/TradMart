@@ -1,11 +1,17 @@
 "use client";
 import { useState } from "react";
 import {
-  ORDER_STATUSES,
   ORDER_STATUS_LABELS,
-  type OrderStatus,
+  ORDER_TRACKING_STEPS,
+  type OrderTrackingStep,
 } from "@/lib/admin/orders";
 
+/**
+ * Quick status pills for the happy path only. `cancelled` is intentionally
+ * absent — it needs a confirmation step and a Safka hand-off warning, so it
+ * lives behind the dedicated CancelOrderButton (and POST /cancel, which is the
+ * only endpoint the server accepts that status on).
+ */
 export default function OrderStatusControl({
   orderId,
   initialStatus,
@@ -17,7 +23,7 @@ export default function OrderStatusControl({
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  async function change(next: OrderStatus) {
+  async function change(next: OrderTrackingStep) {
     if (next === status || busy) return;
     setBusy(true);
     setMessage(null);
@@ -47,7 +53,7 @@ export default function OrderStatusControl({
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap gap-1.5">
-        {ORDER_STATUSES.map((option) => {
+        {ORDER_TRACKING_STEPS.map((option) => {
           const current = option === status;
           return (
             <button
@@ -66,6 +72,11 @@ export default function OrderStatusControl({
           );
         })}
       </div>
+      {status === "cancelled" ? (
+        <p className="rounded-xl bg-rose-50 px-3 py-2 text-xs text-rose-700">
+          هذا الطلب ملغٍ — لا يمكن تغيير الحالة. لإلغاء التراجع استخدم حذف الطلب.
+        </p>
+      ) : null}
       {message ? (
         <p className="text-xs text-navy-soft">{message}</p>
       ) : null}

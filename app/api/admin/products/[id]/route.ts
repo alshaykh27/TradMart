@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isUuid } from "@/lib/products/category";
 
-/** PATCH /api/admin/products/[id] — publish toggle and/or commission edit. */
+/**
+ * PATCH /api/admin/products/[id] — publish toggle, commission edit, and the
+ * per-product category field for Safka-synced rows.
+ *
+ * category_id is only ever written when the key is present in the body, so the
+ * publish toggle and commission editor (which do not send it) can never clear a
+ * category. "no category" is sent as an explicit null.
+ */
 export async function PATCH(
   request: Request,
   context: { params: Promise<{ id: string }> },
@@ -24,7 +32,8 @@ export async function PATCH(
     return NextResponse.json({ ok: false, error: "طلب غير صالح" }, { status: 400 });
   }
 
-  const update: { is_published?: boolean; commission?: number | null } = {};
+  const update: { is_published?: boolean; commission?: number | null; category_id?: string | null } =
+    {};
 
   if ("is_published" in body) {
     if (typeof body.is_published !== "boolean") {
@@ -56,6 +65,22 @@ export async function PATCH(
     }
   }
 
+  if ("category_id" in body) {
+    const categoryId = body.category_id;
+
+    // Explicit null clears the category; a UUID must reference a real section.
+    if (categoryId === null || categoryId === "") {
+      update.category_id = null;
+    } else if (isUuid(categoryId)) {
+      update.category_id = (categoryId as string).trim();
+    } else {
+      return NextResponse.json(
+        { ok: false, error: "القسم المحدد غير صالح" },
+        { status: 422 },
+      );
+    }
+  }
+
   if (Object.keys(update).length === 0) {
     return NextResponse.json({ ok: false, error: "لا شيء لتحديثه" }, { status: 422 });
   }
@@ -66,7 +91,7 @@ export async function PATCH(
     .update(update)
     .eq("id", id)
     .select(
-      "id, name, price, cost_price, commission, is_published, status, safka_product_id, image_url, stock",
+      "id, name, price, cost_price, commission, is_published, status, safka_product_id, image_url, stock, source, category_id",
     )
     .maybeSingle();
 

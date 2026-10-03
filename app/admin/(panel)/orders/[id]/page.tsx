@@ -9,6 +9,7 @@ import {
 } from "@/lib/admin/orders";
 import OrderStatusControl from "@/components/admin/OrderStatusControl";
 import SendToSafka from "@/components/admin/SendToSafka";
+import CancelOrderButton from "@/components/admin/CancelOrderButton";
 import DeleteOrderButton from "@/components/admin/DeleteOrderButton";
 
 export const metadata: Metadata = {
@@ -189,6 +190,19 @@ export default async function AdminOrderDetailPage({
           </section>
         )}
       </div>
+
+      <section className="rounded-3xl bg-white p-5 shadow-soft">
+        <h2 className="mb-1 font-bold text-navy">إلغاء الطلب</h2>
+        <p className="mb-3 text-xs text-navy-soft">
+          الإلغاء يتم عندنا فقط. إذا كان الطلب مُرسلًا إلى سافka فسيظهر تنبيه
+          بتفصيل ما يجب فعله هناك.
+        </p>
+        <CancelOrderButton
+          orderId={order.id}
+          safkaOrderId={order.safka_order_id}
+          status={order.status}
+        />
+      </section>
 
       <section className="rounded-3xl border border-rose-200 bg-white p-5 shadow-soft">
         <h2 className="mb-3 font-bold text-rose-700">منطقة الخطر</h2>

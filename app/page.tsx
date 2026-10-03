@@ -62,14 +62,46 @@ export default async function Home() {
   const dict = getDictionary(defaultLocale);
   const client = await createClient();
 
-  const { data: latest } = await client
-    .from("products")
-    .select("id, name, price, image_url, stock, updated_at")
-    .eq("is_published", true)
-    .order("updated_at", { ascending: false })
-    .limit(8);
+  // Section chips come from the `categories` table, and a section is only shown
+  // when it actually has published products — an empty chip would lead the
+  // visitor to a blank listing. Both queries are independent, so they run
+  // together.
+  const [categoriesResult, categoryUsage] = await Promise.all([
+    client
+      .from("categories")
+      .select("id, name_ar, slug, icon, display_order")
+      .order("display_order")
+      .order("name_ar"),
+    // One uuid per published product (446 rows today) instead of one COUNT
+    // request per section: a single round trip, and the transfer stays small.
+    client
+      .from("products")
+      .select("category_id")
+      .eq("is_published", true)
+      .not("category_id", "is", null),
+  ]);
 
-  const products = (latest ?? []).map((product) => ({
+  const counts = new Map<string, number>();
+  for (const row of categoryUsage.data ?? []) {
+    if (row.category_id) {
+      counts.set(row.category_id, (counts.get(row.category_id) ?? 0) + 1);
+    }
+  }
+
+  const visibleCategories = (categoriesResult.data ?? []).filter((category) =>
+    counts.has(category.id),
+  );
+
+  const [latestResult] = await Promise.all([
+    client
+      .from("products")
+      .select("id, name, price, image_url, stock, updated_at")
+      .eq("is_published", true)
+      .order("updated_at", { ascending: false })
+      .limit(8),
+  ]);
+
+  const products = (latestResult.data ?? []).map((product) => ({
     ...product,
     isNew: daysSince(product.updated_at) <= 30,
   }));
@@ -131,31 +163,42 @@ export default async function Home() {
         </section>
 
         {/* --------------------------------------------------- categories */}
-        <section className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="text-xl font-extrabold tracking-tight text-navy sm:text-2xl">
-              {dict.home.categories.label}
-            </h2>
-            <Link
-              href="/products"
-              className="text-sm font-bold text-brand transition-colors hover:text-brand-dark"
-            >
-              {dict.home.cta.browse}
-            </Link>
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-2.5">
-            {dict.home.categories.items.map((category) => (
+        {visibleCategories.length > 0 ? (
+          <section className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-xl font-extrabold tracking-tight text-navy sm:text-2xl">
+                {dict.home.categories.label}
+              </h2>
               <Link
-                key={category}
                 href="/products"
-                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-soft transition-all hover:-translate-y-0.5 hover:border-brand hover:text-brand"
+                className="text-sm font-bold text-brand transition-colors hover:text-brand-dark"
               >
-                {category}
+                {dict.home.categories.all}
               </Link>
-            ))}
-          </div>
-        </section>
+            </div>
+
+            <ul className="mt-5 flex flex-wrap gap-2.5">
+              {visibleCategories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    href={`/products?category=${encodeURIComponent(category.slug)}`}
+                    className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-soft transition-all hover:-translate-y-0.5 hover:border-brand hover:text-brand"
+                  >
+                    {category.icon ? (
+                      <>
+                        <span aria-hidden="true">{category.icon}</span>
+                        {/* The gap is explicit: JSX drops whitespace-only lines,
+                            which left the emoji touching the Arabic name. */}
+                        <span aria-hidden="true">{" "}</span>
+                      </>
+                    ) : null}
+                    {category.name_ar}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         {/* ----------------------------------------------- latest products */}
         <section className="mx-auto w-full max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">

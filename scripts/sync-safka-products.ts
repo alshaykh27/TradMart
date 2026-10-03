@@ -7,6 +7,10 @@
  * commission and is_published are never touched (a webhook is the only source
  * that may change those). Cost changes are logged to stdout.
  *
+ * Rows with source = 'manual' are created by hand in the admin panel and are
+ * skipped entirely: they are absent from every read below, so this script can
+ * neither refresh nor deactivate them.
+ *
  * Run: npm run sync:products
  *
  * Requires .env.local with SAFKA_API_BASE_URL, SAFKA_API_KEY,
@@ -110,9 +114,13 @@ async function main() {
     if (page > list.pages) break;
   } while (pages.length < totalItems);
 
+  // Manual products are excluded from every write below — not just the
+  // refresh below, but also the stale sweep at the end, which would otherwise
+  // deactivate every hand-written row (they have no Safka id to match).
   const { data: existingRows, error: lookupError } = await database
     .from("products")
-    .select("id, safka_product_id, barcode, is_published, commission, cost_price");
+    .select("id, safka_product_id, barcode, is_published, commission, cost_price")
+    .neq("source", "manual");
   if (lookupError) throw new Error(`Local lookup failed: ${lookupError.message}`);
 
   const bySafkaId = new Map<string, typeof existingRows[number]>();
@@ -122,6 +130,10 @@ async function main() {
     if (row.barcode) byBarcode.set(row.barcode, row);
   }
 
+  // category_id is deliberately absent from every payload below. Safka has no
+  // concept of a storefront category, so it is merchant metadata assigned in
+  // /admin/products; adding it to toInsert or to the per-row `details` objects
+  // would silently clear the categorisation on the next sync run.
   const toInsert: Record<string, unknown>[] = [];
   const toUpdate: Record<string, unknown>[] = [];
   let costChanged = 0;
@@ -144,6 +156,7 @@ async function main() {
         stock: computeStock(item),
         status: item.is_active ? "active" : "inactive",
         is_published: false,
+        source: "safka",
       });
       continue;
     }
@@ -180,6 +193,8 @@ async function main() {
   for (let i = 0; i < toUpdate.length; i += 100) {
     const chunk = toUpdate.slice(i, i + 100);
     const ids = chunk.map((row) => row.id as string);
+    // Explicit column list — an omitted column is left untouched by PostgREST,
+    // which is what keeps category_id (and every other manual field) intact.
     const details = chunk.map((row) => ({
       cost_price: row.cost_price,
       price: row.price,

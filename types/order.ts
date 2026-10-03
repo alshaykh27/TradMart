@@ -7,16 +7,15 @@ export type OrderUpdate = TablesUpdate<"orders">;
 export type OrderItem = Tables<"order_items">;
 export type OrderItemInsert = TablesInsert<"order_items">;
 
-// Statuses listed here are placeholders. Phase 8 will align them with the
-// statuses Safka actually sends via orderHook.
-export const ORDER_STATUSES = [
-  "pending",
-  "processing",
-  "shipped",
-  "delivered",
-  "cancelled",
-] as const;
-export type OrderStatus = (typeof ORDER_STATUSES)[number];
+// Statuses live in lib/orders/status.ts (one vocabulary shared with the
+// customer tracking page) — re-exported here for convenience.
+export {
+  ORDER_STATUSES,
+  ORDER_STATUS_LABELS,
+  ORDER_STATUS_BADGES,
+  isOrderStatus,
+  type OrderStatus,
+} from "@/lib/orders/status";
 
 export type OrderWithItems = Order & {
   order_items: OrderItem[];

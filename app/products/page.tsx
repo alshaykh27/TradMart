@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { createClient } from "@/lib/supabase/server";
 import { defaultLocale, getDictionary } from "@/i18n";
+import { isValidSlug } from "@/lib/products/category";
 
 export const metadata: Metadata = {
   title: "المنتجات",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 function daysSince(iso: string | null | undefined): number {
   if (!iso) return Number.MAX_SAFE_INTEGER;
   const diff = Date.now() - new Date(iso).getTime();
-  return Math.floor(diff / (1000 * 60 * 60 * 24));
+  return Math.floor(diff / (24 * 60 * 60 * 1000));
 }
 
 export default async function ProductsPage({
@@ -24,7 +25,28 @@ export default async function ProductsPage({
   const client = await createClient();
   const params = await searchParams;
   const query = typeof params.q === "string" ? params.q.trim() : "";
+  // The category filter is a slug from the URL. It is pattern-checked before it
+  // is used, then resolved to a real id, so a hand-edited URL can never be
+  // passed into a query filter as-is.
+  const requestedSlug =
+    typeof params.category === "string" && isValidSlug(params.category)
+      ? params.category
+      : "";
 
+  const { data: categories } = await client
+    .from("categories")
+    .select("id, name_ar, slug, icon, display_order")
+    .order("display_order")
+    .order("name_ar");
+
+  const selectedCategory =
+    requestedSlug === ""
+      ? null
+      : (categories ?? []).find((category) => category.slug === requestedSlug) ?? null;
+
+  // The filter runs in the database, after the slug has been resolved to a real
+  // id. An unknown slug is treated as "no filter" so a stale bookmark still
+  // shows the shop instead of an empty listing.
   let builder = client
     .from("products")
     .select("id, name, price, image_url, stock, updated_at")
@@ -35,11 +57,17 @@ export default async function ProductsPage({
     builder = builder.ilike("name", `%${query}%`);
   }
 
+  if (selectedCategory) {
+    builder = builder.eq("category_id", selectedCategory.id);
+  }
+
   const { data, error } = await builder.limit(96);
   const products = (error ? [] : (data ?? [])).map((product) => ({
     ...product,
     isNew: daysSince(product.updated_at) <= 30,
   }));
+
+  const listingHref = query ? `/products?q=${encodeURIComponent(query)}` : "/products";
 
   return (
     <>
@@ -55,6 +83,11 @@ export default async function ProductsPage({
                     {dict.products.title}{" "}
                     <span className="text-brand">«{query}»</span>
                   </>
+                ) : selectedCategory ? (
+                  <>
+                    {dict.products.title} ·{" "}
+                    <span className="text-brand">{selectedCategory.name_ar}</span>
+                  </>
                 ) : (
                   dict.products.title
                 )}
@@ -62,7 +95,7 @@ export default async function ProductsPage({
               <p className="mt-2 text-slate-600">{dict.products.description}</p>
             </div>
 
-            {query && (
+            {(query || selectedCategory) && (
               <Link
                 href="/products"
                 className="inline-flex h-10 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-sm font-bold text-navy transition-colors hover:border-brand hover:text-brand"
@@ -71,6 +104,48 @@ export default async function ProductsPage({
               </Link>
             )}
           </header>
+
+          {/* Category filter. A plain GET form so the choice is a shareable URL
+              and the filtering stays on the server. */}
+          {categories && categories.length > 0 ? (
+            <form method="get" className="mb-6 flex flex-wrap items-center gap-2">
+              {query ? <input type="hidden" name="q" value={query} /> : null}
+              <label
+                htmlFor="category"
+                className="text-sm font-semibold text-navy-soft"
+              >
+                {dict.products.categoryLabel}
+              </label>
+              <select
+                id="category"
+                name="category"
+                defaultValue={selectedCategory?.slug ?? ""}
+                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-navy outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/30"
+              >
+                <option value="">{dict.products.allCategories}</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.slug}>
+                    {category.icon ? `${category.icon} ` : ""}
+                    {category.name_ar}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                className="rounded-full bg-navy px-4 py-2 text-sm font-bold text-white transition hover:bg-brand"
+              >
+                {dict.products.search}
+              </button>
+              {selectedCategory ? (
+                <a
+                  href={listingHref}
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-navy-soft transition hover:border-brand hover:text-brand"
+                >
+                  {dict.products.clearCategory}
+                </a>
+              ) : null}
+            </form>
+          ) : null}
 
           {products.length === 0 ? (
             <div className="mx-auto max-w-md rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-soft">
@@ -91,11 +166,23 @@ export default async function ProductsPage({
                 </svg>
               </div>
               <h2 className="mt-5 text-xl font-extrabold text-navy">
-                {dict.products.emptyTitle}
+                {selectedCategory
+                  ? dict.products.emptyCategoryTitle
+                  : dict.products.emptyTitle}
               </h2>
               <p className="mt-2 text-sm leading-6 text-slate-500">
-                {dict.products.emptyHint}
+                {selectedCategory
+                  ? dict.products.emptyCategoryHint
+                  : dict.products.emptyHint}
               </p>
+              {selectedCategory ? (
+                <Link
+                  href={listingHref}
+                  className="mt-6 inline-flex h-10 items-center rounded-full bg-navy px-5 text-sm font-bold text-white transition hover:bg-brand"
+                >
+                  {dict.products.allCategories}
+                </Link>
+              ) : null}
             </div>
           ) : (
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
