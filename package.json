@@ -17,6 +17,7 @@
     "verify:phase6": "node --env-file=.env.local scripts/verify-phase6.mjs",
     "verify:phase7": "node --env-file=.env.local scripts/verify-phase7.mjs",
     "verify:phase8": "node --env-file=.env.local scripts/verify-phase8.mjs",
+    "verify:types": "node --env-file=.env.local scripts/verify-types.mjs",
     "audit:security": "node --env-file=.env.local scripts/audit-security.mjs"
   },
   "dependencies": {

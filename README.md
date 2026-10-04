@@ -222,6 +222,8 @@ npm run verify:phase3.5
 npm run verify:phase4
 npm run verify:phase6
 npm run verify:phase7
+npm run verify:phase8
+npm run verify:types
 
 ---
 

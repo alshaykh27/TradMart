@@ -174,7 +174,7 @@ export type Database = {
           safka_order_id?: string | null;
           customer_name: string;
           phone: string;
-country: string;
+          country: string;
           city: string;
           governorate?: string | null;
           shipping_governorate?: string | null;
@@ -194,6 +194,7 @@ country: string;
           country?: string;
           city?: string;
           governorate?: string | null;
+          shipping_governorate?: string | null;
           address?: string;
           subtotal?: number;
           shipping_fee?: number;
