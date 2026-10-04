@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isUuid } from "@/lib/products/category";
+import { deriveSyncedPrice } from "@/lib/products/pricing";
 
 /**
  * PATCH /api/admin/products/[id] — publish toggle, commission edit, and the
@@ -10,6 +11,13 @@ import { isUuid } from "@/lib/products/category";
  * category_id is only ever written when the key is present in the body, so the
  * publish toggle and commission editor (which do not send it) can never clear a
  * category. "no category" is sent as an explicit null.
+ *
+ * A commission is markup, so saving one re-derives `price` from the stored
+ * cost_price (price = cost_price + commission) in the same write. The browser
+ * never sends a price, exactly as with a manual product: the client cannot
+ * decide the customer-facing price, the server derives it from the cost it
+ * already holds. Without this the storefront keeps rendering the raw Safka
+ * price and the markup silently does nothing.
  */
 export async function PATCH(
   request: Request,
@@ -32,8 +40,13 @@ export async function PATCH(
     return NextResponse.json({ ok: false, error: "طلب غير صالح" }, { status: 400 });
   }
 
-  const update: { is_published?: boolean; commission?: number | null; category_id?: string | null } =
-    {};
+  const update: {
+    is_published?: boolean;
+    commission?: number | null;
+    category_id?: string | null;
+    /** Server-derived only — never read from the request body. */
+    price?: number;
+  } = {};
 
   if ("is_published" in body) {
     if (typeof body.is_published !== "boolean") {
@@ -86,6 +99,33 @@ export async function PATCH(
   }
 
   const admin = createAdminClient();
+
+  // Re-price whenever the commission changes. cost_price is the only input the
+  // derivation needs, so it is read first rather than trusted from the body.
+  if ("commission" in update) {
+    const { data: current, error: currentError } = await admin
+      .from("products")
+      .select("cost_price")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (currentError || !current) {
+      return NextResponse.json({ ok: false, error: "المنتج غير موجود" }, { status: 404 });
+    }
+
+    const price = deriveSyncedPrice(current.cost_price, update.commission);
+    if (price === null) {
+      // No cost means no base to add the markup to. Refuse rather than report
+      // success while leaving the customer on the unmarked-up price.
+      return NextResponse.json(
+        { ok: false, error: "تكلفة المنتج غير مسجّلة، لا يمكن احتساب العمولة" },
+        { status: 422 },
+      );
+    }
+
+    update.price = price;
+  }
+
   const { data, error } = await admin
     .from("products")
     .update(update)

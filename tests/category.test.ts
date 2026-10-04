@@ -256,7 +256,7 @@ describe("Safka writers never touch category_id", () => {
 
   it("the sync script's per-row update payload omits category_id", async () => {
     const source = await repoFile("scripts/sync-safka-products.ts");
-    const details = objectLiteral(source, "const details = chunk.map((row) =>");
+    const details = objectLiteral(source, "function refreshPayload");
     assert.equal(details.includes("category_id"), false, details);
   });
 

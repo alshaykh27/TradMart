@@ -2,10 +2,12 @@
  * TradeMart — Safka product sync (Phase 2, updated in Phase 3.5.1).
  *
  * Fetches every product from the Safka Public API and seeds new products into
- * Supabase (is_published = false). Existing PUBLISHED products are refreshed
- * with ONLY cost_price, stock, status and the derived display price; their
- * commission and is_published are never touched (a webhook is the only source
- * that may change those). Cost changes are logged to stdout.
+ * Supabase (is_published = false, cost_price = Safka's sale_price, price the
+ * same value because a new row has no commission yet). Every existing non-manual
+ * product is then refreshed with ONLY cost_price, price, stock and status —
+ * published or not. commission and is_published are never written by this
+ * script: they are merchant decisions, and neither appears in any payload below.
+ * Cost changes are logged to stdout.
  *
  * Rows with source = 'manual' are created by hand in the admin panel and are
  * skipped entirely: they are absent from every read below, so this script can
@@ -19,6 +21,10 @@
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { SafkaProduct, SafkaProductList, SafkaProductProperty } from "../types/safka";
+// Explicit .ts extension (not the extensionless form used for the type-only
+// import above, which Node erases): this is a runtime import and Node's type
+// stripping does not rewrite specifiers.
+import { deriveSyncedPrice } from "../lib/products/pricing.ts";
 
 const missing: string[] = [];
 const baseUrl = process.env.SAFKA_API_BASE_URL;
@@ -37,6 +43,31 @@ if (missing.length > 0) {
 }
 
 const PAGE_SIZE = 100;
+/** Rows are written a few at a time, but each in its own request (see below). */
+const WRITE_CONCURRENCY = 10;
+
+type RefreshRow = {
+  id: string;
+  cost_price: number;
+  price: number;
+  stock: number;
+  status: string;
+};
+
+/**
+ * The only columns a sync run may write on an existing product.
+ *
+ * commission and is_published are deliberately absent — both are merchant
+ * decisions, and the merchant is not this script.
+ */
+function refreshPayload(row: RefreshRow) {
+  return {
+    cost_price: row.cost_price,
+    price: row.price,
+    stock: row.stock,
+    status: row.status,
+  };
+}
 
 function admin(): SupabaseClient {
   return createClient(supabaseUrl as string, serviceRoleKey as string, {
@@ -132,16 +163,21 @@ async function main() {
 
   // category_id is deliberately absent from every payload below. Safka has no
   // concept of a storefront category, so it is merchant metadata assigned in
-  // /admin/products; adding it to toInsert or to the per-row `details` objects
-  // would silently clear the categorisation on the next sync run.
+  // /admin/products; adding it to toInsert or to refreshPayload() would
+  // silently clear the categorisation on the next sync run.
   const toInsert: Record<string, unknown>[] = [];
-  const toUpdate: Record<string, unknown>[] = [];
+  const toUpdate: RefreshRow[] = [];
   let costChanged = 0;
 
   for (const item of pages) {
     const existing = bySafkaId.get(item._id) ?? (item.barcode ? byBarcode.get(item.barcode) : undefined);
 
     if (!existing) {
+      // Safka's own `sale_price` is the supplier cost (see lib/safka/webhook.ts),
+      // so it seeds both columns. cost_price must not be left null here: it is
+      // the only base a later commission edit has to add the markup to, and a
+      // null cost made a freshly synced product impossible to price up.
+      const cost = Number(item.sale_price ?? 0);
       toInsert.push({
         safka_product_id: item._id,
         barcode: item.barcode ?? null,
@@ -150,8 +186,8 @@ async function main() {
         image_url: item.image ?? item.images?.[0] ?? null,
         images: toGallery(item),
         variants: toVariants(item),
-        price: Number(item.sale_price ?? 0),
-        cost_price: null,
+        price: cost,
+        cost_price: cost,
         commission: null,
         stock: computeStock(item),
         status: item.is_active ? "active" : "inactive",
@@ -161,13 +197,16 @@ async function main() {
       continue;
     }
 
-    if (existing.is_published !== true) continue;
-
+    // Every non-manual row is refreshed, published or not. The gate that used to
+    // skip unpublished rows existed to protect commission and is_published — but
+    // neither is in the per-row payload below, so it only ever withheld
+    // cost_price, which is pure Safka input. Skipping it left every freshly
+    // synced product with no cost, so no commission could be added to one until
+    // it happened to be published first.
     const newCost = Number(item.sale_price ?? 0);
-    const newPrice =
-      existing.commission !== null && existing.commission !== undefined
-        ? Math.max(0, newCost + existing.commission)
-        : newCost;
+    // Same derivation the admin commission editor uses, so a sync and a manual
+    // edit can never disagree about the customer-facing price.
+    const newPrice = deriveSyncedPrice(newCost, existing.commission) ?? newCost;
 
     if (existing.cost_price !== newCost) costChanged += 1;
     console.log(
@@ -190,19 +229,20 @@ async function main() {
     if (error) throw new Error(`Insert failed: ${error.message}`);
   }
 
-  for (let i = 0; i < toUpdate.length; i += 100) {
-    const chunk = toUpdate.slice(i, i + 100);
-    const ids = chunk.map((row) => row.id as string);
-    // Explicit column list — an omitted column is left untouched by PostgREST,
-    // which is what keeps category_id (and every other manual field) intact.
-    const details = chunk.map((row) => ({
-      cost_price: row.cost_price,
-      price: row.price,
-      stock: row.stock,
-      status: row.status,
-    }));
-    const { error } = await database.from("products").update(details).in("id", ids);
-    if (error) throw new Error(`Update failed: ${error.message}`);
+  // One request per row, never a bulk array body. PostgREST pairs an array
+  // update body against the order the DATABASE returns rows for the filter,
+  // which is unspecified — so a 100-row chunk wrote each product's cost onto
+  // whichever row happened to occupy that position, corrupting the catalog.
+  // Each request here carries one row's values and one id, so there is nothing
+  // to mispair.
+  for (let i = 0; i < toUpdate.length; i += WRITE_CONCURRENCY) {
+    const chunk = toUpdate.slice(i, i + WRITE_CONCURRENCY);
+    const results = await Promise.all(
+      chunk.map((row) => database.from("products").update(refreshPayload(row)).eq("id", row.id)),
+    );
+    for (const { error } of results) {
+      if (error) throw new Error(`Update failed: ${error.message}`);
+    }
   }
 
   let deactivated = 0;
@@ -224,7 +264,7 @@ async function main() {
   }
 
   console.log(`Synced ${seenIds.length} of ${totalItems} Safka products`);
-  console.log(`Inserted ${toInsert.length} new (unpublished), refreshed ${toUpdate.length} published`);
+  console.log(`Inserted ${toInsert.length} new (unpublished), refreshed ${toUpdate.length} existing`);
   console.log(`Cost changes ${costChanged}, deactivated ${deactivated} stale products\n`);
   console.log(seenIds.length === totalItems ? "SYNC COMPLETE\n" : "SYNC PARTIAL\n");
   process.exit(seenIds.length === totalItems ? 0 : 1);
