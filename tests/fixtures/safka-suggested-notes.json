@@ -1,0 +1,3614 @@
+{
+ "captured_at": "2026-10-04",
+ "total": 451,
+ "items": [
+  {
+   "safka_id": "6a8f3489ff4bc0f14e9997ff",
+   "note": "سعر البيع المقترح 300 عمولتك 145",
+   "live_cost": 155,
+   "parser_price": 300,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "6aae673cca38d5013c02a7a3",
+   "note": "سعر البيع المقترح 950 عمولتك 300",
+   "live_cost": 650,
+   "parser_price": 950,
+   "parser_stated_commission": 300,
+   "derived_commission": 300
+  },
+  {
+   "safka_id": "6ab24619ca38d5013cad069c",
+   "note": "سع البيع المقترح 1050 عمولتك 340",
+   "live_cost": 710,
+   "parser_price": 1050,
+   "parser_stated_commission": 340,
+   "derived_commission": 340
+  },
+  {
+   "safka_id": "6aa98263ca38d5013c4be469",
+   "note": "",
+   "live_cost": 630,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6aa81321ca38d5013caa41fc",
+   "note": "سعر البيع المقترح 500 عمولتك 230",
+   "live_cost": 270,
+   "parser_price": 500,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "6aaabda9ca38d5013cc254eb",
+   "note": "سعر البيع المقترح 1050 عمولتك 350",
+   "live_cost": 700,
+   "parser_price": 1050,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "6a9c3d2bc9d99a6b86da4ff6",
+   "note": "سعر البيع المقترح 700 عمولتك 210",
+   "live_cost": 490,
+   "parser_price": 700,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "6aa823c0ca38d5013cb2c43b",
+   "note": "سعر البيع المقترح 700 عمولتك 310",
+   "live_cost": 380,
+   "parser_price": 700,
+   "parser_stated_commission": 310,
+   "derived_commission": 320
+  },
+  {
+   "safka_id": "6aa816c7ca38d5013cab91ee",
+   "note": "سعر البيع المقترح 350 عمولتك 160",
+   "live_cost": 190,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6aa98f18ca38d5013c4e571d",
+   "note": "سعر البيع المقترح 250 عمولتك 115",
+   "live_cost": 135,
+   "parser_price": 250,
+   "parser_stated_commission": 115,
+   "derived_commission": 115
+  },
+  {
+   "safka_id": "6aa16dfdca38d5013ca5eea5",
+   "note": "سعر البيع المقترح 350 عمولتك 170",
+   "live_cost": 180,
+   "parser_price": 350,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6aaa5a0dca38d5013c7eda9f",
+   "note": "سعر البيع المقترح 350 عمولتك 180",
+   "live_cost": 170,
+   "parser_price": 350,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "6aa80df0ca38d5013ca7d692",
+   "note": "سعر البيع المقترح 700 عمولتك 310",
+   "live_cost": 380,
+   "parser_price": 700,
+   "parser_stated_commission": 310,
+   "derived_commission": 320
+  },
+  {
+   "safka_id": "6aa839ecca38d5013cba2c87",
+   "note": "سع البيع المقترح 700 عمولتك 320",
+   "live_cost": 380,
+   "parser_price": 700,
+   "parser_stated_commission": 320,
+   "derived_commission": 320
+  },
+  {
+   "safka_id": "688e725bb4f2089d481185f8",
+   "note": "سعر البيع المقترح 500 عمولتك 185",
+   "live_cost": 315,
+   "parser_price": 500,
+   "parser_stated_commission": 185,
+   "derived_commission": 185
+  },
+  {
+   "safka_id": "6a6f5e4c4d956cf6084e1cb0",
+   "note": "سعر البيع المقترح 1400 عمولتك 350",
+   "live_cost": 1050,
+   "parser_price": 1400,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "6a8253cedd189c992344d917",
+   "note": "سعر البيع المقترح 2500 عمولتك 650",
+   "live_cost": 1850,
+   "parser_price": 2500,
+   "parser_stated_commission": 650,
+   "derived_commission": 650
+  },
+  {
+   "safka_id": "694e747fdbe98faafe7dd717",
+   "note": "سعر البيع المقترح 200 عمولتك 110",
+   "live_cost": 90,
+   "parser_price": 200,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "69e1350f5a30089224de3469",
+   "note": "سعر البيع المقترح 600 عمولتك  370",
+   "live_cost": 230,
+   "parser_price": 600,
+   "parser_stated_commission": 370,
+   "derived_commission": 370
+  },
+  {
+   "safka_id": "6aa81c66ca38d5013caf65fd",
+   "note": "سعر البيع المقترح 350 عمولتك 145",
+   "live_cost": 205,
+   "parser_price": 350,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "681e11093a87ea85f4c08793",
+   "note": "",
+   "live_cost": 680,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "66ff003dcd332bac603f77e8",
+   "note": "سعر البيع المقترح 350 جنيه عمولتك 170 جنيه",
+   "live_cost": 180,
+   "parser_price": 350,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6a7f6545dd189c9923314540",
+   "note": "سعر البيع المقترح 700 عمولتك 370",
+   "live_cost": 330,
+   "parser_price": 700,
+   "parser_stated_commission": 370,
+   "derived_commission": 370
+  },
+  {
+   "safka_id": "69c1db9dcc2eaa4914727bbd",
+   "note": "سعر البيع المقترح 1700 عمولتك 500",
+   "live_cost": 1200,
+   "parser_price": 1700,
+   "parser_stated_commission": 500,
+   "derived_commission": 500
+  },
+  {
+   "safka_id": "69e974b7d84fc7e3c9390a70",
+   "note": "سعر البيع المقترح 300 عمولتك 175",
+   "live_cost": 125,
+   "parser_price": 300,
+   "parser_stated_commission": 175,
+   "derived_commission": 175
+  },
+  {
+   "safka_id": "67ab95061542b1b28cd628e6",
+   "note": "سعر البيع المقترح 500 عمولتك 170",
+   "live_cost": 330,
+   "parser_price": 500,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6a67f7e7a4ea38565147fc40",
+   "note": "سعر البيع المقترح 700 عمولتك 300",
+   "live_cost": 400,
+   "parser_price": 700,
+   "parser_stated_commission": 300,
+   "derived_commission": 300
+  },
+  {
+   "safka_id": "68cace8515bf4d8f29d5d852",
+   "note": "سعر البيع المقترح 300  عمولتك 160",
+   "live_cost": 145,
+   "parser_price": 300,
+   "parser_stated_commission": 160,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "69a23f092a87779b4a7849b1",
+   "note": "سعر البيع المقترح 300 عمولتك 140",
+   "live_cost": 160,
+   "parser_price": 300,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "693333f7635aba1b6bf60669",
+   "note": "سعر البيع المقترح  1300 عمولتك 320",
+   "live_cost": 980,
+   "parser_price": 1300,
+   "parser_stated_commission": 320,
+   "derived_commission": 320
+  },
+  {
+   "safka_id": "689289ed8402b3f88268a631",
+   "note": "سعر البيع المقترح 300 عمولتك 115",
+   "live_cost": 200,
+   "parser_price": 300,
+   "parser_stated_commission": 115,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "66ec4ecccd332bac60b9c8ba",
+   "note": "سعر البيع المقترح 150 جنيه عمولتك 60 جنيه",
+   "live_cost": 85,
+   "parser_price": 150,
+   "parser_stated_commission": 60,
+   "derived_commission": 65
+  },
+  {
+   "safka_id": "66ae540a10520799a922fa00",
+   "note": "سعر البيع المقترح 550 عمولتك 250  جنيه",
+   "live_cost": 350,
+   "parser_price": 550,
+   "parser_stated_commission": 250,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "6806480402fb341d4f438dfb",
+   "note": "سعر البيع المقترح 300 عمولتك 130",
+   "live_cost": 170,
+   "parser_price": 300,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "66939f9e10520799a98ce304",
+   "note": "سعر البيع المقترح 150 جنيه عمولتك 60",
+   "live_cost": 90,
+   "parser_price": 150,
+   "parser_stated_commission": 60,
+   "derived_commission": 60
+  },
+  {
+   "safka_id": "6979a0ef91f7563305cf26cb",
+   "note": "",
+   "live_cost": 305,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "68ba1f1198be0c79cf631164",
+   "note": "سعر البيع المقترح 250 عمولتك 100",
+   "live_cost": 170,
+   "parser_price": 250,
+   "parser_stated_commission": 100,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "687a7eb58d9f44a8a121ecb2",
+   "note": "",
+   "live_cost": 160,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "648783fc6c2eea6c3ea97bed",
+   "note": "سعر بيع مقترح 150 عمولتك 80",
+   "live_cost": 70,
+   "parser_price": 150,
+   "parser_stated_commission": 80,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "6904fc9933a765a1dec395c8",
+   "note": "سعر البيع المقترح 650 عمولتك 260",
+   "live_cost": 390,
+   "parser_price": 650,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "68e66ce7d7c301f2053b2297",
+   "note": "سعر البيع المقترح للقطعه 130 عمولتك 55",
+   "live_cost": 75,
+   "parser_price": 130,
+   "parser_stated_commission": 55,
+   "derived_commission": 55
+  },
+  {
+   "safka_id": "69c7be75cc2eaa491439075e",
+   "note": "سعر البيع المقترح 400 عمولتك 160",
+   "live_cost": 240,
+   "parser_price": 400,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "69fe4f8037a37898c23c724c",
+   "note": "سعر البيع المقترح 650 عمولتك 295",
+   "live_cost": 355,
+   "parser_price": 650,
+   "parser_stated_commission": 295,
+   "derived_commission": 295
+  },
+  {
+   "safka_id": "699c518014c5513c14666049",
+   "note": "سعر البيع المقترح 850 عمولتك 300 جنيه",
+   "live_cost": 550,
+   "parser_price": 850,
+   "parser_stated_commission": 300,
+   "derived_commission": 300
+  },
+  {
+   "safka_id": "685beeb4cd2f1d95c350ed30",
+   "note": "سع البيع المقترح 450 عمولتك 190",
+   "live_cost": 290,
+   "parser_price": 450,
+   "parser_stated_commission": 190,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6924ec9b635aba1b6b0b71f8",
+   "note": "سعر البيع المقترح 600 عمولتك 190",
+   "live_cost": 410,
+   "parser_price": 600,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "66c1dc9849e955603d1c618f",
+   "note": "",
+   "live_cost": 80,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6761c4f4f471e302051c6139",
+   "note": "سعر البيع المقترح 400  جنيه عمولتك 140 جنيه",
+   "live_cost": 260,
+   "parser_price": 400,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "691a33fe9f30377c91e3d3f4",
+   "note": "",
+   "live_cost": 410,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "690a45b854cd18fdf428f73c",
+   "note": "سعر البيع المقترح 600 عمولتك 195",
+   "live_cost": 405,
+   "parser_price": 600,
+   "parser_stated_commission": 195,
+   "derived_commission": 195
+  },
+  {
+   "safka_id": "6a26c45ff6c8815f8da3690b",
+   "note": "سعر البيع المقترح 1200 عمولتك 490",
+   "live_cost": 710,
+   "parser_price": 1200,
+   "parser_stated_commission": 490,
+   "derived_commission": 490
+  },
+  {
+   "safka_id": "69a30079609f3a69d77f8ccf",
+   "note": "سعر البيع المقترح 350 عمولتك 160",
+   "live_cost": 190,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "69f92fd537a37898c2bb6d68",
+   "note": "سعر البيع المقترح 600 عمولتك 330",
+   "live_cost": 270,
+   "parser_price": 600,
+   "parser_stated_commission": 330,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "6716f4a3fa54540680da6252",
+   "note": "سعر البيع المقترح 200 جنيه عمولتك 85 جنيه",
+   "live_cost": 120,
+   "parser_price": 200,
+   "parser_stated_commission": 85,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "68504d6bcd2f1d95c32bc2bb",
+   "note": "سعر البيع المقترح 1200 عمولتك 430",
+   "live_cost": 770,
+   "parser_price": 1200,
+   "parser_stated_commission": 430,
+   "derived_commission": 430
+  },
+  {
+   "safka_id": "678e45e485e034a4c2cb9243",
+   "note": "سعر البيع المقترح 300 جنيه عمولتك 115 جنيه",
+   "live_cost": 185,
+   "parser_price": 300,
+   "parser_stated_commission": 115,
+   "derived_commission": 115
+  },
+  {
+   "safka_id": "68d726cb5174abbc6993d654",
+   "note": "",
+   "live_cost": 380,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "699c5de914c5513c146ceb7d",
+   "note": "",
+   "live_cost": 140,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "699b89e814c5513c1424a606",
+   "note": "سعر البيع المقترح 300 عمولتك 160",
+   "live_cost": 140,
+   "parser_price": 300,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "687688f18d9f44a8a17c68aa",
+   "note": "سعر البيع المقترح 450 عمولتك 175",
+   "live_cost": 275,
+   "parser_price": 450,
+   "parser_stated_commission": 175,
+   "derived_commission": 175
+  },
+  {
+   "safka_id": "6987e9fc150f699e76681ad6",
+   "note": "سعر البيع المقترح 350 جنيه عمولتك 165 جنيه",
+   "live_cost": 185,
+   "parser_price": 350,
+   "parser_stated_commission": 165,
+   "derived_commission": 165
+  },
+  {
+   "safka_id": "6a669886a4ea385651ad3aac",
+   "note": "سعر البيع المقترح 300 عمولتك 130",
+   "live_cost": 170,
+   "parser_price": 300,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "6a502bfafd268beb6d4a4717",
+   "note": "سعر البيع المقترح 800 عمولتك 350",
+   "live_cost": 450,
+   "parser_price": 800,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "69615044356433dea16f0bd8",
+   "note": "سعر البيع المقترح 500 عمولتك 245",
+   "live_cost": 255,
+   "parser_price": 500,
+   "parser_stated_commission": 245,
+   "derived_commission": 245
+  },
+  {
+   "safka_id": "69e7c272e7a7da4c93020bb3",
+   "note": "سعر البيع المقترح 800 عمولتك 350",
+   "live_cost": 450,
+   "parser_price": 800,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "66d2071a96739cf4e4be600f",
+   "note": "سعر البيع المقترح 150 عمولتك 50",
+   "live_cost": 100,
+   "parser_price": 150,
+   "parser_stated_commission": 50,
+   "derived_commission": 50
+  },
+  {
+   "safka_id": "689288cc8402b3f8826891fd",
+   "note": "سعر البيع المقترح 1300 عمولتك 350",
+   "live_cost": 950,
+   "parser_price": 1300,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "6a552419ecf12e1a4c6c5d32",
+   "note": "سعر البيع المقترح 400 عمولتك 230",
+   "live_cost": 170,
+   "parser_price": 400,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "6766e398f471e3020562371a",
+   "note": "سعر البيع المقترح 400 عمولتك 155",
+   "live_cost": 245,
+   "parser_price": 400,
+   "parser_stated_commission": 155,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "648783fc6c2eea6c3ea97bf3",
+   "note": "سعر بيع مقترح 450 عمولتك 185",
+   "live_cost": 265,
+   "parser_price": 450,
+   "parser_stated_commission": 185,
+   "derived_commission": 185
+  },
+  {
+   "safka_id": "6a2591b7f6c8815f8d17b9fe",
+   "note": "سعر البيع المقترح 500 عمولتك 265",
+   "live_cost": 235,
+   "parser_price": 500,
+   "parser_stated_commission": 265,
+   "derived_commission": 265
+  },
+  {
+   "safka_id": "66944b7010520799a9919d2c",
+   "note": "سعر البيع المقترح 280 عمولتك 105",
+   "live_cost": 150,
+   "parser_price": 280,
+   "parser_stated_commission": 105,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "69020498cceac5763c928a54",
+   "note": "سعر البيع المقترح 200 جنيه عمولتك 105",
+   "live_cost": 95,
+   "parser_price": 200,
+   "parser_stated_commission": 105,
+   "derived_commission": 105
+  },
+  {
+   "safka_id": "6a4f0199fd268beb6dac7b99",
+   "note": "سعر البيع المقترح 700 عمولتك 305",
+   "live_cost": 405,
+   "parser_price": 700,
+   "parser_stated_commission": 305,
+   "derived_commission": 295
+  },
+  {
+   "safka_id": "68ed97e8d7c301f20576bb7c",
+   "note": "سعر بيع مقترح للقطعه 250 والقطعتين 400",
+   "live_cost": 150,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a5a7c93ecf12e1a4c80e64a",
+   "note": "سعر البيع المقترح 1000 عمولتك 420",
+   "live_cost": 580,
+   "parser_price": 1000,
+   "parser_stated_commission": 420,
+   "derived_commission": 420
+  },
+  {
+   "safka_id": "677852e0bd99b1dff789e61d",
+   "note": "",
+   "live_cost": 530,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "67fede2d6cc90c5f0312739a",
+   "note": "سعر بيع مقترح 400  عمولتك 190",
+   "live_cost": 210,
+   "parser_price": 400,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "69ddf3e5ce9bd0ede8b79cd1",
+   "note": "سعر البيع المقترح 250 عمولتك 120",
+   "live_cost": 130,
+   "parser_price": 250,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "67353ef01548cec72d5b6327",
+   "note": "سعر بيع مقترح 350 عمولتك 145",
+   "live_cost": 205,
+   "parser_price": 350,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "6a6127de8a58367936180a95",
+   "note": "سعر البيع المقترح 500 عمولتك 190",
+   "live_cost": 310,
+   "parser_price": 500,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6a104fcabfc3530e44daee7b",
+   "note": "سعر البيع المقترح 750 عمولتك 310",
+   "live_cost": 440,
+   "parser_price": 750,
+   "parser_stated_commission": 310,
+   "derived_commission": 310
+  },
+  {
+   "safka_id": "674e32be1548cec72daebf00",
+   "note": "سعر بيع مقترح 300 عمولتك 120",
+   "live_cost": 180,
+   "parser_price": 300,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "6a414df4fd268beb6de1f5eb",
+   "note": "سعر البيع المقترح 700 عمولتك 270",
+   "live_cost": 430,
+   "parser_price": 700,
+   "parser_stated_commission": 270,
+   "derived_commission": 270
+  },
+  {
+   "safka_id": "69c2db1ecc2eaa4914e85916",
+   "note": "سعر البيع المقترح 1200 عمولتك 440",
+   "live_cost": 760,
+   "parser_price": 1200,
+   "parser_stated_commission": 440,
+   "derived_commission": 440
+  },
+  {
+   "safka_id": "68a8e1ea189d18298d0e571f",
+   "note": "سعر البيع المقترح 100 عمولتك 15",
+   "live_cost": 85,
+   "parser_price": 100,
+   "parser_stated_commission": 15,
+   "derived_commission": 15
+  },
+  {
+   "safka_id": "69e16d915a30089224ffefc7",
+   "note": "سعر البيع المقترح 250 عمولتك 120",
+   "live_cost": 130,
+   "parser_price": 250,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "66a1250110520799a9d980a2",
+   "note": "سعر البيع المقترح 300 عمولتك 160",
+   "live_cost": 140,
+   "parser_price": 300,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "698a5116150f699e762bf1d9",
+   "note": "سعر البيع المقترح 250 عمولتك 115",
+   "live_cost": 135,
+   "parser_price": 250,
+   "parser_stated_commission": 115,
+   "derived_commission": 115
+  },
+  {
+   "safka_id": "6904eed333a765a1debec058",
+   "note": "سعر البيع المقترح 500 عمولتك 230",
+   "live_cost": 270,
+   "parser_price": 500,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "673744561548cec72d72ac51",
+   "note": "سعر البيع المقترح 800 جنيه عمولتك 250 جنيه",
+   "live_cost": 550,
+   "parser_price": 800,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "688687548d9f44a8a150cc0b",
+   "note": "سعر البيع المقترح 600 عمولتك 190",
+   "live_cost": 410,
+   "parser_price": 600,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "689891f2cea36353d6b146c0",
+   "note": "سعر البيع المقترح 550 عمولتك 210",
+   "live_cost": 340,
+   "parser_price": 550,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "699ba6df14c5513c1427c1b2",
+   "note": "سعر البيع المقترح 250 عمولتك 115",
+   "live_cost": 135,
+   "parser_price": 250,
+   "parser_stated_commission": 115,
+   "derived_commission": 115
+  },
+  {
+   "safka_id": "6709c5a6fa545406806eadaa",
+   "note": "سعر البيع المقترح 500 جنيه عمولتك 170 جنيه",
+   "live_cost": 330,
+   "parser_price": 500,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "689e5794cea36353d6edde02",
+   "note": "سعر البيع المقترح 400 عمولتك 170",
+   "live_cost": 220,
+   "parser_price": 400,
+   "parser_stated_commission": 170,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "686e52293d57f3e4089f9d3b",
+   "note": "سعر البيع المقترح للقطعه 250 عمولتك 120",
+   "live_cost": 130,
+   "parser_price": 250,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "68109c9c3a87ea85f46b01e9",
+   "note": "سعر البيع المقترح القطعه 170 وعرض القطعتين ب 300",
+   "live_cost": 95,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "67c9f72af55a506a866b5c92",
+   "note": "سعر البيع المقترح 600 عمولتك 255",
+   "live_cost": 345,
+   "parser_price": 600,
+   "parser_stated_commission": 255,
+   "derived_commission": 255
+  },
+  {
+   "safka_id": "6a257713f6c8815f8dfab84c",
+   "note": "سعر البيع المقترح 350 عمولتك 140",
+   "live_cost": 210,
+   "parser_price": 350,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68a98f3a189d18298d2578fd",
+   "note": "",
+   "live_cost": 260,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "68710aa7fef172abfc1569f1",
+   "note": "سعر البيع المقترح 350 عمولتك 155",
+   "live_cost": 195,
+   "parser_price": 350,
+   "parser_stated_commission": 155,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "68a87e21189d18298df54f6b",
+   "note": "سعر البيع المقترح 500 عمولتك 140",
+   "live_cost": 360,
+   "parser_price": 500,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "6a32b77a5c185c62adc3c76c",
+   "note": "سعر البيع المقترح 250 عمولتك 135",
+   "live_cost": 115,
+   "parser_price": 250,
+   "parser_stated_commission": 135,
+   "derived_commission": 135
+  },
+  {
+   "safka_id": "6886882c8d9f44a8a150de3d",
+   "note": "سعر البيع المقترح 600 عمولتك 190",
+   "live_cost": 410,
+   "parser_price": 600,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6a6e658d3f6ed554e3f689e6",
+   "note": "",
+   "live_cost": 120,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "691f0085635aba1b6b9c2223",
+   "note": "سعر البيع المقترح 450 عمولتك 200",
+   "live_cost": 250,
+   "parser_price": 450,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "67bcb2271d01274ec66b0f0d",
+   "note": "سعر البيع المقترح 350 عمولتك 125",
+   "live_cost": 225,
+   "parser_price": 350,
+   "parser_stated_commission": 125,
+   "derived_commission": 125
+  },
+  {
+   "safka_id": "68890cedb4f2089d481c8dde",
+   "note": "سعر البيع المقترح 800 عمولتك 240",
+   "live_cost": 560,
+   "parser_price": 800,
+   "parser_stated_commission": 240,
+   "derived_commission": 240
+  },
+  {
+   "safka_id": "6a296300f6c8815f8dcb1277",
+   "note": "سعر البيع المقترح 550 عمولتك 230",
+   "live_cost": 320,
+   "parser_price": 550,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "6a4ef018fd268beb6daa16e9",
+   "note": "سع البيع المقترح 1100 عمولتك 305",
+   "live_cost": 795,
+   "parser_price": 1100,
+   "parser_stated_commission": 305,
+   "derived_commission": 305
+  },
+  {
+   "safka_id": "688b646fb4f2089d487e18ce",
+   "note": "سعر بيع مقترح 350 عمولتك 185",
+   "live_cost": 165,
+   "parser_price": 350,
+   "parser_stated_commission": 185,
+   "derived_commission": 185
+  },
+  {
+   "safka_id": "68abbaa9189d18298dbd3fcc",
+   "note": "سعر بيع مقترح 1100 هتكون عمولتك 325 جنيه",
+   "live_cost": 775,
+   "parser_price": 1100,
+   "parser_stated_commission": 325,
+   "derived_commission": 325
+  },
+  {
+   "safka_id": "6a1210f0bfc3530e444e8bea",
+   "note": "سعر البيع المقترح 950 عمولتك 240",
+   "live_cost": 710,
+   "parser_price": 950,
+   "parser_stated_commission": 240,
+   "derived_commission": 240
+  },
+  {
+   "safka_id": "6626f1ec0e468fed78c7015d",
+   "note": "سعر البيع المقترح 350 عمولتك 110 جنيه",
+   "live_cost": 240,
+   "parser_price": 350,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "675ed32ff471e30205f0f46f",
+   "note": "سعر بيع مقترح 250 عمولتك 90",
+   "live_cost": 160,
+   "parser_price": 250,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "6a2d40a1444b45b6f4a16022",
+   "note": "سعر البيع المقترح 900 عمولتك 340",
+   "live_cost": 560,
+   "parser_price": 900,
+   "parser_stated_commission": 340,
+   "derived_commission": 340
+  },
+  {
+   "safka_id": "698c379a150f699e76a0a835",
+   "note": "سعر البيع المقترح 1050 عمولتك 315",
+   "live_cost": 735,
+   "parser_price": 1050,
+   "parser_stated_commission": 315,
+   "derived_commission": 315
+  },
+  {
+   "safka_id": "6a7cc0fd42d4b8fe406a8d5a",
+   "note": "سعر البيع المقترح 700 عمولتك 240",
+   "live_cost": 460,
+   "parser_price": 700,
+   "parser_stated_commission": 240,
+   "derived_commission": 240
+  },
+  {
+   "safka_id": "66567d0f0e468fed787e6d65",
+   "note": "سعر البيع المقترح 300 عمولتك 110",
+   "live_cost": 190,
+   "parser_price": 300,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "6866851e3d57f3e408f5beca",
+   "note": "سعر البيع المقترح 900 عمولتك 320",
+   "live_cost": 550,
+   "parser_price": 900,
+   "parser_stated_commission": 320,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "6920552b635aba1b6bd8fbe8",
+   "note": "سعر البيع المقترح 800 هتكون عمولتك 400 جنيه",
+   "live_cost": 400,
+   "parser_price": 800,
+   "parser_stated_commission": 400,
+   "derived_commission": 400
+  },
+  {
+   "safka_id": "6a1b61c79e08240a76bbf38a",
+   "note": "سعر البيع المقترح 900 عمولتك 320",
+   "live_cost": 580,
+   "parser_price": 900,
+   "parser_stated_commission": 320,
+   "derived_commission": 320
+  },
+  {
+   "safka_id": "68b5db926422f463ee6b0aec",
+   "note": "سعر البيع 300 عمولتك 140",
+   "live_cost": 160,
+   "parser_price": 300,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68abb979189d18298dbd298c",
+   "note": "سعر البيع المقترح  800 عمولتك 290",
+   "live_cost": 510,
+   "parser_price": 800,
+   "parser_stated_commission": 290,
+   "derived_commission": 290
+  },
+  {
+   "safka_id": "696a4e066681b56512f5660e",
+   "note": "سعر البيع المقترح 250 عمولتك 140 عمولتك",
+   "live_cost": 160,
+   "parser_price": 250,
+   "parser_stated_commission": 140,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "67d20e49f55a506a861cacd7",
+   "note": "سعر البيع المقترح 700 عمولتك 350",
+   "live_cost": 350,
+   "parser_price": 700,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "68ad0cd3c3315c9e3d9c1fad",
+   "note": "سعر البيع المقترح 550 عمولتك 200",
+   "live_cost": 350,
+   "parser_price": 550,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "678e47bd85e034a4c2cbcc6c",
+   "note": "سعر البيع المقترح 700 جنيه عمولتك 250 جنيه",
+   "live_cost": 450,
+   "parser_price": 700,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "68ab59bf189d18298dad918b",
+   "note": "سعر البيع مقترح 100 عمولتك 40",
+   "live_cost": 60,
+   "parser_price": 100,
+   "parser_stated_commission": 40,
+   "derived_commission": 40
+  },
+  {
+   "safka_id": "6656802c0e468fed787e6ea8",
+   "note": "سعر البيع المقترح 350 جنيه عمولتك 120 جنيه",
+   "live_cost": 230,
+   "parser_price": 350,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "648783fc6c2eea6c3ea97b32",
+   "note": "سعر بيع مقترح 300  عمولتك 135",
+   "live_cost": 165,
+   "parser_price": 300,
+   "parser_stated_commission": 135,
+   "derived_commission": 135
+  },
+  {
+   "safka_id": "6979a3c991f7563305cf3626",
+   "note": "سعر البيع المقترح 900 عمولتك 330",
+   "live_cost": 570,
+   "parser_price": 900,
+   "parser_stated_commission": 330,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "68e3e3f1d7c301f205c7e150",
+   "note": "سعر البيع المقترح 250 عمولتك 100 جنيه",
+   "live_cost": 150,
+   "parser_price": 250,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "6a6353540868f034dd944519",
+   "note": "سعر البيع المقترح 750 عمولتك 260",
+   "live_cost": 490,
+   "parser_price": 750,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "68b8bcba6422f463eed85c16",
+   "note": "سعر البيع المقترح 1000 عمولتك 280",
+   "live_cost": 720,
+   "parser_price": 1000,
+   "parser_stated_commission": 280,
+   "derived_commission": 280
+  },
+  {
+   "safka_id": "6a7c865a42d4b8fe404df6ab",
+   "note": "سعر البيع المقترح 750 عمولتك 255",
+   "live_cost": 495,
+   "parser_price": 750,
+   "parser_stated_commission": 255,
+   "derived_commission": 255
+  },
+  {
+   "safka_id": "68aa1154189d18298d5b17b4",
+   "note": "سعر البيع المقترح 400 عمولتك 205",
+   "live_cost": 195,
+   "parser_price": 400,
+   "parser_stated_commission": 205,
+   "derived_commission": 205
+  },
+  {
+   "safka_id": "6a675a2da4ea3856510cb38b",
+   "note": "سعر البيع المقترح 900 عمولتك 280",
+   "live_cost": 680,
+   "parser_price": 900,
+   "parser_stated_commission": 280,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "6a4f0563fd268beb6dacee8b",
+   "note": "سعر البيع المقترح 900 عمولتك 280",
+   "live_cost": 620,
+   "parser_price": 900,
+   "parser_stated_commission": 280,
+   "derived_commission": 280
+  },
+  {
+   "safka_id": "67fab8786cc90c5f03ac3e69",
+   "note": "سعر البيع المقترح 500 عمولتك 310",
+   "live_cost": 290,
+   "parser_price": 500,
+   "parser_stated_commission": 310,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "68e98a7fd7c301f205b6d68a",
+   "note": "سعر البيع المقترح 900 عمولتك 275 جنيه",
+   "live_cost": 625,
+   "parser_price": 900,
+   "parser_stated_commission": 275,
+   "derived_commission": 275
+  },
+  {
+   "safka_id": "68c534f0c79e01ee54dd1dab",
+   "note": "سعر بيع مقترح 350 عمولتك 140",
+   "live_cost": 210,
+   "parser_price": 350,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68fa68e2cceac5763ce60d6e",
+   "note": "",
+   "live_cost": 420,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a2aadd3f6c8815f8d4ff4e8",
+   "note": "سعر البيع المقترح 950 عمولتك 290",
+   "live_cost": 660,
+   "parser_price": 950,
+   "parser_stated_commission": 290,
+   "derived_commission": 290
+  },
+  {
+   "safka_id": "6a71d2484d956cf608440c37",
+   "note": "سعر البيع المقترح 800 عمولتك 300",
+   "live_cost": 500,
+   "parser_price": 800,
+   "parser_stated_commission": 300,
+   "derived_commission": 300
+  },
+  {
+   "safka_id": "691480089708ca3bf01842ea",
+   "note": "سعر البيع المقترح 200 عمولتك 90",
+   "live_cost": 110,
+   "parser_price": 200,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "68c9719b15bf4d8f2988af5a",
+   "note": "سعر البيع المقترح 550 عمولتك 225",
+   "live_cost": 350,
+   "parser_price": 550,
+   "parser_stated_commission": 225,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "692ab9b6635aba1b6b8f8ecc",
+   "note": "سعر البيع المقترح 200 عمولتك 95",
+   "live_cost": 105,
+   "parser_price": 200,
+   "parser_stated_commission": 95,
+   "derived_commission": 95
+  },
+  {
+   "safka_id": "68c0caddc79e01ee5439126b",
+   "note": "سعر البيع المقترح 700 جنيه عمولتك 260 جنيه",
+   "live_cost": 440,
+   "parser_price": 700,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "68092337015f399decbce234",
+   "note": "سعر البيع المقترح 800 عمولتك 270 جنيه",
+   "live_cost": 530,
+   "parser_price": 800,
+   "parser_stated_commission": 270,
+   "derived_commission": 270
+  },
+  {
+   "safka_id": "6808ec87015f399decb5142a",
+   "note": "سعر البيع المقترح 700 عمولتك 240",
+   "live_cost": 460,
+   "parser_price": 700,
+   "parser_stated_commission": 240,
+   "derived_commission": 240
+  },
+  {
+   "safka_id": "689b55adcea36353d648aeab",
+   "note": "سعر البيع المقترح 350 عمولتك 100",
+   "live_cost": 250,
+   "parser_price": 350,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "696d7dfa6681b56512c92474",
+   "note": "سعر البيع المقترح 700 عمولتك 300",
+   "live_cost": 400,
+   "parser_price": 700,
+   "parser_stated_commission": 300,
+   "derived_commission": 300
+  },
+  {
+   "safka_id": "6953fb9e54bba2d499f083bb",
+   "note": "",
+   "live_cost": 600,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "69e211955a3008922435c233",
+   "note": "سعر البيع المقترح 800 عمولتك 250",
+   "live_cost": 550,
+   "parser_price": 800,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "68b773a76422f463eea7ce07",
+   "note": "سعر البيع المقترح 700 عمولتك 250",
+   "live_cost": 450,
+   "parser_price": 700,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "687139bffef172abfc22bb95",
+   "note": "سعر البيع المقترح 500 عمولتك 235",
+   "live_cost": 265,
+   "parser_price": 500,
+   "parser_stated_commission": 235,
+   "derived_commission": 235
+  },
+  {
+   "safka_id": "6a29b2f7f6c8815f8df59fad",
+   "note": "سعر البيع المقترح 2500 عمولتك 700",
+   "live_cost": 1800,
+   "parser_price": 2500,
+   "parser_stated_commission": 700,
+   "derived_commission": 700
+  },
+  {
+   "safka_id": "68b9c85498be0c79cf5476c1",
+   "note": "سعر البيع المقترح 700 عمولتك 220",
+   "live_cost": 480,
+   "parser_price": 700,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "6801305631443c76195f1a74",
+   "note": "سعر البيع المقترح 1300 عمولتك 300",
+   "live_cost": 900,
+   "parser_price": 1300,
+   "parser_stated_commission": 300,
+   "derived_commission": 400
+  },
+  {
+   "safka_id": "67315a61d84017480e7ed3d4",
+   "note": "سعر البيع المقترح للقطعة 400 عمولتك 180",
+   "live_cost": 220,
+   "parser_price": 400,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "67a0b134dd0eb9af8f19bcfd",
+   "note": "سعر البيع المقترح 300  عمولتك 135",
+   "live_cost": 165,
+   "parser_price": 300,
+   "parser_stated_commission": 135,
+   "derived_commission": 135
+  },
+  {
+   "safka_id": "68025b6331443c76196ee953",
+   "note": "سعر البيع المقترح 800 عمولتك 260",
+   "live_cost": 540,
+   "parser_price": 800,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "699b8bf514c5513c14250893",
+   "note": "سعر البيع المقترح 300 عمولتك 140",
+   "live_cost": 160,
+   "parser_price": 300,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68e288a0d7c301f205825dcb",
+   "note": "سعر البيع المقترح 500 عمولتك 205",
+   "live_cost": 295,
+   "parser_price": 500,
+   "parser_stated_commission": 205,
+   "derived_commission": 205
+  },
+  {
+   "safka_id": "696a2c846681b56512e6886e",
+   "note": "سعر البيع المقترح 800 عمولتك 230",
+   "live_cost": 570,
+   "parser_price": 800,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "68cbaf2815bf4d8f29ec4567",
+   "note": "سعر البيع المقترح 200 عمولتك 75",
+   "live_cost": 125,
+   "parser_price": 200,
+   "parser_stated_commission": 75,
+   "derived_commission": 75
+  },
+  {
+   "safka_id": "68979d74cea36353d68f4a3f",
+   "note": "",
+   "live_cost": 670,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "686920103d57f3e408816035",
+   "note": "سعر البيع المقترح 250 عمولتك 110",
+   "live_cost": 140,
+   "parser_price": 250,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "686d54323d57f3e4086c9350",
+   "note": "سعر البيع المقترح 1000 جنيه عمولتك 360",
+   "live_cost": 640,
+   "parser_price": 1000,
+   "parser_stated_commission": 360,
+   "derived_commission": 360
+  },
+  {
+   "safka_id": "689e7e1fcea36353d6f0334b",
+   "note": "سعر البيع المقترح 600 عمولتك 210",
+   "live_cost": 395,
+   "parser_price": 600,
+   "parser_stated_commission": 210,
+   "derived_commission": 205
+  },
+  {
+   "safka_id": "67bcf0081d01274ec670bf97",
+   "note": "سعر البيع المقترح 300 عمولتك 100",
+   "live_cost": 200,
+   "parser_price": 300,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "692fa223635aba1b6b022b3b",
+   "note": "سعر البيع المقترح للقطعه 350 عمولتك 150",
+   "live_cost": 200,
+   "parser_price": 350,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "67c0c0fc733fbc16c93ea3d6",
+   "note": "سعر البيع المقترح 400 عمولتك 220",
+   "live_cost": 180,
+   "parser_price": 400,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "69cd181c87fa1a67bb927865",
+   "note": "سعر البيع المقترح 350 عمولتك 180",
+   "live_cost": 170,
+   "parser_price": 350,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "67c0dbe5733fbc16c93f7c1e",
+   "note": "سعر البيع المقترح 800 عمولتك 310",
+   "live_cost": 490,
+   "parser_price": 800,
+   "parser_stated_commission": 310,
+   "derived_commission": 310
+  },
+  {
+   "safka_id": "6a4d18d6fd268beb6de0747a",
+   "note": "سعر البيع المقترح 500 عمولتك 210",
+   "live_cost": 290,
+   "parser_price": 500,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "68d1294415bf4d8f29015896",
+   "note": "سعر البيع المقترح 130 عمولتك 45",
+   "live_cost": 85,
+   "parser_price": 130,
+   "parser_stated_commission": 45,
+   "derived_commission": 45
+  },
+  {
+   "safka_id": "68e28064d7c301f2058080ab",
+   "note": "سعر البيع المقترح القطعتين 600 عمولتك 220",
+   "live_cost": 380,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6850a6f4cd2f1d95c339a7d6",
+   "note": "سعر بيع مقترح 350 عمولتك 140",
+   "live_cost": 210,
+   "parser_price": 350,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "69eca9dad84fc7e3c9cb0241",
+   "note": "سعر البيع المقترح 450 عمولتك 210",
+   "live_cost": 240,
+   "parser_price": 450,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "694434cbf7d30860862cf918",
+   "note": "سعر البيع المقترح 350 عمولتك 150",
+   "live_cost": 200,
+   "parser_price": 350,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "6868fdc53d57f3e4086aae6f",
+   "note": "سعر البيع المقترح 400 عمولتك 130",
+   "live_cost": 270,
+   "parser_price": 400,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "67b9bb681d01274ec625b03a",
+   "note": "سعر البيع المقترح 800 عمولتك 190",
+   "live_cost": 610,
+   "parser_price": 800,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6850721fcd2f1d95c334ee44",
+   "note": "سعر البيع المقترح 500 عمولتلك 130",
+   "live_cost": 370,
+   "parser_price": 500,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "68ad3fa4326f34b20cddbc12",
+   "note": "سعر البيع المقترح 350 عمولتك 145",
+   "live_cost": 200,
+   "parser_price": 350,
+   "parser_stated_commission": 145,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "69e3c3765a30089224208a22",
+   "note": "سعر البيع المقترح 400 عمولتك 145",
+   "live_cost": 255,
+   "parser_price": 400,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "68ac8fcf189d18298df1ac88",
+   "note": "سعر البيع المقترح 150 عمولتك 70",
+   "live_cost": 70,
+   "parser_price": 150,
+   "parser_stated_commission": 70,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "66b74ed649e955603dc17c02",
+   "note": "سعر البيع المقترح 150عمولتك 80",
+   "live_cost": 70,
+   "parser_price": 150,
+   "parser_stated_commission": 80,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "6a5cf7bfecf12e1a4caae51c",
+   "note": "سعر البيع المقترح 400 عمولتك 165",
+   "live_cost": 235,
+   "parser_price": 400,
+   "parser_stated_commission": 165,
+   "derived_commission": 165
+  },
+  {
+   "safka_id": "67447b1b1548cec72d31c73e",
+   "note": "سعر البيع المقترح 250  جنيه عمولتك 130 جنيه",
+   "live_cost": 120,
+   "parser_price": 250,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "6a260b77f6c8815f8d47418b",
+   "note": "سعر البيع المقترح 850 عمولتك  280",
+   "live_cost": 570,
+   "parser_price": 850,
+   "parser_stated_commission": 280,
+   "derived_commission": 280
+  },
+  {
+   "safka_id": "6879a8f18d9f44a8a1fd7def",
+   "note": "سعر البيع المقترح 650 عمولتك 300",
+   "live_cost": 320,
+   "parser_price": 650,
+   "parser_stated_commission": 300,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "673a2dae1548cec72da086d0",
+   "note": "سعر بيع مقترح 550 هتكون عمولتك 210  جنيه",
+   "live_cost": 340,
+   "parser_price": 550,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "673741c81548cec72d727f2d",
+   "note": "سعر البيع المقترح 200 عمولتك 80",
+   "live_cost": 120,
+   "parser_price": 200,
+   "parser_stated_commission": 80,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "69eca6f7d84fc7e3c9c80ea4",
+   "note": "سعر البيع المقترح 700 عمولتك 270",
+   "live_cost": 430,
+   "parser_price": 700,
+   "parser_stated_commission": 270,
+   "derived_commission": 270
+  },
+  {
+   "safka_id": "692366a7635aba1b6b9f7800",
+   "note": "",
+   "live_cost": 600,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6726c6a063402457d5767314",
+   "note": "سعر البيع المقترح 1100 جنيه عمولتك 255 جنيه ",
+   "live_cost": 845,
+   "parser_price": 1100,
+   "parser_stated_commission": 255,
+   "derived_commission": 255
+  },
+  {
+   "safka_id": "68aa138f189d18298d5b797c",
+   "note": "سعر البيع المقترح 500 عمولتك 210",
+   "live_cost": 290,
+   "parser_price": 500,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "68fdfb79cceac5763c98fab6",
+   "note": "سعر البيع المقترح 450 عمولتك 190",
+   "live_cost": 260,
+   "parser_price": 450,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6a43e24bfd268beb6d05e31d",
+   "note": "سعر البيع المقترح 1000 عمولتك 350",
+   "live_cost": 650,
+   "parser_price": 1000,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "68d1ed9b5174abbc699549eb",
+   "note": "سعر البيع المقترح 500 عمولتك 255",
+   "live_cost": 245,
+   "parser_price": 500,
+   "parser_stated_commission": 255,
+   "derived_commission": 255
+  },
+  {
+   "safka_id": "6710650afa54540680a50684",
+   "note": "سعر البيع المقترح 150 جنيه عمولتك 60 جنيه",
+   "live_cost": 80,
+   "parser_price": 150,
+   "parser_stated_commission": 60,
+   "derived_commission": 70
+  },
+  {
+   "safka_id": "6976902fd302277a9b245e01",
+   "note": "سعر البيع المقترح 200 عمولتك 90",
+   "live_cost": 110,
+   "parser_price": 200,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "6a612cc28a5836793618ff93",
+   "note": "سعر البيع المقترح 450 عمولتك 200",
+   "live_cost": 250,
+   "parser_price": 450,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "68a4a2d2189d18298d3748fc",
+   "note": "سعر البيع المقترح 250 عمولتك 90",
+   "live_cost": 160,
+   "parser_price": 250,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "685145f3cd2f1d95c3502c35",
+   "note": "سعر البيع المقترح 350 جنيه عمولتك 180 جنيه",
+   "live_cost": 170,
+   "parser_price": 350,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "65caa4dc0e468fed78de7bd7",
+   "note": "سعر البيع المقترح 450 عمولتك 150",
+   "live_cost": 300,
+   "parser_price": 450,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "67f6d77e6cc90c5f0357a938",
+   "note": "سعر البيع المقترح 240 عمولتك 90",
+   "live_cost": 150,
+   "parser_price": 240,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "688e6764b4f2089d48107f20",
+   "note": "سعر البيع المقترح 500 عمولتك 200",
+   "live_cost": 300,
+   "parser_price": 500,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "6a71f70b4d956cf608604baa",
+   "note": "سعر البيع المقترح 700 عمولتك 310",
+   "live_cost": 390,
+   "parser_price": 700,
+   "parser_stated_commission": 310,
+   "derived_commission": 310
+  },
+  {
+   "safka_id": "6a819176dd189c9923ee54a8",
+   "note": "سعر البيع المقترح 800 عملوتك 290",
+   "live_cost": 510,
+   "parser_price": 800,
+   "parser_stated_commission": 290,
+   "derived_commission": 290
+  },
+  {
+   "safka_id": "6969555d6681b56512ca9054",
+   "note": "سعر البيع المقترح 420 عمولتك 155",
+   "live_cost": 265,
+   "parser_price": 420,
+   "parser_stated_commission": 155,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "6a502690fd268beb6d49464e",
+   "note": "سعر البيع المقترح 750 عمولتك 320",
+   "live_cost": 430,
+   "parser_price": 750,
+   "parser_stated_commission": 320,
+   "derived_commission": 320
+  },
+  {
+   "safka_id": "69de0621ce9bd0ede8d3a9d4",
+   "note": "سعر البيع المقترح 650 عمولتك 245",
+   "live_cost": 405,
+   "parser_price": 650,
+   "parser_stated_commission": 245,
+   "derived_commission": 245
+  },
+  {
+   "safka_id": "685bd761cd2f1d95c3464e68",
+   "note": "سعر البيع المقترح 150 عمولتك 80",
+   "live_cost": 70,
+   "parser_price": 150,
+   "parser_stated_commission": 80,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "6a01059b37a37898c26934b7",
+   "note": "سعر البيع المقترح 300 عمولتك 140",
+   "live_cost": 160,
+   "parser_price": 300,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "67165500fa54540680d46097",
+   "note": "سعر البيع المقترح 150 جنيه عمولتك 75جنيه",
+   "live_cost": 75,
+   "parser_price": 150,
+   "parser_stated_commission": 75,
+   "derived_commission": 75
+  },
+  {
+   "safka_id": "68a8b95d189d18298d096776",
+   "note": "سعر البيع المقترح 150 عمولتك 40 ",
+   "live_cost": 95,
+   "parser_price": 150,
+   "parser_stated_commission": 40,
+   "derived_commission": 55
+  },
+  {
+   "safka_id": "6824674fcbb435de1235deaf",
+   "note": "سعر البيع المقترح 700 عمولتك 190",
+   "live_cost": 510,
+   "parser_price": 700,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "674cf0661548cec72d9e2883",
+   "note": "سعر بيع مقترح 300 هتكون عمولتك 110 جنيه",
+   "live_cost": 190,
+   "parser_price": 300,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "673a81b81548cec72da55125",
+   "note": "سعر البيع المقترح 700 عمولتك 180",
+   "live_cost": 520,
+   "parser_price": 700,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "678433da85e034a4c234bcc4",
+   "note": "سعر البيع المقترح 800 جنيه عمولتك 280 جنيه",
+   "live_cost": 520,
+   "parser_price": 800,
+   "parser_stated_commission": 280,
+   "derived_commission": 280
+  },
+  {
+   "safka_id": "66de248628454669e04514f4",
+   "note": "سعر البيع المقترح 150 عمولتك 75",
+   "live_cost": 75,
+   "parser_price": 150,
+   "parser_stated_commission": 75,
+   "derived_commission": 75
+  },
+  {
+   "safka_id": "6a5a5106ecf12e1a4c6c0c05",
+   "note": "سعر البيع المقترح 250 عمولتك 120",
+   "live_cost": 130,
+   "parser_price": 250,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "6a0b872df8838175016e5547",
+   "note": "سعر البيع المقترح 500 عمولتك 220",
+   "live_cost": 280,
+   "parser_price": 500,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "6a450a90fd268beb6d7deac8",
+   "note": "سعر البيع المقترح 800 عمولتك 330",
+   "live_cost": 470,
+   "parser_price": 800,
+   "parser_stated_commission": 330,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "69e13ea05a30089224e4b4b7",
+   "note": "سعر البيع المقترح 650 عمولتك 270",
+   "live_cost": 380,
+   "parser_price": 650,
+   "parser_stated_commission": 270,
+   "derived_commission": 270
+  },
+  {
+   "safka_id": "685185a8cd2f1d95c3641033",
+   "note": "سعر البيع المقترح 400 عمولتك 160",
+   "live_cost": 240,
+   "parser_price": 400,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6a5a572fecf12e1a4c6f87e5",
+   "note": "سعر البيع المقترح 250 عمولتك 100",
+   "live_cost": 150,
+   "parser_price": 250,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "6a3c622bb2dfdec2ecb2a647",
+   "note": "سعر البيع المقترح 700 عمولتك 210",
+   "live_cost": 490,
+   "parser_price": 700,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "67315818d84017480e7ecf96",
+   "note": "سعر البيع المقترح للقطعة 100 عمولتك 10",
+   "live_cost": 90,
+   "parser_price": 100,
+   "parser_stated_commission": 10,
+   "derived_commission": 10
+  },
+  {
+   "safka_id": "68092b92015f399decbdefc4",
+   "note": "",
+   "live_cost": 1860,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "68d1680115bf4d8f291c5710",
+   "note": "سعر البيع المقترح 350 عمولتك 110",
+   "live_cost": 240,
+   "parser_price": 350,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "6851ccf5cd2f1d95c37111d2",
+   "note": "سعر البيع المقترح 450 عمولتك 170",
+   "live_cost": 280,
+   "parser_price": 450,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "68692b0b3d57f3e408866515",
+   "note": "سعر البيع المقترح 200 عمولتك 80",
+   "live_cost": 120,
+   "parser_price": 200,
+   "parser_stated_commission": 80,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "6904ebb833a765a1debd9b49",
+   "note": "سعر البيع المقترح 200 عمولتك 70",
+   "live_cost": 130,
+   "parser_price": 200,
+   "parser_stated_commission": 70,
+   "derived_commission": 70
+  },
+  {
+   "safka_id": "689b5890cea36353d649d451",
+   "note": "سعر البيع المقترح 400 عمولتك 190",
+   "live_cost": 210,
+   "parser_price": 400,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6a84b8d4c7b6f6cbf9c323d9",
+   "note": "سعر البيع المقترح 650 عمولتك 235",
+   "live_cost": 415,
+   "parser_price": 650,
+   "parser_stated_commission": 235,
+   "derived_commission": 235
+  },
+  {
+   "safka_id": "68ad049ac3315c9e3d9beb83",
+   "note": "سعر البيع المقترح 400 عمولتك 160",
+   "live_cost": 240,
+   "parser_price": 400,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6954f208ddc488a5049b9df2",
+   "note": "سعر البيع المقترح 400 عمولتك 170",
+   "live_cost": 230,
+   "parser_price": 400,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "69014bbdcceac5763c5e2bd6",
+   "note": "سعر البيع المقترح 350  عمولتك 180",
+   "live_cost": 170,
+   "parser_price": 350,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "673a2fd31548cec72da0bad5",
+   "note": "سعر بيع مقترح 350 عمولتك 120",
+   "live_cost": 230,
+   "parser_price": 350,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "6827436bcbb435de1281ce43",
+   "note": "سعر البيع المقترح 350 عمولتك 100",
+   "live_cost": 250,
+   "parser_price": 350,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "6a668928a4ea385651a9508d",
+   "note": "سعر البيع المقترح للقطعه 200 القطعتين 350",
+   "live_cost": 120,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a300f65444b45b6f4071510",
+   "note": "سعر البيع المقترح 650 عمولتك 280",
+   "live_cost": 370,
+   "parser_price": 650,
+   "parser_stated_commission": 280,
+   "derived_commission": 280
+  },
+  {
+   "safka_id": "67fe90626cc90c5f0307fe26",
+   "note": "سعر بيع مقترح 1600 عمولتك 420",
+   "live_cost": 1180,
+   "parser_price": 1600,
+   "parser_stated_commission": 420,
+   "derived_commission": 420
+  },
+  {
+   "safka_id": "68fa4a85cceac5763cdfcb11",
+   "note": "سعر البيع المقترح 250 عمولتك 120",
+   "live_cost": 130,
+   "parser_price": 250,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "6705c4786be3c0aa396f4ba9",
+   "note": "سعر البيع المقترح 350 جنيه عمولتك 160جنيه ",
+   "live_cost": 180,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "67143df2fa54540680c20979",
+   "note": "سعر البيع المقترح 250 جنيه عمولتك 135 جنيه",
+   "live_cost": 115,
+   "parser_price": 250,
+   "parser_stated_commission": 135,
+   "derived_commission": 135
+  },
+  {
+   "safka_id": "69613717356433dea1646ae5",
+   "note": "",
+   "live_cost": 260,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a62a87d0868f034dd796b9a",
+   "note": "سعر البيع المقترح 1300 عمولتك 380",
+   "live_cost": 920,
+   "parser_price": 1300,
+   "parser_stated_commission": 380,
+   "derived_commission": 380
+  },
+  {
+   "safka_id": "68654d0c274b44138ac0a130",
+   "note": "سعر البيع المقترح 300 عمولتك 130",
+   "live_cost": 170,
+   "parser_price": 300,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "66567e450e468fed787e6dcb",
+   "note": "سعر بيع مقترح 250 هتكون عمولتك 110",
+   "live_cost": 140,
+   "parser_price": 250,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "68e511abd7c301f205fadb09",
+   "note": "سعر البيع المقترح 350 عمولتك 150",
+   "live_cost": 200,
+   "parser_price": 350,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "68e52da2d7c301f20502e048",
+   "note": "سعر البيع المقترح للقطعه 200 قطعتين 180",
+   "live_cost": 100,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a502414fd268beb6d485ef0",
+   "note": "سعر البيع المقترح 150 عمولتك 60",
+   "live_cost": 90,
+   "parser_price": 150,
+   "parser_stated_commission": 60,
+   "derived_commission": 60
+  },
+  {
+   "safka_id": "68a9cd54189d18298d488fbe",
+   "note": "سعر البيع المقترح 850 عمولتك 230",
+   "live_cost": 590,
+   "parser_price": 850,
+   "parser_stated_commission": 230,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "6a7c734442d4b8fe403d98cd",
+   "note": "سعر البيع المقترح 1300 عمولتك 400",
+   "live_cost": 900,
+   "parser_price": 1300,
+   "parser_stated_commission": 400,
+   "derived_commission": 400
+  },
+  {
+   "safka_id": "6752ca3c1548cec72de5abec",
+   "note": "سعر بيع مقترح 400 عمولتك  160",
+   "live_cost": 240,
+   "parser_price": 400,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "695fad0addc488a50494a3e1",
+   "note": "سعر البيع المقترح 600 عمولتك 195",
+   "live_cost": 405,
+   "parser_price": 600,
+   "parser_stated_commission": 195,
+   "derived_commission": 195
+  },
+  {
+   "safka_id": "6a678f05a4ea3856512eb1c1",
+   "note": "سعر البيع المقترح 350 عمولتك 120",
+   "live_cost": 230,
+   "parser_price": 350,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "68c787c015bf4d8f291be913",
+   "note": "سعر البيع المقترح 600 عمولتك 275",
+   "live_cost": 325,
+   "parser_price": 600,
+   "parser_stated_commission": 275,
+   "derived_commission": 275
+  },
+  {
+   "safka_id": "6a82c564dd189c9923606cd0",
+   "note": "سعر البيع المقترح 700 عمولتك 260",
+   "live_cost": 440,
+   "parser_price": 700,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "6810e5533a87ea85f47a8c73",
+   "note": "سعر البيع المقترح 400 عمولتك 220",
+   "live_cost": 180,
+   "parser_price": 400,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "6907b445903051f2d1b33fe1",
+   "note": "سعر البيع المقترح 700عمولتك 235",
+   "live_cost": 465,
+   "parser_price": 700,
+   "parser_stated_commission": 235,
+   "derived_commission": 235
+  },
+  {
+   "safka_id": "6a669123a4ea385651abe9c5",
+   "note": "سعر البيع المقترح 700 عمولتك 220",
+   "live_cost": 480,
+   "parser_price": 700,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "68d426c35174abbc690fb78c",
+   "note": "سعر البيع المقترح 310 عمولتك 110",
+   "live_cost": 200,
+   "parser_price": 310,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "680666f302fb341d4f47ab91",
+   "note": "سعر البيع المقترح 350 عمولتك 170",
+   "live_cost": 180,
+   "parser_price": 350,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "69d8665bfe096ac1b245729b",
+   "note": "سعر البيع المقترح 250 عمولتك 145",
+   "live_cost": 105,
+   "parser_price": 250,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "6a2aa749f6c8815f8d4b17fb",
+   "note": "سعر البيع المقترح 700 عمولتك 280",
+   "live_cost": 420,
+   "parser_price": 700,
+   "parser_stated_commission": 280,
+   "derived_commission": 280
+  },
+  {
+   "safka_id": "6a7dfaaadd189c9923baca5f",
+   "note": "سعر البيع المقترح 600 عمولتك 260",
+   "live_cost": 340,
+   "parser_price": 600,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "68d890b3d7c301f205a70cf5",
+   "note": "سعر البيع المقترح 900 عمولتك 330",
+   "live_cost": 570,
+   "parser_price": 900,
+   "parser_stated_commission": 330,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "69e97ad1d84fc7e3c93c6e30",
+   "note": "سعر البيع المقترح 450 عمولتك 170",
+   "live_cost": 280,
+   "parser_price": 450,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6a7676924d956cf60836b8fb",
+   "note": "سعر البيع المقترح 400 عمولتك 170",
+   "live_cost": 230,
+   "parser_price": 400,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6904e6a833a765a1debb9f70",
+   "note": "سعر البيع المقترح 400 عمولتك 155",
+   "live_cost": 245,
+   "parser_price": 400,
+   "parser_stated_commission": 155,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "6a875b846c33f3e3e4befa95",
+   "note": "سعر البيع المقترح 400 عمولتك 170",
+   "live_cost": 230,
+   "parser_price": 400,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "66567bf50e468fed787e6c04",
+   "note": "سعر البيع المقترح 350 عمولتك 160",
+   "live_cost": 190,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "66f012d7cd332bac60d3c7cf",
+   "note": "سعر البيع المقترح 150 جنيه عمولتك 80 جنيه",
+   "live_cost": 70,
+   "parser_price": 150,
+   "parser_stated_commission": 80,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "6a77a5db849bf12335fc839a",
+   "note": "سعر البيع المقترح 400 عمولك 155",
+   "live_cost": 245,
+   "parser_price": 400,
+   "parser_stated_commission": 155,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "69650ce87fd9c61da9efb337",
+   "note": "سعر البيع المقترح 700 عمولتك 190",
+   "live_cost": 510,
+   "parser_price": 700,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "68e52053d7c301f205ff973a",
+   "note": "سعر البيع المقترح 450 عمولتك 140",
+   "live_cost": 310,
+   "parser_price": 450,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "6a2823b9f6c8815f8d42088a",
+   "note": "سعر البيع المقترح 250 عمولتك 140",
+   "live_cost": 110,
+   "parser_price": 250,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68233a97cbb435de12193721",
+   "note": "سعر البيع المقترح 650 عمولتك 180",
+   "live_cost": 470,
+   "parser_price": 650,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "6a693082a4ea385651df412a",
+   "note": "سعر البيع المقترح 400 عمولتك 155",
+   "live_cost": 245,
+   "parser_price": 400,
+   "parser_stated_commission": 155,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "69853130150f699e76bd79d0",
+   "note": "سعر البيع المقترح 250 عمولتك 130",
+   "live_cost": 120,
+   "parser_price": 250,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "690bbea34c664f3498c4bc60",
+   "note": "سعر البيع المقترح 250 عمولتك 105",
+   "live_cost": 145,
+   "parser_price": 250,
+   "parser_stated_commission": 105,
+   "derived_commission": 105
+  },
+  {
+   "safka_id": "6693a1f610520799a98cf418",
+   "note": "سعر البيع المقترح 250 عمولتك 135",
+   "live_cost": 115,
+   "parser_price": 250,
+   "parser_stated_commission": 135,
+   "derived_commission": 135
+  },
+  {
+   "safka_id": "69dbac493256f1f89221978c",
+   "note": "سعر البيع المقترح 250 عمولتك 115",
+   "live_cost": 135,
+   "parser_price": 250,
+   "parser_stated_commission": 115,
+   "derived_commission": 115
+  },
+  {
+   "safka_id": "68ee593fd7c301f2059d0f60",
+   "note": "سعر البيع المقترح 550 عمولتك  205",
+   "live_cost": 345,
+   "parser_price": 550,
+   "parser_stated_commission": 205,
+   "derived_commission": 205
+  },
+  {
+   "safka_id": "68d0671515bf4d8f29e46c62",
+   "note": "سعر البيع المقترح 300 عمولتك 155",
+   "live_cost": 145,
+   "parser_price": 300,
+   "parser_stated_commission": 155,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "66c1d4e849e955603d1bbfa2",
+   "note": "سعر البيع المقترح 300 عمولتك 140",
+   "live_cost": 160,
+   "parser_price": 300,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "66f5f2f6cd332bac60ff6a45",
+   "note": "سعر البيع المقترح 500 جنيه عمولتك 180 جنيه",
+   "live_cost": 320,
+   "parser_price": 500,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "6a693afd3f6ed554e30893bc",
+   "note": "سعر البيع المقترح 800 عمولتك 250",
+   "live_cost": 550,
+   "parser_price": 800,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "6911957911fc9175988dacd7",
+   "note": "سعر البيع المقترح 200 جنيه عمولتك 90 جنيه",
+   "live_cost": 110,
+   "parser_price": 200,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "65247a33b740d62654779347",
+   "note": "سعر البيع المقترح 300 عمولتك 170",
+   "live_cost": 130,
+   "parser_price": 300,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6981ba8b150f699e76b8831a",
+   "note": "",
+   "live_cost": 380,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "66b3baf149e955603da7ae8d",
+   "note": "سعر البيع المقترح 350 عمولتك 100",
+   "live_cost": 250,
+   "parser_price": 350,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "69e51875e7a7da4c934ac906",
+   "note": "سعر البيع المقترح 850 عمولتك 265",
+   "live_cost": 565,
+   "parser_price": 850,
+   "parser_stated_commission": 265,
+   "derived_commission": 285
+  },
+  {
+   "safka_id": "68a8d746189d18298d0d792d",
+   "note": "سعر البيع المقترح 100 عمولتك 25",
+   "live_cost": 75,
+   "parser_price": 100,
+   "parser_stated_commission": 25,
+   "derived_commission": 25
+  },
+  {
+   "safka_id": "691f054c635aba1b6b9e952e",
+   "note": "سعر البيع المقترح 150 عمولتك 60 جنيه",
+   "live_cost": 90,
+   "parser_price": 150,
+   "parser_stated_commission": 60,
+   "derived_commission": 60
+  },
+  {
+   "safka_id": "6967e2667fd9c61da9b3cd4d",
+   "note": "سعر البيع المقترح 250 عمولتك 140",
+   "live_cost": 110,
+   "parser_price": 250,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "685d4b53274b44138afdfca6",
+   "note": "سعر البيع المقترح 400 عمولتك 140",
+   "live_cost": 260,
+   "parser_price": 400,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "6a874a696c33f3e3e4ba063c",
+   "note": "سعر البيع المقترح 900 عمولتك 420",
+   "live_cost": 460,
+   "parser_price": 900,
+   "parser_stated_commission": 420,
+   "derived_commission": 440
+  },
+  {
+   "safka_id": "68044fd11de40ec0dfb22504",
+   "note": "سعر البيع المقترح 350 عمولتك 190",
+   "live_cost": 160,
+   "parser_price": 350,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "69a8d728f7eeea4048b09592",
+   "note": "سعر البيع المقترح 300 عمولتك 140",
+   "live_cost": 160,
+   "parser_price": 300,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68fea586cceac5763cc56301",
+   "note": "سعر البيع المقترح 200 عمولتك 105",
+   "live_cost": 95,
+   "parser_price": 200,
+   "parser_stated_commission": 105,
+   "derived_commission": 105
+  },
+  {
+   "safka_id": "648783fc6c2eea6c3ea97cab",
+   "note": "سعر بيع مقترح 150 عمولتك 60",
+   "live_cost": 90,
+   "parser_price": 150,
+   "parser_stated_commission": 60,
+   "derived_commission": 60
+  },
+  {
+   "safka_id": "69e56a99e7a7da4c936fa0a8",
+   "note": "سعر البيع المقترح 400 عمولتك 140",
+   "live_cost": 260,
+   "parser_price": 400,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "689e827bcea36353d6f06031",
+   "note": "سعر البيع المقترح 400 عمولتك 200",
+   "live_cost": 200,
+   "parser_price": 400,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "6879abe68d9f44a8a1fd8776",
+   "note": "سعر البيع المقترح 600 عمولتك 235",
+   "live_cost": 365,
+   "parser_price": 600,
+   "parser_stated_commission": 235,
+   "derived_commission": 235
+  },
+  {
+   "safka_id": "6991ee2dedf1bc56220619bd",
+   "note": "سعر البيع المقترح 300 عمولتك 140",
+   "live_cost": 160,
+   "parser_price": 300,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "672392a32b2c923fa39c2eed",
+   "note": "سعر البيع المقترح 200 جنيه عمولتك 95 جنيه ",
+   "live_cost": 105,
+   "parser_price": 200,
+   "parser_stated_commission": 95,
+   "derived_commission": 95
+  },
+  {
+   "safka_id": "68c6dd10e36831c213ae82b4",
+   "note": "سعر البيع المقترح 300 جنيه عمولتك 130",
+   "live_cost": 170,
+   "parser_price": 300,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "68e551a9d7c301f2050b30bb",
+   "note": "سعر البيع المقترح 350 عمولتك 170",
+   "live_cost": 180,
+   "parser_price": 350,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "681bcf393a87ea85f48d2816",
+   "note": "سعر البيع المقترح 500 عمولتك 220",
+   "live_cost": 280,
+   "parser_price": 500,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "688e6a2eb4f2089d4810ee39",
+   "note": "سعر البيع المقترح 300 عمولتك 130",
+   "live_cost": 170,
+   "parser_price": 300,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "68dbc14dd7c301f20540b9ef",
+   "note": "سعر البيع المقترح 300 عمولتك 110",
+   "live_cost": 190,
+   "parser_price": 300,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "6987e832150f699e76680056",
+   "note": "سعر بيع مقترح 400 عمولتك 210",
+   "live_cost": 190,
+   "parser_price": 400,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "680e20ec3a87ea85f42c072a",
+   "note": "سعر البيع المقترح 200 عمولتك 85",
+   "live_cost": 120,
+   "parser_price": 200,
+   "parser_stated_commission": 85,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "6873c49efef172abfc814de4",
+   "note": "سعر البيع المقترح 350 عمولتك 140",
+   "live_cost": 210,
+   "parser_price": 350,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "69e5658ae7a7da4c936bf47d",
+   "note": "سعر البيع المقترح 500 عمولتك 200",
+   "live_cost": 300,
+   "parser_price": 500,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "6888ef8db4f2089d4815e7ab",
+   "note": "سعر البيع المقترح 350 عمولتك 165",
+   "live_cost": 185,
+   "parser_price": 350,
+   "parser_stated_commission": 165,
+   "derived_commission": 165
+  },
+  {
+   "safka_id": "67f755036cc90c5f035cbe6e",
+   "note": "سعر البيع المقترح 250 عمولتك 95",
+   "live_cost": 155,
+   "parser_price": 250,
+   "parser_stated_commission": 95,
+   "derived_commission": 95
+  },
+  {
+   "safka_id": "688e6ad9b4f2089d4810f5b3",
+   "note": "سعر البيع المقترح 400 عمولتك 210",
+   "live_cost": 190,
+   "parser_price": 400,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "6a897998b025430898b643d2",
+   "note": "سعر البيع المقترح 350 عمولتك 170",
+   "live_cost": 180,
+   "parser_price": 350,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "648783fc6c2eea6c3ea97bf0",
+   "note": "سعر بيع مقترح 250 عمولتك 90",
+   "live_cost": 160,
+   "parser_price": 250,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "678b96bd85e034a4c2a0b73c",
+   "note": "سعر البيع المقترح 400 جنيه عمولتك 115 جنيه",
+   "live_cost": 285,
+   "parser_price": 400,
+   "parser_stated_commission": 115,
+   "derived_commission": 115
+  },
+  {
+   "safka_id": "68dd4e9ad7c301f2058fa618",
+   "note": "سعر البيع المقترح 300 عمولتك  120",
+   "live_cost": 180,
+   "parser_price": 300,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "6a675d51a4ea3856510fbea6",
+   "note": "سعر البيع المقترح 650 عمولتك 230",
+   "live_cost": 420,
+   "parser_price": 650,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "6a6132098a583679361b1a88",
+   "note": "سعر البيع المقترح 350 عموتتك 160",
+   "live_cost": 190,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6883c92e8d9f44a8a1cda350",
+   "note": "سعر البيع المقترح 300 عمولتك 160",
+   "live_cost": 140,
+   "parser_price": 300,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6a53e7e3ecf12e1a4cda063d",
+   "note": "سعر البيع المقترح 600 عمولتك 250",
+   "live_cost": 350,
+   "parser_price": 600,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "6a62a39f0868f034dd79104d",
+   "note": "سعر البيع المقترح 1200 عمولتك 350",
+   "live_cost": 850,
+   "parser_price": 1200,
+   "parser_stated_commission": 350,
+   "derived_commission": 350
+  },
+  {
+   "safka_id": "6a62ad1a0868f034dd7a18d2",
+   "note": "سعر البيع المقترح 600 عمولتك 330",
+   "live_cost": 270,
+   "parser_price": 600,
+   "parser_stated_commission": 330,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "6a7ccc9c42d4b8fe406cae3f",
+   "note": "سعر البيع المقترح 600 عمولتك 230",
+   "live_cost": 370,
+   "parser_price": 600,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "673bc53c1548cec72db7f83b",
+   "note": "سعر بيع مقترح 150 عمولتك 60 جنيه",
+   "live_cost": 90,
+   "parser_price": 150,
+   "parser_stated_commission": 60,
+   "derived_commission": 60
+  },
+  {
+   "safka_id": "6a53f24cecf12e1a4cdb9b79",
+   "note": "سعر البيع المقترح 350 عمولتك 160",
+   "live_cost": 160,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6987d4c2150f699e766577b4",
+   "note": "سعر البيع المقترح 350 عمولتك 195",
+   "live_cost": 205,
+   "parser_price": 350,
+   "parser_stated_commission": 195,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "6895440c8402b3f882f4fc73",
+   "note": "سعر البيع المقترح 350 عمولتك 140",
+   "live_cost": 210,
+   "parser_price": 350,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68d6f54c5174abbc699157b3",
+   "note": "سعر البيع المقترح 300 120",
+   "live_cost": 180,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "648783fc6c2eea6c3ea97d70",
+   "note": "سعر البيع المقترح 200 هتبقي عمولتك 60",
+   "live_cost": 130,
+   "parser_price": 200,
+   "parser_stated_commission": 60,
+   "derived_commission": 70
+  },
+  {
+   "safka_id": "66f5f4e5cd332bac60ff875c",
+   "note": "سعر البيع المقترح 550 جنيه عمولتك 260 جنيه",
+   "live_cost": 290,
+   "parser_price": 550,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "677beafbbd99b1dff7d3e042",
+   "note": "سعر البيع المقترح 400 جنيه عمولتك 150 جنيه",
+   "live_cost": 250,
+   "parser_price": 400,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "67b49e98b5bcc526f0765d40",
+   "note": "سعر البيع المقترح 300 عمولتك 100",
+   "live_cost": 200,
+   "parser_price": 300,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "680673c602fb341d4f485cac",
+   "note": "سعر البيع المقترح 370 عمولتك 110 جنيه",
+   "live_cost": 260,
+   "parser_price": 370,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "6a7c6bf942d4b8fe4034c054",
+   "note": "سعر البيع المقترح 400 عمولتك 145",
+   "live_cost": 255,
+   "parser_price": 400,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "6888f0fcb4f2089d481612ae",
+   "note": "سعر البيع المقترح 600 عمولتك 210",
+   "live_cost": 390,
+   "parser_price": 600,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "6a7f702bdd189c9923340220",
+   "note": "سعر البيع المقترح 500 عمولتك 210",
+   "live_cost": 290,
+   "parser_price": 500,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "687146cafef172abfc258361",
+   "note": "سعر البيع المقترح 300 عمولتك 110",
+   "live_cost": 190,
+   "parser_price": 300,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "6a5d52baecf12e1a4cc63af2",
+   "note": "سعر البيع المقترح 350 عمولتك 160",
+   "live_cost": 190,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6a60fe618a583679360f6970",
+   "note": "سعر البيع المقترح 400 عمولتك 165",
+   "live_cost": 235,
+   "parser_price": 400,
+   "parser_stated_commission": 165,
+   "derived_commission": 165
+  },
+  {
+   "safka_id": "68d588415174abbc6956c8c5",
+   "note": "سعر البيع المقترح 450 عمولتك 140",
+   "live_cost": 310,
+   "parser_price": 450,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68e57ebad7c301f2051235d9",
+   "note": "سعر البيع المقترح 250 جنيه عمولتك 110",
+   "live_cost": 140,
+   "parser_price": 250,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "68c9b19515bf4d8f299c79c2",
+   "note": "سعر البيع المقترح 600 عمولتك 250",
+   "live_cost": 350,
+   "parser_price": 600,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "6a60a55858f8e62a76abeadd",
+   "note": "سعر البيع المقترح 400 عمولتك 190",
+   "live_cost": 210,
+   "parser_price": 400,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6994c2efedf1bc5622edf2b4",
+   "note": "سعر البيع المقترح 250 عمولتك 140",
+   "live_cost": 110,
+   "parser_price": 250,
+   "parser_stated_commission": 140,
+   "derived_commission": 140
+  },
+  {
+   "safka_id": "68b4d9f46422f463ee42a0c0",
+   "note": "سعر البيع المقترح 800 عمولتك 270",
+   "live_cost": 630,
+   "parser_price": 800,
+   "parser_stated_commission": 270,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6a2abaf7f6c8815f8d5b240f",
+   "note": "سعر البيع المقترح 500 عمولتك 190",
+   "live_cost": 295,
+   "parser_price": 500,
+   "parser_stated_commission": 190,
+   "derived_commission": 205
+  },
+  {
+   "safka_id": "6a6124628a58367936167172",
+   "note": "سعر البيع المقترح 400 عمولتك 210",
+   "live_cost": 190,
+   "parser_price": 400,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "6a5813f6ecf12e1a4c9fe8ec",
+   "note": "سعر البيع المقترح للقطعه 200 عمولتك 100 وللقطعتين 350 عمولتك 200",
+   "live_cost": 100,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a7ca6f642d4b8fe405fb58d",
+   "note": "سعر البيع المقترح 800 عمولتك 310",
+   "live_cost": 490,
+   "parser_price": 800,
+   "parser_stated_commission": 310,
+   "derived_commission": 310
+  },
+  {
+   "safka_id": "680519067a8092df4d9cfa23",
+   "note": "سعر البيع المقترح 250 عمولتك 85",
+   "live_cost": 165,
+   "parser_price": 250,
+   "parser_stated_commission": 85,
+   "derived_commission": 85
+  },
+  {
+   "safka_id": "67923e2f85e034a4c20bb134",
+   "note": "سعر بيع مقترح 550 هتكون عمولتك 120 جنيه",
+   "live_cost": 430,
+   "parser_price": 550,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "66fed603cd332bac603d589e",
+   "note": "سعر البيع المقترح 500 جنيه عمولتك 185 جنيه",
+   "live_cost": 315,
+   "parser_price": 500,
+   "parser_stated_commission": 185,
+   "derived_commission": 185
+  },
+  {
+   "safka_id": "68ad161fc3315c9e3d9c553f",
+   "note": "سعر البيع المقترح 250 عمولتك 105",
+   "live_cost": 145,
+   "parser_price": 250,
+   "parser_stated_commission": 105,
+   "derived_commission": 105
+  },
+  {
+   "safka_id": "6806699f02fb341d4f47df2a",
+   "note": "سعر البيع المقترح 350 عمولتك 160",
+   "live_cost": 195,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 155
+  },
+  {
+   "safka_id": "68c61453e36831c2138399b4",
+   "note": "سعر البيع المقترح 350  عمولتك 215",
+   "live_cost": 235,
+   "parser_price": 350,
+   "parser_stated_commission": 215,
+   "derived_commission": 115
+  },
+  {
+   "safka_id": "68b322b76459e04ced3adaf0",
+   "note": "سعر البيع المقترح 250 عمولتك 105",
+   "live_cost": 145,
+   "parser_price": 250,
+   "parser_stated_commission": 105,
+   "derived_commission": 105
+  },
+  {
+   "safka_id": "6a8753e16c33f3e3e4bd5497",
+   "note": "سعر البيع المقترح 750 عمولتك 280",
+   "live_cost": 470,
+   "parser_price": 750,
+   "parser_stated_commission": 280,
+   "derived_commission": 280
+  },
+  {
+   "safka_id": "674e0c741548cec72dad043b",
+   "note": "سعر البيع المقترح 500 جنيه عمولتك 220 جنيه ",
+   "live_cost": 280,
+   "parser_price": 500,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "68e518c2d7c301f205fc790f",
+   "note": "سعر البيع المقترح 450 عمولتك 150",
+   "live_cost": 300,
+   "parser_price": 450,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "6a7c9cab42d4b8fe405be078",
+   "note": "سعر البيع المقترح 500 عمولتك 180",
+   "live_cost": 320,
+   "parser_price": 500,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "6a6f08c93f6ed554e31f9b72",
+   "note": "سعر البيع المقترح 600 عمولتك 190",
+   "live_cost": 410,
+   "parser_price": 600,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6a3c6797b2dfdec2ecb4145d",
+   "note": "سعر البيع المقترح 500 عمولتك 210",
+   "live_cost": 290,
+   "parser_price": 500,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "6a6e74c43f6ed554e3fcb56d",
+   "note": "سعر البيع المقترح 550 عمولتك 220",
+   "live_cost": 330,
+   "parser_price": 550,
+   "parser_stated_commission": 220,
+   "derived_commission": 220
+  },
+  {
+   "safka_id": "6a3bda03b2dfdec2ec72b139",
+   "note": "سعر البيع المقترح 900 عمولتك 340",
+   "live_cost": 560,
+   "parser_price": 900,
+   "parser_stated_commission": 340,
+   "derived_commission": 340
+  },
+  {
+   "safka_id": "6a9328d3ff4bc0f14e52f1ed",
+   "note": "سعر البيع المقترح 800 عمولتك 330",
+   "live_cost": 470,
+   "parser_price": 800,
+   "parser_stated_commission": 330,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "671a4e5afa54540680f6dffe",
+   "note": "سعر البيع المقترح 200 جنيه عمولتك 75 جنيه",
+   "live_cost": 125,
+   "parser_price": 200,
+   "parser_stated_commission": 75,
+   "derived_commission": 75
+  },
+  {
+   "safka_id": "6a3bbfe1b2dfdec2ec571e8e",
+   "note": "سعر البيع المقترح 700 عمولتك 330",
+   "live_cost": 370,
+   "parser_price": 700,
+   "parser_stated_commission": 330,
+   "derived_commission": 330
+  },
+  {
+   "safka_id": "68e27c58d7c301f2057f4796",
+   "note": "سعر البيع المقترح 400 عمولتك 185",
+   "live_cost": 215,
+   "parser_price": 400,
+   "parser_stated_commission": 185,
+   "derived_commission": 185
+  },
+  {
+   "safka_id": "68531e76cd2f1d95c3b1c908",
+   "note": "سعر البيع المقترح 250 عمولتك 120",
+   "live_cost": 130,
+   "parser_price": 250,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "68d5a0925174abbc695a8c31",
+   "note": "سعر البيع المقترح 350 عمولتك 130",
+   "live_cost": 220,
+   "parser_price": 350,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "6a8c325bb025430898d5943c",
+   "note": "سعر البيع المقترح 750 عمولتك 310",
+   "live_cost": 440,
+   "parser_price": 750,
+   "parser_stated_commission": 310,
+   "derived_commission": 310
+  },
+  {
+   "safka_id": "6a6116828a5836793613e95b",
+   "note": "سعر البيع المقترح 500 عمولتك 210",
+   "live_cost": 290,
+   "parser_price": 500,
+   "parser_stated_commission": 210,
+   "derived_commission": 210
+  },
+  {
+   "safka_id": "6a7684cd4d956cf608384f98",
+   "note": "سعر البيع المقترح 350 عمولتك 135",
+   "live_cost": 215,
+   "parser_price": 350,
+   "parser_stated_commission": 135,
+   "derived_commission": 135
+  },
+  {
+   "safka_id": "692fa5cf635aba1b6b02493f",
+   "note": "",
+   "live_cost": 370,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a5819aeecf12e1a4ca0afd3",
+   "note": "سعر البيع المقترح 700 عمولتك 340",
+   "live_cost": 360,
+   "parser_price": 700,
+   "parser_stated_commission": 340,
+   "derived_commission": 340
+  },
+  {
+   "safka_id": "6730e13b6536d6befb0da331",
+   "note": "سعر البيع المقترح 600 جنيه عمولتك 200 جنيه",
+   "live_cost": 400,
+   "parser_price": 600,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "6a581fc0ecf12e1a4ca14fe4",
+   "note": "سعر البيع المقترح 700 عمولتك 310",
+   "live_cost": 390,
+   "parser_price": 700,
+   "parser_stated_commission": 310,
+   "derived_commission": 310
+  },
+  {
+   "safka_id": "65c374bc0e468fed78cf8381",
+   "note": "سعر البيع المقترح 200 عمولتك 80",
+   "live_cost": 120,
+   "parser_price": 200,
+   "parser_stated_commission": 80,
+   "derived_commission": 80
+  },
+  {
+   "safka_id": "6873fdcefef172abfc8d0df6",
+   "note": "سعر البيع المقترح 600 عمولتك 230",
+   "live_cost": 370,
+   "parser_price": 600,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "6a87bab16c33f3e3e4d15e52",
+   "note": "سعر البيع المقترح 1400 عمولتك 420",
+   "live_cost": 980,
+   "parser_price": 1400,
+   "parser_stated_commission": 420,
+   "derived_commission": 420
+  },
+  {
+   "safka_id": "689548a78402b3f882f520b2",
+   "note": "سعر البيع المقترح 990 عمولتك 270",
+   "live_cost": 720,
+   "parser_price": 990,
+   "parser_stated_commission": 270,
+   "derived_commission": 270
+  },
+  {
+   "safka_id": "6a953fda820dc94cb0be93d8",
+   "note": "سعر البيع المقترح 300 عمولتك 120",
+   "live_cost": 180,
+   "parser_price": 300,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "688205c18d9f44a8a174d167",
+   "note": "سعر البيع المقترح 400 عمولتك 180",
+   "live_cost": 220,
+   "parser_price": 400,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "68f56124d7c301f205ff17d7",
+   "note": "سعر البيع المقترح 600 عمولتك 200",
+   "live_cost": 400,
+   "parser_price": 600,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "67c4758a423d86b7f285a8d9",
+   "note": "سعر البيع المقترح 400 عمولتك 190",
+   "live_cost": 210,
+   "parser_price": 400,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "6a908b4cff4bc0f14e39ff77",
+   "note": "سعر البيع المقترح 900 عمولتك 360",
+   "live_cost": 540,
+   "parser_price": 900,
+   "parser_stated_commission": 360,
+   "derived_commission": 360
+  },
+  {
+   "safka_id": "67d74acef55a506a869b49aa",
+   "note": "سعر البيع المقترح للقطعه 200 عمولتك 95",
+   "live_cost": 105,
+   "parser_price": 200,
+   "parser_stated_commission": 95,
+   "derived_commission": 95
+  },
+  {
+   "safka_id": "6a29f09bf6c8815f8d0500df",
+   "note": "سعر البيع المقترح 350 170",
+   "live_cost": 180,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "67c22fb6733fbc16c951829a",
+   "note": "سعر البيع المقترح 350 عمولتك 85",
+   "live_cost": 265,
+   "parser_price": 350,
+   "parser_stated_commission": 85,
+   "derived_commission": 85
+  },
+  {
+   "safka_id": "67f0278f6cc90c5f03b0986e",
+   "note": "سعر البيع المقترح 350 عمولتك 135",
+   "live_cost": 215,
+   "parser_price": 350,
+   "parser_stated_commission": 135,
+   "derived_commission": 135
+  },
+  {
+   "safka_id": "66f0acb6cd332bac60d969d0",
+   "note": "سعر البيع المقترح 250 عمولتك 120",
+   "live_cost": 130,
+   "parser_price": 250,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "695eb5c7ddc488a504506e97",
+   "note": "سعر البيع المقترح 450 عمولتك 190",
+   "live_cost": 260,
+   "parser_price": 450,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "66c2889449e955603d22cd3e",
+   "note": "",
+   "live_cost": 140,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "68a9e721189d18298d4f1e31",
+   "note": "سعر البيع المقترح 150 عمولتك 70",
+   "live_cost": 80,
+   "parser_price": 150,
+   "parser_stated_commission": 70,
+   "derived_commission": 70
+  },
+  {
+   "safka_id": "6a6e6d6c3f6ed554e3fa3478",
+   "note": "سعر البيع المقترح 450 عمولتك 205",
+   "live_cost": 245,
+   "parser_price": 450,
+   "parser_stated_commission": 205,
+   "derived_commission": 205
+  },
+  {
+   "safka_id": "65cb9ad10e468fed78e09e69",
+   "note": "سعر بيع مقترح 100 هتكون عمولتك 30",
+   "live_cost": 70,
+   "parser_price": 100,
+   "parser_stated_commission": 30,
+   "derived_commission": 30
+  },
+  {
+   "safka_id": "689d24a9cea36353d6a19633",
+   "note": "سعر بيع مقترح 400 هتكون عمولتك 235 جنيه",
+   "live_cost": 235,
+   "parser_price": 400,
+   "parser_stated_commission": 235,
+   "derived_commission": 165
+  },
+  {
+   "safka_id": "6869824e3d57f3e408995aed",
+   "note": "سعر البيع المقترح 200 عمولتك 100",
+   "live_cost": 100,
+   "parser_price": 200,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "68a8c54f189d18298d0bda74",
+   "note": "سعر البيع المقترح 250 عمولتك 90",
+   "live_cost": 140,
+   "parser_price": 250,
+   "parser_stated_commission": 90,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "6a7687564d956cf6083891a7",
+   "note": "سعر البيع المقترح 350 عمولتك 175",
+   "live_cost": 175,
+   "parser_price": 350,
+   "parser_stated_commission": 175,
+   "derived_commission": 175
+  },
+  {
+   "safka_id": "6661c38f6bb2679227b82a14",
+   "note": "سعر البيع المقترح 180 عمولتك 100",
+   "live_cost": 80,
+   "parser_price": 180,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "6893503a8402b3f882902278",
+   "note": "سعر البيع المقترح 350  عمولتك 150",
+   "live_cost": 200,
+   "parser_price": 350,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "67128c53fa54540680b38c0a",
+   "note": "سعر البيع المقترح 200 جنيه عمولتك 110 جنيه",
+   "live_cost": 90,
+   "parser_price": 200,
+   "parser_stated_commission": 110,
+   "derived_commission": 110
+  },
+  {
+   "safka_id": "69407aa3f7d30860864d77b0",
+   "note": "سعر البيع المقترح 200 عمولتك 90",
+   "live_cost": 110,
+   "parser_price": 200,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "692ab5c8635aba1b6b8c03cc",
+   "note": "سعر البيع المقترح للقطعه 300 عمولتك 150",
+   "live_cost": 150,
+   "parser_price": 300,
+   "parser_stated_commission": 150,
+   "derived_commission": 150
+  },
+  {
+   "safka_id": "67315614d84017480e7ec013",
+   "note": "سعر البيع المقترح للقطعة 140 عمولتك 70",
+   "live_cost": 80,
+   "parser_price": 140,
+   "parser_stated_commission": 70,
+   "derived_commission": 60
+  },
+  {
+   "safka_id": "6a7e233cdd189c9923c827e3",
+   "note": "سعر البيع المقترح 500 عمولتك 195",
+   "live_cost": 305,
+   "parser_price": 500,
+   "parser_stated_commission": 195,
+   "derived_commission": 195
+  },
+  {
+   "safka_id": "6975daf66681b56512bf1d0d",
+   "note": "سعر البيع المقترح 200 عمولتك 90",
+   "live_cost": 110,
+   "parser_price": 200,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "6a676378a4ea38565116417b",
+   "note": "",
+   "live_cost": 150,
+   "parser_price": null,
+   "parser_stated_commission": null,
+   "derived_commission": null
+  },
+  {
+   "safka_id": "6a60b3d78a58367936df02b0",
+   "note": "سعر البيع المقترح 350 عمولتك 165",
+   "live_cost": 185,
+   "parser_price": 350,
+   "parser_stated_commission": 165,
+   "derived_commission": 165
+  },
+  {
+   "safka_id": "6a7c646e42d4b8fe402dbecb",
+   "note": "سعر البيع المقترح 600 عمولتك 255",
+   "live_cost": 345,
+   "parser_price": 600,
+   "parser_stated_commission": 255,
+   "derived_commission": 255
+  },
+  {
+   "safka_id": "6a04ced1f8838175010fdb54",
+   "note": "سعر البيع المقترح 250 عمولتك 90",
+   "live_cost": 160,
+   "parser_price": 250,
+   "parser_stated_commission": 90,
+   "derived_commission": 90
+  },
+  {
+   "safka_id": "6a0c06c8f883817501924436",
+   "note": "سعر البيع المقترح 450 عمولتك 200",
+   "live_cost": 250,
+   "parser_price": 450,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "671933befa54540680edf1f3",
+   "note": "سعر البيع المقترح للقطعه 180 جنيه عمولتك 75 جنيه ",
+   "live_cost": 105,
+   "parser_price": 180,
+   "parser_stated_commission": 75,
+   "derived_commission": 75
+  },
+  {
+   "safka_id": "677be0a1bd99b1dff7d240f5",
+   "note": "سعر البيع المقترح 450 جنيه عمولتك 230 جنيه",
+   "live_cost": 220,
+   "parser_price": 450,
+   "parser_stated_commission": 230,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "6a772024849bf12335b6d6ae",
+   "note": "سعر البيع المقترح 400 عمولتك 180",
+   "live_cost": 220,
+   "parser_price": 400,
+   "parser_stated_commission": 180,
+   "derived_commission": 180
+  },
+  {
+   "safka_id": "68ee6101d7c301f2059f7a3f",
+   "note": "سعر البيع المقترح 520 عمولتك 170",
+   "live_cost": 350,
+   "parser_price": 520,
+   "parser_stated_commission": 170,
+   "derived_commission": 170
+  },
+  {
+   "safka_id": "6a8f1ed5ff4bc0f14e919a12",
+   "note": "سعر البيع المقترح 300 عمولتك 145",
+   "live_cost": 155,
+   "parser_price": 300,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  },
+  {
+   "safka_id": "6969422a6681b56512c85352",
+   "note": "سعر البيع المقترح 200 عمولتك 85",
+   "live_cost": 115,
+   "parser_price": 200,
+   "parser_stated_commission": 85,
+   "derived_commission": 85
+  },
+  {
+   "safka_id": "6a7110db4d956cf608ff39a7",
+   "note": "سعر البيع المقترح 300 عمولتك 130",
+   "live_cost": 170,
+   "parser_price": 300,
+   "parser_stated_commission": 130,
+   "derived_commission": 130
+  },
+  {
+   "safka_id": "6a56bea1ecf12e1a4c0d4a85",
+   "note": "سعر البيع المقترح 120 عمولتك 30",
+   "live_cost": 90,
+   "parser_price": 120,
+   "parser_stated_commission": 30,
+   "derived_commission": 30
+  },
+  {
+   "safka_id": "65e46bc90e468fed7831342c",
+   "note": "سعر البيع المقترح 200 عمولتك 75",
+   "live_cost": 125,
+   "parser_price": 200,
+   "parser_stated_commission": 75,
+   "derived_commission": 75
+  },
+  {
+   "safka_id": "69e56db8e7a7da4c93706294",
+   "note": "سعر البيع المقترح 500 عمولتك 205",
+   "live_cost": 295,
+   "parser_price": 500,
+   "parser_stated_commission": 205,
+   "derived_commission": 205
+  },
+  {
+   "safka_id": "68b861186422f463eecce6f9",
+   "note": "سعر البيع المقترح 750 عمولتك 240",
+   "live_cost": 510,
+   "parser_price": 750,
+   "parser_stated_commission": 240,
+   "derived_commission": 240
+  },
+  {
+   "safka_id": "69de2db1ce9bd0ede80f5116",
+   "note": "سعر البيع المقترح 450 عمولتك 200",
+   "live_cost": 250,
+   "parser_price": 450,
+   "parser_stated_commission": 200,
+   "derived_commission": 200
+  },
+  {
+   "safka_id": "67214c2ac5e98a1bd2b6df65",
+   "note": "سعر البيع المقترح 700 جنيه عمولتك 220 جنيه",
+   "live_cost": 470,
+   "parser_price": 700,
+   "parser_stated_commission": 220,
+   "derived_commission": 230
+  },
+  {
+   "safka_id": "6871108cfef172abfc176b9f",
+   "note": "سعر البيع المقترح 550 عمولتك 190",
+   "live_cost": 360,
+   "parser_price": 550,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "68a8cbf6189d18298d0cb435",
+   "note": "سعر البيع المقترح 200 عمولتك 95",
+   "live_cost": 105,
+   "parser_price": 200,
+   "parser_stated_commission": 95,
+   "derived_commission": 95
+  },
+  {
+   "safka_id": "6a8f3b5bff4bc0f14e9b3f95",
+   "note": "سعر البيع المقترح 350 عمولتك 160",
+   "live_cost": 190,
+   "parser_price": 350,
+   "parser_stated_commission": 160,
+   "derived_commission": 160
+  },
+  {
+   "safka_id": "6880c34d8d9f44a8a13b86a2",
+   "note": "سعر البيع المقترح 160 عمولتك 50",
+   "live_cost": 110,
+   "parser_price": 160,
+   "parser_stated_commission": 50,
+   "derived_commission": 50
+  },
+  {
+   "safka_id": "690fe8ae9708ca3bf0c021f1",
+   "note": "سعر البيع المقترح 100عمولتك 30",
+   "live_cost": 70,
+   "parser_price": 100,
+   "parser_stated_commission": 30,
+   "derived_commission": 30
+  },
+  {
+   "safka_id": "67c8709cf55a506a864ec70f",
+   "note": "سعر البيع المقترح 300 عمولتك 100",
+   "live_cost": 200,
+   "parser_price": 300,
+   "parser_stated_commission": 100,
+   "derived_commission": 100
+  },
+  {
+   "safka_id": "68dd3bdcd7c301f2058cdafa",
+   "note": "سعر البيع المقترح 490 عمولتك 250",
+   "live_cost": 240,
+   "parser_price": 490,
+   "parser_stated_commission": 250,
+   "derived_commission": 250
+  },
+  {
+   "safka_id": "697c7753b5607ee12c9bceba",
+   "note": "سعر البيع المقترح 300 عمولتك 120",
+   "live_cost": 180,
+   "parser_price": 300,
+   "parser_stated_commission": 120,
+   "derived_commission": 120
+  },
+  {
+   "safka_id": "6a857a2c839bd1b43df95d0d",
+   "note": "سعر البيع المقترح 850 عمولتك 260",
+   "live_cost": 590,
+   "parser_price": 850,
+   "parser_stated_commission": 260,
+   "derived_commission": 260
+  },
+  {
+   "safka_id": "6a8582db839bd1b43dffa855",
+   "note": "سعر البيع المقترح 500 عمولتك 190",
+   "live_cost": 310,
+   "parser_price": 500,
+   "parser_stated_commission": 190,
+   "derived_commission": 190
+  },
+  {
+   "safka_id": "68dd4aaad7c301f2058f3fca",
+   "note": "سعر البيع المقترح 350 عمولتك 145",
+   "live_cost": 205,
+   "parser_price": 350,
+   "parser_stated_commission": 145,
+   "derived_commission": 145
+  }
+ ]
+}

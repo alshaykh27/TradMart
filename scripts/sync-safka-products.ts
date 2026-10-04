@@ -25,6 +25,10 @@ import type { SafkaProduct, SafkaProductList, SafkaProductProperty } from "../ty
 // import above, which Node erases): this is a runtime import and Node's type
 // stripping does not rewrite specifiers.
 import { deriveSyncedPrice } from "../lib/products/pricing.ts";
+import {
+  deriveSuggestedCommission,
+  parseSafkaSuggestedPrice,
+} from "../lib/safka/suggested-price.ts";
 
 const missing: string[] = [];
 const baseUrl = process.env.SAFKA_API_BASE_URL;
@@ -52,13 +56,18 @@ type RefreshRow = {
   price: number;
   stock: number;
   status: string;
+  /** Parsed from the Safka note; null when it is absent or ambiguous. */
+  safka_suggested_price: number | null;
+  safka_suggested_commission: number | null;
 };
 
 /**
  * The only columns a sync run may write on an existing product.
  *
  * commission and is_published are deliberately absent — both are merchant
- * decisions, and the merchant is not this script.
+ * decisions, and the merchant is not this script. The two suggested-price
+ * columns are pure Safka input, so refreshing them is the same kind of write
+ * as cost_price: they re-derive the suggestion, they never apply it.
  */
 function refreshPayload(row: RefreshRow) {
   return {
@@ -66,6 +75,8 @@ function refreshPayload(row: RefreshRow) {
     price: row.price,
     stock: row.stock,
     status: row.status,
+    safka_suggested_price: row.safka_suggested_price,
+    safka_suggested_commission: row.safka_suggested_commission,
   };
 }
 
@@ -178,6 +189,16 @@ async function main() {
       // the only base a later commission edit has to add the markup to, and a
       // null cost made a freshly synced product impossible to price up.
       const cost = Number(item.sale_price ?? 0);
+      // Safka states its suggested selling price only as a sentence in `note`,
+      // so it is parsed once here rather than fetched on demand. The commission
+      // is derived from that price against this row's cost so applying it later
+      // lands exactly on the suggestion, even where the note's own commission
+      // figure has gone stale. Both stay null when the note cannot be trusted.
+      const suggested = parseSafkaSuggestedPrice(item.note);
+      const suggestedCommission = deriveSuggestedCommission(
+        suggested?.suggestedPrice,
+        cost,
+      );
       toInsert.push({
         safka_product_id: item._id,
         barcode: item.barcode ?? null,
@@ -189,6 +210,8 @@ async function main() {
         price: cost,
         cost_price: cost,
         commission: null,
+        safka_suggested_price: suggested?.suggestedPrice ?? null,
+        safka_suggested_commission: suggestedCommission,
         stock: computeStock(item),
         status: item.is_active ? "active" : "inactive",
         is_published: false,
@@ -208,7 +231,20 @@ async function main() {
     // edit can never disagree about the customer-facing price.
     const newPrice = deriveSyncedPrice(newCost, existing.commission) ?? newCost;
 
+    // Re-read the note every run so the suggestion tracks the supplier's edits,
+    // and so a note that becomes ambiguous clears the columns instead of leaving
+    // a stale button behind. Derived against newCost, i.e. the cost this run is
+    // about to write, so cost + suggested_commission === suggested_price holds.
+    const suggested = parseSafkaSuggestedPrice(item.note);
+    const suggestedPrice = suggested?.suggestedPrice ?? null;
+    const suggestedCommission = deriveSuggestedCommission(suggestedPrice, newCost);
+
     if (existing.cost_price !== newCost) costChanged += 1;
+    if (suggestedPrice !== null) {
+      console.log(
+        `SYNC suggestion   ${item._id}: suggested ${suggestedPrice}, commission ${suggestedCommission ?? "-"}`,
+      );
+    }
     console.log(
       `SYNC cost change  ${item._id}: ${existing.cost_price ?? "-"} -> ${newCost} (display ${newPrice})`,
     );
@@ -219,6 +255,8 @@ async function main() {
       price: newPrice,
       stock: computeStock(item),
       status: item.is_active ? "active" : "inactive",
+      safka_suggested_price: suggestedPrice,
+      safka_suggested_commission: suggestedCommission,
     });
   }
 

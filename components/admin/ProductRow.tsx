@@ -23,6 +23,14 @@ export type AdminProduct = {
   stock: number;
   source: "safka" | "manual";
   category_id?: string | null;
+  /**
+   * Safka's suggested selling price, parsed from the product note by the sync.
+   * Null when the note is absent, malformed, or describes two quantity tiers —
+   * in which case the "use suggested commission" button is not rendered at all.
+   */
+  safka_suggested_price?: number | null;
+  /** suggested_price - cost_price, so applying it lands on the exact figure. */
+  safka_suggested_commission?: number | null;
 };
 
 function formatMoney(value: number): string {
@@ -76,8 +84,36 @@ export default function ProductRow({
     [categories, categoryId],
   );
 
-  async function saveCommission() {
-    if (!commissionValid) {
+  /**
+   * Safka's suggested commission, but only when it is genuinely applicable: a
+   * Safka-backed row whose sync recorded both a suggested price and a derived
+   * markup. A manual product has no supplier, and a product whose note was
+   * absent or multi-tier has no single suggestion — in both cases this stays
+   * null and the button is not rendered, rather than being disabled or
+   * silently defaulting to 0.
+   */
+  const suggestedCommission = useMemo(() => {
+    if (isManual) return null;
+    if (product.cost_price == null) return null;
+    if (product.safka_suggested_price == null) return null;
+    const derived = Number(product.safka_suggested_commission);
+    return Number.isFinite(derived) && derived > 0 ? derived : null;
+  }, [isManual, product.cost_price, product.safka_suggested_price, product.safka_suggested_commission]);
+
+  async function applySuggestedCommission() {
+    if (suggestedCommission === null) return;
+    setCommission(String(suggestedCommission));
+    await saveCommission(suggestedCommission);
+  }
+
+  async function saveCommission(explicit?: number | null) {
+    // An explicit value bypasses the input, whose state has not yet re-rendered
+    // when a button sets it and saves in the same click. Everything after this
+    // line is identical either way, so the suggested-commission button reuses
+    // this exact request rather than owning a second pricing path.
+    const value = explicit === undefined ? parsed : explicit;
+    const valid = value === null || (typeof value === "number" && Number.isFinite(value) && value >= 0);
+    if (!valid) {
       setMessage({ text: "العمولة غير صالحة", ok: false });
       return;
     }
@@ -87,7 +123,7 @@ export default function ProductRow({
       const response = await fetch(`/api/admin/products/${product.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ commission: parsed }),
+        body: JSON.stringify({ commission: value }),
       });
       const json = (await response.json().catch(() => ({}))) as { error?: string };
       setMessage(
@@ -288,13 +324,34 @@ export default function ProductRow({
               </div>
               <button
                 type="button"
-                onClick={saveCommission}
+                onClick={() => saveCommission()}
                 disabled={saving === "commission" || !commissionValid}
                 className="rounded-2xl bg-navy px-3 text-sm font-semibold text-white transition hover:bg-navy-soft disabled:opacity-40"
               >
                 {saving === "commission" ? "…" : "حفظ"}
               </button>
             </div>
+            {suggestedCommission !== null && (
+              <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-brand/25 bg-brand-soft/40 px-3 py-2">
+                <span className="text-xs text-navy-soft">
+                  سعر البيع المقترح{" "}
+                  <strong className="text-navy">
+                    {formatMoney(Number(product.safka_suggested_price))}
+                  </strong>
+                  {" · "}
+                  العمولة{" "}
+                  <strong className="text-navy">{formatMoney(suggestedCommission)}</strong>
+                </span>
+                <button
+                  type="button"
+                  onClick={applySuggestedCommission}
+                  disabled={saving === "commission"}
+                  className="rounded-full bg-brand px-3 py-1 text-xs font-bold text-white transition hover:bg-brand-dark disabled:opacity-40"
+                >
+                  استخدم عمولة صفقة المقترحة
+                </button>
+              </div>
+            )}
           </>
         )}
 

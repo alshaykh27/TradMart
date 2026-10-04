@@ -64,7 +64,7 @@ export default async function AdminProductsPage({
   let query = admin
     .from("products")
     .select(
-      "id, name, description, price, cost_price, commission, is_published, status, safka_product_id, image_url, images, stock, source, category_id",
+      "id, name, description, price, cost_price, commission, is_published, status, safka_product_id, image_url, images, stock, source, category_id, safka_suggested_price, safka_suggested_commission",
       { count: "exact" },
     )
     .order("is_published", { ascending: false })

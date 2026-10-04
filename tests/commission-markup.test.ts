@@ -157,9 +157,13 @@ describe("the Safka sync seeds a cost the merchant can mark up", () => {
 
   it("still never writes commission, is_published or category_id", async () => {
     const payload = await refreshPayload();
-    for (const forbidden of ["commission", "is_published", "category_id"]) {
-      assert.doesNotMatch(payload, new RegExp(forbidden), `${forbidden} must not be sync-written`);
-    }
+    // The merchant's `commission` is the forbidden key; note that
+    // safka_suggested_commission is allowed, since it is Safka input that only
+    // offers a suggestion. Matched as a whole key so the suffix cannot hide a
+    // real write of the merchant column.
+    assert.doesNotMatch(payload, /(?:^|[\s{,])commission:/m, "commission must not be sync-written");
+    assert.doesNotMatch(payload, /is_published/);
+    assert.doesNotMatch(payload, /category_id/);
   });
 
   it("refreshes unpublished rows too, so a cost exists before publishing", async () => {

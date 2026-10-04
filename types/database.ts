@@ -30,6 +30,15 @@ export type Database = {
           is_published: boolean;
           cost_price: number | null;
           commission: number | null;
+          // Safka's suggested selling price, parsed from the product note by the
+          // sync (there is no structured API field for it). NULL when the note
+          // is absent, malformed, or describes two quantity tiers — the admin
+          // "use suggested commission" button is not rendered in that case.
+          safka_suggested_price: number | null;
+          // safka_suggested_price - cost_price, so applying it lands exactly on
+          // the suggested price. Derived rather than read from the note, whose
+          // own commission figure goes stale when sale_price changes.
+          safka_suggested_commission: number | null;
           // 'safka' = mirrored from the Safka API/webhook; 'manual' = created
           // by hand. Safka writers must filter on source <> 'manual'.
           source: "safka" | "manual";
@@ -57,6 +66,8 @@ export type Database = {
           is_published?: boolean;
           cost_price?: number | null;
           commission?: number | null;
+          safka_suggested_price?: number | null;
+          safka_suggested_commission?: number | null;
           source?: "safka" | "manual";
           category_id?: string | null;
           created_at?: string;
@@ -77,6 +88,8 @@ export type Database = {
           is_published?: boolean;
           cost_price?: number | null;
           commission?: number | null;
+          safka_suggested_price?: number | null;
+          safka_suggested_commission?: number | null;
           source?: "safka" | "manual";
           category_id?: string | null;
           created_at?: string;
