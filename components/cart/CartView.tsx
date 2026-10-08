@@ -16,6 +16,13 @@ type GovernorateOption = {
   safka_shipping_fee: number;
 };
 
+/** One row of `safka_cities` — Safka's own numeric city ids, per governorate. */
+type CityOption = {
+  city_id: string;
+  governorate_id: string;
+  name_ar: string;
+};
+
 type LineProduct = {
   id: string;
   name: string;
@@ -29,7 +36,12 @@ type CheckoutForm = {
   phone: string;
   country: string;
   shippingGovernorate: string;
-  city: string;
+  /**
+   * Safka price-list city id (not the name): the checkout only ever offers ids
+   * from `safka_cities`, and empty means "no city", which the server omits from
+   * the Safka payload rather than sending free text.
+   */
+  cityId: string;
   address: string;
   website: string;
 };
@@ -39,7 +51,7 @@ const EMPTY_FORM: CheckoutForm = {
   phone: "",
   country: "Egypt",
   shippingGovernorate: "",
-  city: "",
+  cityId: "",
   address: "",
   website: "",
 };
@@ -51,6 +63,7 @@ export default function CartView({ dict }: { dict: Dictionary }) {
   const [products, setProducts] = useState<LineProduct[]>([]);
   const [loadedKey, setLoadedKey] = useState<string>("");
   const [governorates, setGovernorates] = useState<GovernorateOption[]>([]);
+  const [cities, setCities] = useState<CityOption[]>([]);
   const [form, setForm] = useState<CheckoutForm>(EMPTY_FORM);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -91,6 +104,28 @@ export default function CartView({ dict }: { dict: Dictionary }) {
       .then(({ data, error }) => {
         if (cancelled) return;
         setGovernorates(error ? [] : (data ?? []));
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Safka city ids live in `safka_cities`, written by the same sync that fills
+  // governorate_pricing (Safka exposes no cities endpoint of its own). Fetched
+  // once — 418 rows — and filtered by the chosen governorate in the form.
+  // If this fails (table not migrated yet, RLS, network) the city select is
+  // simply absent-optional: the order still submits and Safka omits `city`.
+  useEffect(() => {
+    let cancelled = false;
+    const supabase = createClient();
+    supabase
+      .from("safka_cities")
+      .select("city_id, governorate_id, name_ar")
+      .order("name_ar")
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        setCities(error ? [] : (data ?? []));
       });
 
     return () => {
@@ -148,7 +183,16 @@ export default function CartView({ dict }: { dict: Dictionary }) {
   });
 
   const setField = (name: keyof CheckoutForm, value: string) =>
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => {
+      const next = { ...prev, [name]: value };
+      // Cities belong to exactly one governorate, so the previous choice is no
+      // longer valid the moment the governorate changes. Clearing it keeps a
+      // foreign city id from ever being submitted.
+      if (name === "shippingGovernorate" && next.cityId !== "") {
+        next.cityId = "";
+      }
+      return next;
+    });
 
   // InitiateCheckout: fired once when the cart page is opened with items in it.
   // Mounted here rather than in app/cart/page.tsx because the line data is
@@ -175,7 +219,10 @@ export default function CartView({ dict }: { dict: Dictionary }) {
         setError(dict.checkout.invalidDetails);
         return;
       }
-      if (!form.country.trim() || !form.shippingGovernorate.trim() || !form.city.trim() || !form.address.trim()) {
+      // `cityId` is deliberately NOT required: `city` is optional in Safka's
+      // contract, and a missing or unusable id must let the order through with
+      // the field omitted rather than block checkout.
+      if (!form.country.trim() || !form.shippingGovernorate.trim() || !form.address.trim()) {
         setError(dict.checkout.invalidDetails);
         return;
       }
@@ -185,7 +232,7 @@ export default function CartView({ dict }: { dict: Dictionary }) {
         phone: form.phone.trim(),
         country: form.country.trim(),
         shippingGovernorate: form.shippingGovernorate.trim(),
-        city: form.city.trim(),
+        cityId: form.cityId.trim(),
         address: form.address.trim(),
         website: form.website.trim(),
         items: items.map((item) => ({ productId: item.productId, qty: item.qty })),
@@ -402,6 +449,7 @@ export default function CartView({ dict }: { dict: Dictionary }) {
         form={form}
         setField={setField}
         governorates={governorates}
+        cities={cities}
         error={error}
         isPending={isPending}
         canSubmit={items.length > 0 && !unavailable.some((u) => u.missing || u.out)}
@@ -417,6 +465,7 @@ function CheckoutForm({
   form,
   setField,
   governorates,
+  cities,
   error,
   isPending,
   canSubmit,
@@ -427,24 +476,40 @@ function CheckoutForm({
   form: CheckoutForm;
   setField: (name: keyof CheckoutForm, value: string) => void;
   governorates: GovernorateOption[];
+  cities: CityOption[];
   error: string | null;
   isPending: boolean;
   canSubmit: boolean;
   submitLabel: string;
   onSubmitted: () => void;
 }) {
-  const governorateOptions = governorates.map((governorate) => ({
-    value: governorate.governorate_id,
-    label: governorate.name_ar,
-  }));
+  type FieldOption = { value: string; label: string };
 
-  const fields: {
+  type FieldDef = {
     name: keyof CheckoutForm;
     label: string;
     placeholder: string;
     type: "text" | "tel" | "select";
     autoComplete: string;
-  }[] = [
+    /** select only: the choices to render. */
+    options?: FieldOption[];
+    /** select only; defaults to true. The city select is deliberately optional. */
+    required?: boolean;
+  };
+
+  const governorateOptions: FieldOption[] = governorates.map((governorate) => ({
+    value: governorate.governorate_id,
+    label: governorate.name_ar,
+  }));
+
+  // Only cities belonging to the chosen governorate. Safka ties every city id
+  // to one price list, and the server re-checks the pairing anyway; showing
+  // another governorate's cities here would only invite a rejected order.
+  const cityOptions: FieldOption[] = cities
+    .filter((city) => city.governorate_id === form.shippingGovernorate)
+    .map((city) => ({ value: city.city_id, label: city.name_ar }));
+
+  const fields: FieldDef[] = [
     {
       name: "customerName",
       label: dict.checkout.name,
@@ -472,13 +537,17 @@ function CheckoutForm({
       placeholder: dict.checkout.governoratePlaceholder,
       type: "select",
       autoComplete: "address-level1",
+      options: governorateOptions,
     },
     {
-      name: "city",
+      name: "cityId",
       label: dict.checkout.city,
       placeholder: dict.checkout.cityPlaceholder,
-      type: "text",
+      type: "select",
       autoComplete: "address-level2",
+      options: cityOptions,
+      // Optional: leave it blank and the order goes out with no `city` at all.
+      required: false,
     },
     {
       name: "address",
@@ -516,15 +585,17 @@ function CheckoutForm({
                 id={field.name}
                 name={field.name}
                 autoComplete={field.autoComplete}
-                required
+                required={field.required ?? true}
                 value={form[field.name]}
                 onChange={(event) => setField(field.name, event.target.value)}
                 className="h-12 w-full rounded-full border border-slate-200 bg-white px-4 text-sm text-slate-800 outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/15"
               >
-                <option value="" disabled>
+                {/* For an optional select the placeholder stays selectable so
+                    the customer can clear the city again. */}
+                <option value="" disabled={field.required ?? true}>
                   {field.placeholder}
                 </option>
-                {governorateOptions.map((option) => (
+                {(field.options ?? []).map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>

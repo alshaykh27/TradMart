@@ -110,7 +110,7 @@ export const en: Dictionary = {
     country: "Country",
     countryPlaceholder: "Egypt",
     city: "City",
-    cityPlaceholder: "Your city",
+    cityPlaceholder: "Select your city",
     governorate: "Governorate",
     governoratePlaceholder: "Select your governorate",
     address: "Full address",

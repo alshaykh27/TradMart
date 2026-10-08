@@ -2,6 +2,7 @@ import type {
   SafkaCreateOrderRequest,
   SafkaOrderItemInput,
 } from "@/types/safka";
+import { parseCityId } from "./cities.ts";
 
 /**
  * Pure builder for the Safka create-order payload (POST /api/v1/public/orders).
@@ -19,6 +20,9 @@ import type {
  *     shipping is NOT added here because the contract has no shipping amount
  *     field and Safka derives it from the governorate's price list.
  *   - `commission` is the merchant commission total (per-unit commission x qty).
+ *   - `city` is documented as an optional string, but the server casts it to a
+ *     Number: only a price-list `cities[].id` (verified against the shipped
+ *     governorate) is sent, and the key is omitted entirely when we have none.
  *
  * `page_id` / `page_name` are optional and omitted (we have neither).
  *
@@ -39,7 +43,12 @@ export type SafkaOrderInput = {
   phone: string;
   /** Street address only — city/governorate go in their own fields. */
   address: string;
-  city: string;
+  /**
+   * Verified Safka price-list city id (see lib/safka/cities.ts), or null when
+   * the customer picked none or the id could not be confirmed against the
+   * governorate actually being shipped to. Null omits `city` from the payload.
+   */
+  cityId: string | null;
   /** Safka price-list document `_id` (already resolved from the order). */
   shippingGovernorate: string | null;
   /** Product total (subtotal), excluding shipping. */
@@ -94,6 +103,8 @@ export function buildSafkaOrderPayload(input: SafkaOrderInput): SafkaOrderPayloa
     commission += (line.commission ?? 0) * line.quantity;
   }
 
+  const cityId = parseCityId(input.cityId);
+
   const payload: SafkaCreateOrderRequest = {
     items,
     client_name: input.clientName,
@@ -103,7 +114,10 @@ export function buildSafkaOrderPayload(input: SafkaOrderInput): SafkaOrderPayloa
     shipping_governorate: input.shippingGovernorate ?? "",
     commission: round2(commission),
     total: round2(input.total),
-    city: input.city.trim(),
+    // Spread so the KEY IS ABSENT when there is no verified id. Safka's docs
+    // mark `city` optional; a blank string or free text is not, so an unset
+    // city must never reach the wire.
+    ...(cityId ? { city: cityId } : {}),
     note: input.note,
   };
 

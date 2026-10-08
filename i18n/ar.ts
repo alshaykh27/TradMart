@@ -119,7 +119,7 @@ export const ar: Dictionary = {
     country: "الدولة",
     countryPlaceholder: "مصر",
     city: "المدينة",
-    cityPlaceholder: "اكتب مدينتك",
+    cityPlaceholder: "اختر مدينتك",
     governorate: "المحافظة",
     governoratePlaceholder: "اختر محافظتك",
     address: "العنوان بالتفصيل",

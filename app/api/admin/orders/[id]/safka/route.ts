@@ -39,7 +39,7 @@ export async function POST(
   const { data: order, error: orderError } = await admin
     .from("orders")
     .select(
-      "id, customer_name, phone, address, city, shipping_governorate, subtotal, safka_order_id",
+      "id, customer_name, phone, address, city_id, shipping_governorate, subtotal, safka_order_id",
     )
     .eq("id", id)
     .maybeSingle();
@@ -100,7 +100,10 @@ export async function POST(
       clientName: order.customer_name,
       phone: order.phone,
       address: order.address,
-      city: order.city,
+      // The stored Safka id, never the display name: `city` is cast to a
+      // Number server-side. Orders saved before Phase 10 have NULL here, so
+      // the field is simply omitted for them.
+      cityId: order.city_id,
       shippingGovernorate: order.shipping_governorate,
       total: Number(order.subtotal),
       note: "",

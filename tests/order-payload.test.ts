@@ -12,7 +12,9 @@ const baseInput = {
   clientName: "أحمد محمد",
   phone: "01012345678",
   address: "شارع النيل 12",
-  city: "القاهرة",
+  // Safka price-list cities[].id for Cairo — NOT a city name. Safka casts
+  // `city` to a Number, so a name would fail the whole order with NaN.
+  cityId: "1",
   shippingGovernorate: CAIRO_PRICE_LIST_ID,
   total: 560, // product subtotal (display prices), excluding shipping
   note: "",
@@ -51,14 +53,32 @@ describe("buildSafkaOrderPayload", () => {
     assert.deepEqual(warnings, []);
   });
 
-  it("sends the address as-is (no city/country appended) and city in its own field", () => {
+  it("sends the address as-is (no city/country appended) and the city id in its own field", () => {
     const { payload } = buildSafkaOrderPayload(baseInput);
     assert.equal(payload.client_name, "أحمد محمد");
     assert.equal(payload.client_phone1, "01012345678");
     assert.equal(payload.client_phone2, "");
     assert.equal(payload.client_address, "شارع النيل 12");
-    assert.equal(payload.city, "القاهرة");
+    assert.equal(payload.city, "1");
     assert.equal(payload.note, "");
+  });
+
+  it("omits `city` entirely when no city id was resolved", () => {
+    const { payload } = buildSafkaOrderPayload({ ...baseInput, cityId: null });
+    assert.equal("city" in payload, false);
+  });
+
+  it("omits `city` rather than send free text Safka would cast to NaN", () => {
+    // This is the regression: a name used to go out as `city` and Safka
+    // answered 400 `city: Cast to Number failed for value "NaN"`.
+    const { payload } = buildSafkaOrderPayload({ ...baseInput, cityId: "القاهرة" });
+    assert.equal("city" in payload, false);
+
+    const blank = buildSafkaOrderPayload({ ...baseInput, cityId: "" });
+    assert.equal("city" in blank.payload, false);
+
+    const padded = buildSafkaOrderPayload({ ...baseInput, cityId: "  1  " });
+    assert.equal(padded.payload.city, "1");
   });
 
   it("forwards the price-list _id as shipping_governorate verbatim", () => {

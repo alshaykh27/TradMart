@@ -151,6 +151,30 @@ export type Database = {
         };
         Relationships: [];
       };
+      safka_cities: {
+        Row: {
+          city_id: string;
+          governorate_id: string;
+          name_ar: string;
+          name_en: string;
+          updated_at: string;
+        };
+        Insert: {
+          city_id: string;
+          governorate_id: string;
+          name_ar: string;
+          name_en?: string;
+          updated_at?: string;
+        };
+        Update: {
+          city_id?: string;
+          governorate_id?: string;
+          name_ar?: string;
+          name_en?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       orders: {
         Row: {
           id: string;
@@ -159,6 +183,7 @@ export type Database = {
           phone: string;
           country: string;
           city: string;
+          city_id: string | null;
           governorate: string | null;
           shipping_governorate: string | null;
           address: string;
@@ -176,6 +201,7 @@ export type Database = {
           phone: string;
           country: string;
           city: string;
+          city_id?: string | null;
           governorate?: string | null;
           shipping_governorate?: string | null;
           address: string;
@@ -193,6 +219,7 @@ export type Database = {
           phone?: string;
           country?: string;
           city?: string;
+          city_id?: string | null;
           governorate?: string | null;
           shipping_governorate?: string | null;
           address?: string;

@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       customerName: parsed.data.customerName,
       phone: parsed.data.phone,
       country: parsed.data.country,
-      city: parsed.data.city,
+      cityId: parsed.data.cityId || null,
       shippingGovernorate: parsed.data.shippingGovernorate,
       address: parsed.data.address,
       items: parsed.data.items,

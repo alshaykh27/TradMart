@@ -80,7 +80,19 @@ export interface SafkaCreateOrderRequest {
   shipping_governorate: string;
   commission: number;
   total: number;
-  city: string;
+  /**
+   * OPTIONAL. Must be the price-list `cities[].id` for the SAME governorate as
+   * `shipping_governorate` — e.g. "336" = Desouq.
+   *
+   * The docs table calls this a `string` but the server casts it to a Number,
+   * so free text fails the whole order with
+   * `city: Cast to Number failed for value "NaN" (type number)`.
+   *
+   * Deliberately absent-when-empty: when we have no verified id the field is
+   * OMITTED from the payload rather than sent blank or guessed, so Safka
+   * applies its documented default instead of rejecting the order.
+   */
+  city?: string;
   note: string;
 }
 

@@ -9,7 +9,7 @@ const validPayload = {
   customerName: "أحمد محمد",
   phone: "01012345678",
   country: "Egypt",
-  city: "القاهرة",
+  cityId: "1",
   shippingGovernorate: cairoPriceListId,
   address: "المنطقة الأولى، شارع النيل 12",
   items: [{ productId: uuid, qty: 2 }],
@@ -83,6 +83,30 @@ describe("orderRequestSchema", () => {
       orderRequestSchema.safeParse({ ...validPayload, shippingGovernorate: cairoPriceListId })
         .success,
       true,
+    );
+  });
+
+  it("treats cityId as optional (Safka's `city` field is optional)", () => {
+    const parsed = orderRequestSchema.safeParse({ ...validPayload, cityId: undefined });
+    assert.ok(parsed.success);
+    if (parsed.success) assert.equal(parsed.data.cityId, "");
+  });
+
+  it("bounds cityId and drops any legacy free-text city field", () => {
+    const parsed = orderRequestSchema.safeParse({
+      ...validPayload,
+      city: "القاهرة",
+      cityId: "336",
+    });
+    assert.ok(parsed.success);
+    if (parsed.success) {
+      assert.equal(parsed.data.cityId, "336");
+      assert.equal("city" in parsed.data, false);
+    }
+
+    assert.equal(
+      orderRequestSchema.safeParse({ ...validPayload, cityId: "9".repeat(17) }).success,
+      false,
     );
   });
 

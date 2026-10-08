@@ -6,6 +6,7 @@ import { getShippingSettings } from "@/lib/settings";
 import { computeOrderTotals, roundMoney } from "./pricing";
 import { buildOrderLines, OrderValidationError } from "./lines";
 import { resolveSafkaPropertyId } from "@/lib/safka/order-payload";
+import { resolveOrderCity } from "@/lib/safka/cities";
 import { sendSafkaOrder } from "@/lib/safka/orders";
 import { sendNewOrderTelegramAlert } from "@/lib/notify/telegram";
 import type { SafkaOrderLineInput } from "@/lib/safka/order-payload";
@@ -35,7 +36,14 @@ export type CreateOrderInput = {
   customerName: string;
   phone: string;
   country: string;
-  city: string;
+  /**
+   * Client-selected Safka city id, or null/empty for none. Treated as a HINT:
+   * it is looked up in `safka_cities` and discarded unless it belongs to the
+   * governorate actually being shipped to. On any mismatch the order proceeds
+   * with no city rather than failing — a wrong city must never block checkout,
+   * and a guessed one must never reach Safka.
+   */
+  cityId: string | null;
   /** Safka price-list document _id (governorate_pricing.governorate_id). */
   shippingGovernorate: string;
   address: string;
@@ -89,7 +97,6 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
   const customerName = validateRequired(input.customerName, "customer name");
   const phone = validatePhone(input.phone);
   const country = validateRequired(input.country, "country", 80);
-  const city = validateRequired(input.city, "city", 120);
   const shippingGovernorate = validateRequired(
     input.shippingGovernorate,
     "governorate",
@@ -140,6 +147,32 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
     throw new OrderValidationError("Unsupported governorate");
   }
   const governorateName = governorateRow.name_ar;
+
+  // Optional city: kept only if it really exists and belongs to this
+  // governorate. Lookup failures degrade to "no city" — the Safka payload then
+  // omits `city` entirely (see lib/safka/order-payload.ts) instead of sending
+  // a value Safka would cast to NaN.
+  const city = await resolveOrderCity(input.cityId, shippingGovernorate, async (cityId) => {
+    try {
+      const { data, error } = await admin
+        .from("safka_cities")
+        .select("governorate_id, name_ar")
+        .eq("city_id", cityId)
+        .maybeSingle();
+      if (error) {
+        console.warn("[orders] city lookup failed, omitting city:", error.message);
+        return null;
+      }
+      return data;
+    } catch (error) {
+      console.warn(
+        "[orders] city lookup threw, omitting city:",
+        error instanceof Error ? error.message : String(error),
+      );
+      return null;
+    }
+  });
+
   const shippingSettings = await getShippingSettings();
   const shippingFee = roundMoney(
     Number(governorateRow.safka_shipping_fee) +
@@ -165,7 +198,8 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
     customer_name: customerName,
     phone,
     country,
-    city,
+    city: city.name,
+    city_id: city.id,
     governorate: governorateName,
     shipping_governorate: shippingGovernorate,
     address,
@@ -204,7 +238,7 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
       customerName,
       phone,
       governorate: governorateName,
-      city,
+      city: city.name || "—",
       total: totals.total,
     });
   } catch {
@@ -233,7 +267,7 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
         clientName: customerName,
         phone,
         address,
-        city,
+        cityId: city.id,
         shippingGovernorate,
         total: totals.subtotal,
         note: "",

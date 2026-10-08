@@ -43,7 +43,17 @@ export const orderRequestSchema = z.object({
         .regex(/^[+0-9][0-9()\s-]{5,20}$/, "A valid phone number is required"),
     ),
   country: cleanString(1, 80, "Country"),
-  city: cleanString(1, 120, "City"),
+  /**
+   * Safka price-list `cities[].id` (a short numeric string) chosen at checkout.
+   * OPTIONAL: an unknown id, a city from another governorate, or no id at all
+   * simply omits `city` from the Safka payload. Existence and governorate match
+   * are checked server-side (create) against `safka_cities`, never here — the
+   * browser's claim is not evidence.
+   *
+   * The old free-text `city` field was dropped deliberately: Safka casts `city`
+   * to a Number, so text became NaN and the whole order 400'd.
+   */
+  cityId: z.string().max(16, "City is too long").optional().default(""),
   // Safka price-list (pricing) document _id chosen at checkout. Validity is
   // checked against governorate_pricing server-side (create), not here.
   shippingGovernorate: cleanString(2, 120, "Governorate"),

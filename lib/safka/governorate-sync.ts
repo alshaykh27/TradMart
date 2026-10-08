@@ -7,19 +7,27 @@
  * sends `shipping_governorate` as this document `_id` (NOT a name), so the
  * rows are keyed by it and the checkout ships on Safka's real fee.
  *
- * The current rows are upserted into `governorate_pricing` (service role) and
- * rows that Safka no longer lists are removed, so the storefront can never
- * charge less than Safka actually charges.
+ * The same response also carries each governorate's `cities[]`, so this sync
+ * writes `safka_cities` too (Safka has no cities endpoint of its own — every
+ * candidate 404s). `POST /api/v1/public/orders` casts `city` to a Number, so
+ * the checkout can only offer cities it can send as a real id.
+ *
+ * The current rows are upserted into `governorate_pricing` / `safka_cities`
+ * (service role) and rows that Safka no longer lists are removed, so the
+ * storefront can never offer a city or charge a fee Safka no longer agrees to.
  *
  * Deliberately free of "server-only": this runs both under Node (npm run
  * sync:governorates) and inside a Next.js route handler (the cron).
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { SafkaPriceListEntry } from "@/types/safka";
+import { collectSafkaCities } from "./cities.ts";
 
 export type GovernorateSyncResult = {
   total: number;
   removed: number;
+  cities: number;
+  citiesRemoved: number;
   cairo?: { governorate_id: string; name_ar: string; safka_shipping_fee: number };
 };
 
@@ -50,6 +58,8 @@ export async function syncGovernoratePricing(): Promise<GovernorateSyncResult> {
     name_en: string;
     safka_shipping_fee: number;
   }[] = [];
+  /** Active, nameable entries — the source for `safka_cities`. */
+  const activeEntries: SafkaPriceListEntry[] = [];
 
   let page = 1;
   let pages = 1;
@@ -77,6 +87,7 @@ export async function syncGovernoratePricing(): Promise<GovernorateSyncResult> {
       const nameAr = String(entry.governorateNameAr ?? "").trim();
       const governorateId = String(entry._id ?? "").trim();
       if (!governorateId || !nameAr) continue;
+      activeEntries.push(entry);
       rows.push({
         governorate_id: governorateId,
         name_ar: nameAr,
@@ -91,11 +102,37 @@ export async function syncGovernoratePricing(): Promise<GovernorateSyncResult> {
   const seen = new Set(rows.map((row) => row.governorate_id));
   const database = admin(supabaseUrl as string, serviceRoleKey as string);
 
+  // Cities reference governorate_pricing, so governorates land first.
   if (rows.length > 0) {
     const { error } = await database
       .from("governorate_pricing")
       .upsert(rows, { onConflict: "governorate_id" });
     if (error) throw new Error(`governorate_pricing upsert failed: ${error.message}`);
+  }
+
+  const cities = collectSafkaCities(activeEntries);
+  const seenCityIds = new Set(cities.map((city) => city.city_id));
+
+  if (cities.length > 0) {
+    const { error } = await database
+      .from("safka_cities")
+      .upsert(cities, { onConflict: "city_id" });
+    if (error) throw new Error(`safka_cities upsert failed: ${error.message}`);
+  }
+
+  const { data: existingCities, error: cityLookupError } = await database
+    .from("safka_cities")
+    .select("city_id");
+  if (cityLookupError) throw new Error(`safka_cities lookup failed: ${cityLookupError.message}`);
+
+  const staleCities = (existingCities ?? [])
+    .map((city) => city.city_id)
+    .filter((cityId) => !seenCityIds.has(cityId));
+
+  for (let i = 0; i < staleCities.length; i += 100) {
+    const chunk = staleCities.slice(i, i + 100);
+    const { error } = await database.from("safka_cities").delete().in("city_id", chunk);
+    if (error) throw new Error(`safka_cities delete failed: ${error.message}`);
   }
 
   const { data: existing, error: lookupError } = await database
@@ -121,6 +158,8 @@ export async function syncGovernoratePricing(): Promise<GovernorateSyncResult> {
   return {
     total: rows.length,
     removed: stale.length,
+    cities: cities.length,
+    citiesRemoved: staleCities.length,
     cairo: cairo
       ? {
           governorate_id: cairo.governorate_id,
