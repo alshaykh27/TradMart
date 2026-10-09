@@ -14,23 +14,25 @@ export default async function AdminSettingsPage() {
   const admin = createAdminClient();
   const { data } = await admin
     .from("settings")
-    .select("shipping_markup")
+    .select("shipping_markup, shipping_fold_default")
     .eq("id", SETTINGS_ID)
     .maybeSingle();
 
   const markup = Number(data?.shipping_markup ?? 0);
+  const foldDefault = Number(data?.shipping_fold_default ?? 85);
 
   return (
     <div className="space-y-5">
       <header>
         <h1 className="text-2xl font-extrabold tracking-tight text-navy">الإعدادات</h1>
         <p className="mt-1 text-sm text-navy-soft">
-          الزيادة الثابتة المفروضة فوق سعر توصيل المحافظة من سافكا.
+          الزيادة الثابتة المفروضة فوق سعر توصيل المحافظة من سافكا، والقيمة
+          الافتراضية لـ«الشحن المجاني» (تضمين الشحن في سعر المنتج).
         </p>
       </header>
 
       <section className="max-w-2xl rounded-3xl bg-white p-5 shadow-soft">
-        <SettingsForm initialMarkup={markup} />
+        <SettingsForm initialMarkup={markup} initialFoldDefault={foldDefault} />
       </section>
     </div>
   );

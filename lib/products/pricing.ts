@@ -39,3 +39,43 @@ export function deriveSyncedPrice(
   if (costPrice == null) return null;
   return displayPrice(Number(costPrice), commission == null ? 0 : Number(commission));
 }
+
+/** Upper bound accepted for a fold value (mirrors the commission cap). */
+export const MAX_SHIPPING_FOLD = 100_000;
+
+/**
+ * The fold actually applied to a product: 0 when the toggle is off or the
+ * stored value is unusable. Never negative, never NaN.
+ */
+export function shippingFoldApplied(
+  included: boolean | null | undefined,
+  fold: number | null | undefined,
+): number {
+  if (!included) return 0;
+  const value = Number(fold);
+  return Number.isFinite(value) && value > 0 ? round2(value) : 0;
+}
+
+/**
+ * Storefront price for a product row: base (cost + commission) plus the folded
+ * shipping — `585` for base 500 + fold 85. DISPLAY ONLY: orders and Safka
+ * continue to use the plain `price`, so this helper must never reach the order
+ * pipeline (lib/orders/*, lib/safka/order-payload.ts) or the margin math.
+ */
+export function storefrontPrice(
+  price: number,
+  included: boolean | null | undefined,
+  fold: number | null | undefined,
+): number {
+  const base = Number.isFinite(price) ? price : 0;
+  return round2(base + shippingFoldApplied(included, fold));
+}
+
+/**
+ * "Free shipping" cart rule: the cart shows 0 shipping only when EVERY line is
+ * folded. An empty cart is never "free" (nothing to ship), and a single
+ * non-folded item brings the real per-governorate fee back, exactly as today.
+ */
+export function allLinesFolded(includedFlags: Array<boolean | null | undefined>): boolean {
+  return includedFlags.length > 0 && includedFlags.every((flag) => flag === true);
+}

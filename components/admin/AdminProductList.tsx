@@ -16,9 +16,12 @@ import type { CategoryOption } from "@/lib/products/category";
 export default function AdminProductList({
   products,
   categories,
+  shippingFeeRange,
 }: {
   products: AdminProduct[];
   categories: CategoryOption[];
+  /** Min / max / typical per-governorate Safka fee, for the fold warning. */
+  shippingFeeRange?: { min: number; max: number; typical: number } | null;
 }) {
   const [bulkMode, setBulkMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -84,6 +87,7 @@ export default function AdminProductList({
               bulkMode={bulkMode}
               selected={selected.has(product.id)}
               onToggle={toggle}
+              shippingFeeRange={shippingFeeRange}
             />
           </li>
         ))}

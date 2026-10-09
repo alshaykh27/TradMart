@@ -64,7 +64,7 @@ export default async function AdminProductsPage({
   let query = admin
     .from("products")
     .select(
-      "id, name, description, price, cost_price, commission, is_published, status, safka_product_id, image_url, images, stock, source, category_id, safka_suggested_price, safka_suggested_commission",
+      "id, name, description, price, cost_price, commission, is_published, status, safka_product_id, image_url, images, stock, source, category_id, safka_suggested_price, safka_suggested_commission, shipping_included, shipping_fold",
       { count: "exact" },
     )
     .order("is_published", { ascending: false })
@@ -92,6 +92,24 @@ export default async function AdminProductsPage({
 
   const from = (page - 1) * LIMIT;
   const { data: products, error, count } = await query.range(from, from + LIMIT - 1);
+
+  // The real per-governorate Safka fees, so each row can show the fold against
+  // the actual spread (min / max / typical) and warn when it sits below the
+  // typical figure — the merchant picks the flat fold knowingly.
+  const { data: feeRows } = await admin
+    .from("governorate_pricing")
+    .select("safka_shipping_fee");
+  const fees = (feeRows ?? [])
+    .map((row) => Number(row.safka_shipping_fee))
+    .filter((value) => Number.isFinite(value) && value > 0);
+  const shippingFeeRange =
+    fees.length > 0
+      ? {
+          min: Math.min(...fees),
+          max: Math.max(...fees),
+          typical: Math.round((fees.reduce((sum, value) => sum + value, 0) / fees.length) * 100) / 100,
+        }
+      : null;
 
   const total = count ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / LIMIT));
@@ -209,7 +227,11 @@ export default async function AdminProductsPage({
         </p>
       ) : (
         <>
-          <AdminProductList products={products} categories={categories} />
+          <AdminProductList
+            products={products}
+            categories={categories}
+            shippingFeeRange={shippingFeeRange}
+          />
 
           {totalPages > 1 ? (
             <nav className="flex items-center justify-between gap-3" aria-label="تصفّح المنتجات">

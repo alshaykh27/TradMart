@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { useCart } from "@/components/cart/CartProvider";
 import { trackMarketingEvent } from "@/lib/marketing/browser";
+import { shippingFoldApplied, storefrontPrice } from "@/lib/products/pricing";
 import type { Dictionary } from "@/i18n";
 
 type CardProduct = {
@@ -15,6 +16,9 @@ type CardProduct = {
   image_url: string | null;
   stock: number | null;
   isNew?: boolean;
+  /** "Free shipping" fold columns; optional for callers that lack them. */
+  shipping_included?: boolean;
+  shipping_fold?: number | null;
 };
 
 function noopSubscribe(): () => void {
@@ -76,7 +80,13 @@ export default function ProductCard({
     ry.set(0);
   };
 
-  const formattedPrice = product.price.toLocaleString("ar-EG", {
+  const folded = shippingFoldApplied(product.shipping_included, product.shipping_fold);
+  const displayPriceValue = storefrontPrice(
+    Number(product.price),
+    product.shipping_included,
+    product.shipping_fold,
+  );
+  const formattedPrice = displayPriceValue.toLocaleString("ar-EG", {
     maximumFractionDigits: 2,
   });
   const unavailable = (product.stock ?? 0) <= 0;
@@ -132,9 +142,14 @@ export default function ProductCard({
               {product.name}
             </h3>
 
-            <p className="mt-auto flex items-baseline gap-1.5">
+            <p className="mt-auto flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
               <span className="text-lg font-extrabold text-brand sm:text-xl">{formattedPrice}</span>
               <span className="text-xs font-medium text-slate-500">{dict.products.currency}</span>
+              {folded > 0 ? (
+                <span className="ms-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                  {dict.products.freeShipping}
+                </span>
+              ) : null}
             </p>
           </div>
         </Link>

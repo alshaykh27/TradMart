@@ -1,7 +1,7 @@
 import { z } from "zod";
 // Relative specifiers (not the `@/` alias) so `node --test` can load this module
 // directly — same convention as lib/orders/lines.ts -> ./pricing.ts.
-import { displayPrice, round2 } from "../products/pricing.ts";
+import { displayPrice, round2, MAX_SHIPPING_FOLD } from "../products/pricing.ts";
 import {
   cleanText,
   MANUAL_MAX_COMMISSION,
@@ -89,6 +89,15 @@ export const manualProductSchema = z.object({
     .max(MANUAL_MAX_STOCK, "مخزون أكبر من الحد المسموح"),
   isPublished: booleanField,
   categoryId: categoryField,
+  // Fold shipping into the storefront price ("شحن مجاني"). Display-only: it
+  // never feeds `price`, which stays derived as cost + commission.
+  shippingIncluded: z.boolean().optional().default(false),
+  shippingFold: z.coerce
+    .number()
+    .finite("قيمة رقمية مطلوبة")
+    .min(0, "لا يمكن أن تكون سالبة")
+    .max(MAX_SHIPPING_FOLD, "قيمة أكبر من الحد المسموح")
+    .default(0),
 });
 
 export type ManualProductInput = z.infer<typeof manualProductSchema>;
@@ -127,6 +136,11 @@ export function buildManualProductRow(
     category_id: input.categoryId,
     image_url: parsedImages.urls[0] ?? null,
     images: parsedImages.urls.length > 0 ? (parsedImages.urls as Json) : null,
+    // The fold rides alongside the price but is never part of it: `price` above
+    // is cost + commission, and these two columns are only read by the
+    // storefront display and the cart's "free shipping" rule.
+    shipping_included: input.shippingIncluded,
+    shipping_fold: input.shippingIncluded ? round2(input.shippingFold) : null,
   };
 }
 
@@ -181,6 +195,8 @@ export function buildManualProductPatch(
       category_id: parsed.data.categoryId,
       image_url: images.images.urls[0] ?? null,
       images: images.images.urls.length > 0 ? (images.images.urls as Json) : null,
+      shipping_included: parsed.data.shippingIncluded,
+      shipping_fold: parsed.data.shippingIncluded ? round2(parsed.data.shippingFold) : null,
     },
   };
 }

@@ -9,6 +9,7 @@ import OrderNowButton from "@/components/OrderNowButton";
 import TrackViewContent from "@/components/marketing/TrackViewContent";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeHtmlDescription } from "@/lib/sanitize";
+import { shippingFoldApplied, storefrontPrice } from "@/lib/products/pricing";
 import { defaultLocale, getDictionary } from "@/i18n";
 
 type ProductPageProps = PageProps<"/products/[id]">;
@@ -62,7 +63,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const { data: product, error } = await client
     .from("products")
-    .select("id, name, description, price, image_url, stock, is_published, images, variants, updated_at")
+    .select("id, name, description, price, image_url, stock, is_published, images, variants, updated_at, shipping_included, shipping_fold")
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
@@ -72,7 +73,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const description = sanitizeHtmlDescription(product.description);
-  const formattedPrice = Number(product.price).toLocaleString("ar-EG", {
+  const basePrice = Number(product.price);
+  // Display-only fold: the customer sees cost + commission + shipping_fold with
+  // a free-shipping badge; orders and Safka keep charging `basePrice`.
+  const folded = shippingFoldApplied(product.shipping_included, product.shipping_fold);
+  const formattedPrice = storefrontPrice(
+    basePrice,
+    product.shipping_included,
+    product.shipping_fold,
+  ).toLocaleString("ar-EG", {
     maximumFractionDigits: 2,
   });
   const unavailable = (product.stock ?? 0) <= 0;
@@ -91,7 +100,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const { data: relatedData } = await client
     .from("products")
-    .select("id, name, price, image_url, stock, updated_at")
+    .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
     .eq("is_published", true)
     .neq("id", id)
     .order("updated_at", { ascending: false })
@@ -146,12 +155,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {product.name}
               </h1>
 
-              <div className="mt-4 flex items-center gap-3">
+              <div className="mt-4 flex flex-wrap items-center gap-3">
                 <p className="text-[26px] font-extrabold text-brand sm:text-3xl">
                   {formattedPrice}
                   <span className="ms-2 text-sm font-medium text-slate-500">
                     {dict.products.currency}
                   </span>
+                  {folded > 0 ? (
+                    <span className="ms-3 inline-block rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                      {dict.products.freeShipping}
+                    </span>
+                  ) : null}
                 </p>
                 {unavailable && (
                   <span className="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">

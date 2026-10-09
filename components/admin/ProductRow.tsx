@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { computeMargin } from "@/lib/admin/margin";
+import { storefrontPrice } from "@/lib/products/pricing";
 import ManualProductEditor from "./ManualProductEditor";
 import DeleteManualProductButton from "./DeleteManualProductButton";
 import CategorySelect from "./CategorySelect";
@@ -31,6 +32,9 @@ export type AdminProduct = {
   safka_suggested_price?: number | null;
   /** suggested_price - cost_price, so applying it lands on the exact figure. */
   safka_suggested_commission?: number | null;
+  /** "Free shipping" fold into the displayed price (display-only). */
+  shipping_included?: boolean;
+  shipping_fold?: number | null;
 };
 
 function formatMoney(value: number): string {
@@ -43,6 +47,7 @@ export default function ProductRow({
   bulkMode = false,
   selected = false,
   onToggle,
+  shippingFeeRange = null,
 }: {
   product: AdminProduct;
   categories?: CategoryOption[];
@@ -50,13 +55,15 @@ export default function ProductRow({
   bulkMode?: boolean;
   selected?: boolean;
   onToggle?: (id: string) => void;
+  /** Min / max / typical per-governorate Safka fee, for the fold warning. */
+  shippingFeeRange?: { min: number; max: number; typical: number } | null;
 }) {
   const [commission, setCommission] = useState(
     product.commission == null ? "" : String(product.commission),
   );
   const [isPublished, setIsPublished] = useState(product.is_published);
   const [message, setMessage] = useState<{ text: string; ok: boolean } | null>(null);
-  const [saving, setSaving] = useState<"commission" | "publish" | "category" | null>(null);
+  const [saving, setSaving] = useState<"commission" | "publish" | "category" | "shipping" | null>(null);
   const [editing, setEditing] = useState(false);
   /**
    * Optimistic copy of the assigned category. The quick field saves on change,
@@ -65,11 +72,35 @@ export default function ProductRow({
    */
   const [categoryId, setCategoryId] = useState(product.category_id ?? "");
 
+  // Free-shipping fold: local copies so the box can preview the storefront
+  // price without waiting for router.refresh(), just like the commission field.
+  const [shippingIncluded, setShippingIncluded] = useState(
+    product.shipping_included === true,
+  );
+  const [shippingFold, setShippingFold] = useState(
+    product.shipping_fold == null ? "" : String(product.shipping_fold),
+  );
+
   const isManual = product.source === "manual";
 
   const parsed = commission.trim() === "" ? null : Number(commission);
   const commissionValid =
     commission.trim() === "" || (Number.isFinite(parsed) && (parsed ?? -1) >= 0);
+
+  const foldedValue = shippingFold.trim() === "" ? null : Number(shippingFold);
+  const foldedValid =
+    shippingFold.trim() === "" ||
+    (Number.isFinite(foldedValue) && (foldedValue ?? -1) >= 0);
+  const foldedApplied =
+    shippingIncluded && Number.isFinite(foldedValue) && (foldedValue ?? 0) > 0
+      ? storefrontPrice(product.price, true, foldedValue)
+      : product.price;
+  const foldBelowTypical =
+    shippingIncluded &&
+    foldedValue !== null &&
+    Number.isFinite(foldedValue) &&
+    shippingFeeRange !== null &&
+    foldedValue < shippingFeeRange.typical;
 
   const preview = useMemo(
     () => computeMargin(product.price, product.cost_price, parsed),
@@ -189,6 +220,43 @@ export default function ProductRow({
     }
   }
 
+  async function saveShippingFold() {
+    if (shippingIncluded && !Number.isFinite(foldedValue ?? NaN)) {
+      setMessage({ text: "حدّد قيمة الشحن المضمّن", ok: false });
+      return;
+    }
+    if (!foldedValid) {
+      setMessage({ text: "قيمة الشحن المضمّن غير صالحة", ok: false });
+      return;
+    }
+    setSaving("shipping");
+    setMessage(null);
+    try {
+      const response = await fetch(`/api/admin/products/${product.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        // Folding never touches price: the server writes only the two display
+        // columns (and resolves the settings default when the fold is blank).
+        body: JSON.stringify({
+          shippingIncluded: shippingIncluded,
+          shippingFold: shippingIncluded ? (foldedValue ?? null) : null,
+        }),
+      });
+      const json = (await response.json().catch(() => ({}))) as { error?: string };
+      setMessage(
+        response.ok
+          ? shippingIncluded
+            ? { text: "تم تفعيل «الشحن مجاني» للمنتج", ok: true }
+            : { text: "تم إيقاف «الشحن مجاني» للمنتج", ok: true }
+          : { text: json?.error ?? "تعذّر الحفظ", ok: false },
+      );
+    } catch {
+      setMessage({ text: "تعذّر الاتصال بالخادم", ok: false });
+    } finally {
+      setSaving(null);
+    }
+  }
+
   const seed: ManualProductSeed = {
     name: product.name,
     description: product.description ?? null,
@@ -199,6 +267,8 @@ export default function ProductRow({
     stock: product.stock,
     is_published: product.is_published,
     category_id: categoryId,
+    shipping_included: product.shipping_included === true,
+    shipping_fold: product.shipping_fold ?? null,
   };
 
   return (
@@ -374,6 +444,66 @@ export default function ProductRow({
               }
             />
           )}
+        </div>
+
+        <div className="rounded-2xl border border-navy/10 bg-slate-50/60 p-2.5">
+          <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-navy">
+            <input
+              type="checkbox"
+              checked={shippingIncluded}
+              onChange={(event) => setShippingIncluded(event.target.checked)}
+              className="size-4 accent-brand"
+            />
+            تضمين الشحن في السعر — «شحن مجاني»
+          </label>
+
+          <div className="mt-2 flex gap-2">
+            <div className="flex flex-1 items-center gap-1 rounded-2xl border border-navy/15 bg-white px-3 py-2 focus-within:border-brand">
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                inputMode="decimal"
+                value={shippingFold}
+                onChange={(event) => setShippingFold(event.target.value)}
+                disabled={!shippingIncluded}
+                placeholder="مثال: 85"
+                className="w-full bg-transparent text-sm text-navy outline-none disabled:opacity-40"
+              />
+              <span className="text-xs text-navy-soft">ج.م</span>
+            </div>
+            <button
+              type="button"
+              onClick={saveShippingFold}
+              disabled={saving === "shipping" || (shippingIncluded && !foldedValid)}
+              className="rounded-2xl bg-navy px-3 text-sm font-semibold text-white transition hover:bg-navy-soft disabled:opacity-40"
+            >
+              {saving === "shipping" ? "…" : "حفظ"}
+            </button>
+          </div>
+
+          <p className="mt-1.5 text-xs text-navy-soft">
+            سعر العرض للعميل:{" "}
+            <strong className="text-navy">
+              {formatMoney(shippingIncluded ? foldedApplied : product.price)}
+            </strong>
+            {shippingIncluded ? " — الشحن يظهر مجانًا في السلة، بشرط ألا يضمّنها منتجات أخرى غير مضمّنة" : ""}
+          </p>
+
+          {shippingFeeRange ? (
+            <p className="mt-1 text-xs text-navy-soft">
+              رسوم توصيل سافكا: من {formatMoney(shippingFeeRange.min)} إلى{" "}
+              {formatMoney(shippingFeeRange.max)} · المتوسط{" "}
+              {formatMoney(shippingFeeRange.typical)}
+            </p>
+          ) : null}
+
+          {foldBelowTypical ? (
+            <p className="mt-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-[11px] font-semibold leading-4 text-amber-700">
+              ⚠ القيمة أقل من متوسط رسوم التوصيل — بعض المحافظات أغلى، وسيظهر
+              فرق بين الإجمالي المعروض في السلة والفاتورة الفعلية عند الاستلام.
+            </p>
+          ) : null}
         </div>
 
         {preview ? (

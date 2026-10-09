@@ -47,7 +47,7 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ ok: false, error: "غير مصرح" }, { status: 401 });
   }
 
-  let body: MarketingBody & { shippingMarkup?: unknown };
+  let body: MarketingBody & { shippingMarkup?: unknown; shippingFoldDefault?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -66,6 +66,18 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ ok: false, error: "الزيادة خارج النطاق" }, { status: 422 });
     }
     update.shipping_markup = Math.round(value * 100) / 100;
+  }
+
+  // --- flat fold default (prefills the per-product "شحن مجاني" control) ----
+  if (body?.shippingFoldDefault !== undefined) {
+    const value = body.shippingFoldDefault;
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      return NextResponse.json({ ok: false, error: "القيمة غير صالحة" }, { status: 422 });
+    }
+    if (value < 0 || value > 100_000) {
+      return NextResponse.json({ ok: false, error: "القيمة خارج النطاق" }, { status: 422 });
+    }
+    update.shipping_fold_default = Math.round(value * 100) / 100;
   }
 
   // --- marketing ----------------------------------------------------------
@@ -132,7 +144,7 @@ export async function PATCH(request: Request) {
     .from("settings")
     .update(update)
     .eq("id", SETTINGS_ID)
-    .select("shipping_markup, meta_pixel_id, tiktok_pixel_id")
+    .select("shipping_markup, shipping_fold_default, meta_pixel_id, tiktok_pixel_id")
     .maybeSingle();
 
   if (error || !data) {
@@ -152,6 +164,7 @@ export async function PATCH(request: Request) {
   return NextResponse.json({
     ok: true,
     shippingMarkup: Number(data.shipping_markup),
+    shippingFoldDefault: Number(data.shipping_fold_default),
     saved: {
       metaPixelId: data.meta_pixel_id ?? null,
       tiktokPixelId: data.tiktok_pixel_id ?? null,

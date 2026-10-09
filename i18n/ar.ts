@@ -86,6 +86,7 @@ export const ar: Dictionary = {
     newBadge: "جديد",
     addToCart: "أضف للسلة",
     orderNow: "اطلب الآن",
+    freeShipping: "شحن مجاني",
     related: "منتجات مشابهة",
     delivery: {
       title: "معلومات التوصيل",

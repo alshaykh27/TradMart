@@ -95,7 +95,7 @@ export default async function Home() {
   const [latestResult] = await Promise.all([
     client
       .from("products")
-      .select("id, name, price, image_url, stock, updated_at")
+      .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
       .eq("is_published", true)
       .order("updated_at", { ascending: false })
       .limit(8),

@@ -49,7 +49,7 @@ export default async function ProductsPage({
   // shows the shop instead of an empty listing.
   let builder = client
     .from("products")
-    .select("id, name, price, image_url, stock, updated_at")
+    .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
     .eq("is_published", true)
     .order("updated_at", { ascending: false });
 

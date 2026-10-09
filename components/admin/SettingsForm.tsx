@@ -1,16 +1,28 @@
 "use client";
 import { useState, type FormEvent } from "react";
 
-export default function SettingsForm({ initialMarkup }: { initialMarkup: number }) {
+export default function SettingsForm({
+  initialMarkup,
+  initialFoldDefault,
+}: {
+  initialMarkup: number;
+  initialFoldDefault: number;
+}) {
   const [markup, setMarkup] = useState(String(initialMarkup));
+  const [foldDefault, setFoldDefault] = useState(String(initialFoldDefault));
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     const value = Number(markup);
+    const fold = Number(foldDefault);
     if (!Number.isFinite(value) || value < 0) {
       setMessage("القيمة غير صالحة");
+      return;
+    }
+    if (!Number.isFinite(fold) || fold < 0) {
+      setMessage("قيمة الشحن المضمّن غير صالحة");
       return;
     }
     setBusy(true);
@@ -19,7 +31,7 @@ export default function SettingsForm({ initialMarkup }: { initialMarkup: number 
       const response = await fetch("/api/admin/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shippingMarkup: value }),
+        body: JSON.stringify({ shippingMarkup: value, shippingFoldDefault: fold }),
       });
       const json = (await response.json().catch(() => ({}))) as { error?: string };
       setMessage(
@@ -33,7 +45,7 @@ export default function SettingsForm({ initialMarkup }: { initialMarkup: number 
   }
 
   return (
-    <form onSubmit={submit} className="max-w-sm space-y-4">
+    <form onSubmit={submit} className="max-w-sm space-y-5">
       <div>
         <label htmlFor="shipping-markup" className="mb-1.5 block text-sm font-semibold text-navy-soft">
           الزيادة على الشحن (ج.م)
@@ -53,6 +65,29 @@ export default function SettingsForm({ initialMarkup }: { initialMarkup: number 
         </div>
         <p className="mt-1.5 text-xs text-navy-soft">
           تُضاف على سعر توصيل المحافظة من سافكا أثناء الطلب، لجميع المحافظات.
+        </p>
+      </div>
+
+      <div>
+        <label htmlFor="shipping-fold-default" className="mb-1.5 block text-sm font-semibold text-navy-soft">
+          القيمة الافتراضية لتضمين الشحن (ج.م)
+        </label>
+        <div className="flex items-center gap-1 rounded-2xl border border-navy/15 px-4 py-2.5 focus-within:border-brand">
+          <input
+            id="shipping-fold-default"
+            type="number"
+            min="0"
+            step="0.5"
+            inputMode="decimal"
+            value={foldDefault}
+            onChange={(event) => setFoldDefault(event.target.value)}
+            className="w-full bg-transparent text-navy outline-none"
+          />
+          <span className="text-sm text-navy-soft">ج.م</span>
+        </div>
+        <p className="mt-1.5 text-xs text-navy-soft">
+          تُملأ تلقائيًا في خانة «الشحن المضمّن» لكل منتج عند تفعيل «شحن مجاني».
+          لتطابق الفاتورة مع كل المحافظات اختر قيمة ≥ أعلى رسوم توصيل.
         </p>
       </div>
 

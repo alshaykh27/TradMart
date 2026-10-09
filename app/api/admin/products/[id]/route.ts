@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isUuid } from "@/lib/products/category";
-import { deriveSyncedPrice } from "@/lib/products/pricing";
+import { deriveSyncedPrice, MAX_SHIPPING_FOLD } from "@/lib/products/pricing";
+import { SETTINGS_ID } from "@/lib/settings";
 
 /**
  * PATCH /api/admin/products/[id] — publish toggle, commission edit, and the
@@ -44,6 +45,8 @@ export async function PATCH(
     is_published?: boolean;
     commission?: number | null;
     category_id?: string | null;
+    shipping_included?: boolean;
+    shipping_fold?: number | null;
     /** Server-derived only — never read from the request body. */
     price?: number;
   } = {};
@@ -94,11 +97,68 @@ export async function PATCH(
     }
   }
 
+  // --- "free shipping" fold (display-only, never touches price) -------------
+  if ("shippingIncluded" in body) {
+    if (typeof body.shippingIncluded !== "boolean") {
+      return NextResponse.json(
+        { ok: false, error: "قيمة shippingIncluded غير صالحة" },
+        { status: 422 },
+      );
+    }
+    update.shipping_included = body.shippingIncluded;
+  }
+
+  if ("shippingFold" in body) {
+    const fold = body.shippingFold;
+    if (fold === null) {
+      update.shipping_fold = null;
+    } else if (typeof fold === "number" && Number.isFinite(fold)) {
+      if (fold < 0 || fold > MAX_SHIPPING_FOLD) {
+        return NextResponse.json(
+          { ok: false, error: "الشحن المضمّن خارج النطاق" },
+          { status: 422 },
+        );
+      }
+      update.shipping_fold = Math.round(fold * 100) / 100;
+    } else {
+      return NextResponse.json(
+        { ok: false, error: "الشحن المضمّن غير صالح" },
+        { status: 422 },
+      );
+    }
+  }
+
   if (Object.keys(update).length === 0) {
     return NextResponse.json({ ok: false, error: "لا شيء لتحديثه" }, { status: 422 });
   }
 
   const admin = createAdminClient();
+
+  // The fold and the toggle must travel together: enabling without a value in
+  // the body resolves the flat default from settings; disabling always clears
+  // whatever fold was stored. Either way `price` is never part of this — the
+  // fold exists only in the two display columns.
+  if ("shipping_included" in update) {
+    if (update.shipping_included) {
+      if (update.shipping_fold == null) {
+        const { data: settings } = await admin
+          .from("settings")
+          .select("shipping_fold_default")
+          .eq("id", SETTINGS_ID)
+          .maybeSingle();
+        const fallback = Number(settings?.shipping_fold_default);
+        if (!Number.isFinite(fallback) || fallback <= 0) {
+          return NextResponse.json(
+            { ok: false, error: "حدّد قيمة الشحن المضمّن أو اضبط الافتراضي في الإعدادات" },
+            { status: 422 },
+          );
+        }
+        update.shipping_fold = Math.round(fallback * 100) / 100;
+      }
+    } else {
+      update.shipping_fold = null;
+    }
+  }
 
   // Re-price whenever the commission changes. cost_price is the only input the
   // derivation needs, so it is read first rather than trusted from the body.
@@ -131,7 +191,7 @@ export async function PATCH(
     .update(update)
     .eq("id", id)
     .select(
-      "id, name, price, cost_price, commission, is_published, status, safka_product_id, image_url, stock, source, category_id",
+      "id, name, price, cost_price, commission, is_published, status, safka_product_id, image_url, stock, source, category_id, shipping_included, shipping_fold",
     )
     .maybeSingle();
 

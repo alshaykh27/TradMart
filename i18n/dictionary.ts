@@ -71,6 +71,7 @@ export type Dictionary = {
     newBadge: string;
     addToCart: string;
     orderNow: string;
+    freeShipping: string;
     related: string;
     delivery: {
       title: string;

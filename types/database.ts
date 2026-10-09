@@ -47,6 +47,15 @@ export type Database = {
           // for synced AND manual products. Safka writers must never include it
           // in their update payloads or a sync would wipe the assignment.
           category_id: string | null;
+          // "Free shipping" fold: when true the storefront shows price =
+          // products.price + shipping_fold and the cart shows 0 shipping while
+          // every line is folded. Display-only — orders, the Safka payload and
+          // margin math keep using `price` and the real governorate fee.
+          shipping_included: boolean;
+          // The merchant's flat EGP assumption folded into the displayed price,
+          // seeded from shipping_fold_default (85 = Cairo's fee). Null when not
+          // included. NOT the per-governorate fee — a single display constant.
+          shipping_fold: number | null;
           created_at: string;
           updated_at: string;
         };
@@ -70,6 +79,8 @@ export type Database = {
           safka_suggested_commission?: number | null;
           source?: "safka" | "manual";
           category_id?: string | null;
+          shipping_included?: boolean;
+          shipping_fold?: number | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -92,6 +103,8 @@ export type Database = {
           safka_suggested_commission?: number | null;
           source?: "safka" | "manual";
           category_id?: string | null;
+          shipping_included?: boolean;
+          shipping_fold?: number | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -261,6 +274,8 @@ export type Database = {
           id: string;
           store_name: string;
           shipping_markup: number;
+          /** Flat EGP fold prefilled when a product is marked "free shipping". */
+          shipping_fold_default: number;
           /** Public. Renamed from facebook_pixel_id in Phase 8. */
           meta_pixel_id: string | null;
           /** Server-only. Never leaves the server. */
@@ -276,6 +291,7 @@ export type Database = {
           id?: string;
           store_name?: string;
           shipping_markup?: number;
+          shipping_fold_default?: number;
           meta_pixel_id?: string | null;
           meta_capi_token?: string | null;
           tiktok_pixel_id?: string | null;
@@ -287,6 +303,7 @@ export type Database = {
           id?: string;
           store_name?: string;
           shipping_markup?: number;
+          shipping_fold_default?: number;
           meta_pixel_id?: string | null;
           meta_capi_token?: string | null;
           tiktok_pixel_id?: string | null;

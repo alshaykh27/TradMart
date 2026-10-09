@@ -77,6 +77,7 @@ export const en: Dictionary = {
     newBadge: "New",
     addToCart: "Add to cart",
     orderNow: "Order now",
+    freeShipping: "Free shipping",
     related: "You may also like",
     delivery: {
       title: "Delivery info",

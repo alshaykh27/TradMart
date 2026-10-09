@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/components/cart/CartProvider";
 import { createClient } from "@/lib/supabase/client";
 import { trackMarketingEvent } from "@/lib/marketing/browser";
+import { allLinesFolded, shippingFoldApplied, storefrontPrice } from "@/lib/products/pricing";
 import type { Dictionary } from "@/i18n";
 
 type GovernorateOption = {
@@ -29,6 +30,9 @@ type LineProduct = {
   price: number;
   image_url: string | null;
   stock: number | null;
+  /** "Free shipping" fold columns, read with the base price for the rule. */
+  shipping_included: boolean;
+  shipping_fold: number | null;
 };
 
 type CheckoutForm = {
@@ -78,7 +82,7 @@ export default function CartView({ dict }: { dict: Dictionary }) {
     const supabase = createClient();
     supabase
       .from("products")
-      .select("id, name, price, image_url, stock")
+      .select("id, name, price, image_url, stock, shipping_included, shipping_fold")
       .eq("is_published", true)
       .in("id", ids)
       .then(({ data, error }) => {
@@ -145,15 +149,29 @@ export default function CartView({ dict }: { dict: Dictionary }) {
           const product = productById.get(item.productId);
           if (!product) return null;
           const price = Number(product.price);
+          // Display price: base + folded shipping. The ORDER the customer
+          // places still prices from the base — the fold only changes what the
+          // cart and leader display.
+          const displayPrice = storefrontPrice(
+            price,
+            product.shipping_included,
+            product.shipping_fold,
+          );
           return {
             ...item,
             ...product,
-            lineTotal: price * item.qty,
+            displayPrice,
+            lineTotal: displayPrice * item.qty,
           };
         })
         .filter((line): line is NonNullable<typeof line> => line !== null),
     [items, productById],
   );
+
+  // "Free shipping" is all-or-nothing per the merchant's rule: the cart shows
+  // 0 shipping ONLY while every line is folded. A single non-folded item brings
+  // the real per-governorate fee back.
+  const shippingFree = allLinesFolded(lines.map((line) => line.shipping_included));
 
   const unavailable = useMemo(
     () =>
@@ -175,10 +193,13 @@ export default function CartView({ dict }: { dict: Dictionary }) {
     (governorate) => governorate.governorate_id === form.shippingGovernorate,
   );
   const shippingEstimate = selectedGovernorate?.safka_shipping_fee ?? 0;
-  const formattedShipping = shippingEstimate.toLocaleString("ar-EG", {
+  // Free shipping (all lines folded) is independent of the governorate: show it
+  // right away instead of the "—" placeholder the pick still triggers today.
+  const shippingCharge = shippingFree ? 0 : shippingEstimate;
+  const formattedShipping = shippingCharge.toLocaleString("ar-EG", {
     maximumFractionDigits: 2,
   });
-  const formattedTotal = (subtotal + shippingEstimate).toLocaleString("ar-EG", {
+  const formattedTotal = (subtotal + shippingCharge).toLocaleString("ar-EG", {
     maximumFractionDigits: 2,
   });
 
@@ -328,7 +349,14 @@ export default function CartView({ dict }: { dict: Dictionary }) {
             {items.map((item) => {
               const product = productById.get(item.productId);
               const isUnavailable = !product || (product.stock ?? 0) <= 0;
-              const lineTotal = product ? Number(product.price) * item.qty : 0;
+              const folded = product ? shippingFoldApplied(product.shipping_included, product.shipping_fold) : 0;
+              const lineTotal = product
+                ? storefrontPrice(
+                    Number(product.price),
+                    product.shipping_included,
+                    product.shipping_fold,
+                  ) * item.qty
+                : 0;
               return (
                 <motion.li
                   key={item.productId}
@@ -407,6 +435,11 @@ export default function CartView({ dict }: { dict: Dictionary }) {
                             <span className="ms-1 text-[11px] font-medium text-slate-500">
                               {dict.products.currency}
                             </span>
+                            {folded > 0 ? (
+                              <span className="ms-1.5 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">
+                                {dict.products.freeShipping}
+                              </span>
+                            ) : null}
                           </>
                         ) : (
                           <span className="font-semibold text-slate-400">{dict.cart.loading}</span>
@@ -436,16 +469,18 @@ export default function CartView({ dict }: { dict: Dictionary }) {
           </div>
           <div className="mt-2 flex items-center justify-between gap-4">
             <span className="text-sm font-bold text-slate-700">{dict.cart.shipping}</span>
-            <span className="text-sm font-extrabold text-navy">
-              {selectedGovernorate ? (
-                <>
-                  {formattedShipping}
-                  <span className="ms-1 text-xs font-medium text-slate-500">{dict.products.currency}</span>
-                </>
-              ) : (
-                <span className="font-semibold text-slate-400">—</span>
-              )}
-            </span>
+            {shippingFree ? (
+              <span className="text-sm font-extrabold text-emerald-700">
+                {dict.products.freeShipping}
+              </span>
+            ) : selectedGovernorate ? (
+              <span className="text-sm font-extrabold text-navy">
+                {formattedShipping}
+                <span className="ms-1 text-xs font-medium text-slate-500">{dict.products.currency}</span>
+              </span>
+            ) : (
+              <span className="font-semibold text-slate-400">—</span>
+            )}
           </div>
           <div className="mt-3 flex items-center justify-between gap-4 border-t border-slate-100 pt-3">
             <span className="text-sm font-bold text-slate-700">{dict.cart.total}</span>

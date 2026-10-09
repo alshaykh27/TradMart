@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { displayPrice } from "@/lib/products/pricing";
+import { displayPrice, storefrontPrice } from "@/lib/products/pricing";
 import {
   ALLOWED_IMAGE_TYPES,
   MANUAL_MAX_IMAGES,
@@ -26,6 +26,8 @@ export type ManualProductValues = {
   stock: string;
   isPublished: boolean;
   categoryId: string;
+  shippingIncluded: boolean;
+  shippingFold: string;
 };
 
 export type ManualProductSeed = {
@@ -38,6 +40,8 @@ export type ManualProductSeed = {
   stock: number;
   is_published: boolean;
   category_id?: string | null;
+  shipping_included?: boolean;
+  shipping_fold?: number | null;
 };
 
 const EMPTY: ManualProductValues = {
@@ -49,6 +53,8 @@ const EMPTY: ManualProductValues = {
   stock: "0",
   isPublished: false,
   categoryId: "",
+  shippingIncluded: false,
+  shippingFold: "",
 };
 
 function seedValues(seed: ManualProductSeed | null): ManualProductValues {
@@ -65,6 +71,8 @@ function seedValues(seed: ManualProductSeed | null): ManualProductValues {
     stock: String(seed.stock),
     isPublished: seed.is_published,
     categoryId: seed.category_id ?? "",
+    shippingIncluded: seed.shipping_included === true,
+    shippingFold: seed.shipping_fold == null ? "" : String(seed.shipping_fold),
   };
 }
 
@@ -98,6 +106,11 @@ export default function ManualProductForm({
   const [uploading, setUploading] = useState(false);
 
   const previewPrice = displayPrice(toNumber(values.costPrice), toNumber(values.commission));
+  const storefrontPriceDisplay = storefrontPrice(
+    previewPrice,
+    values.shippingIncluded,
+    toNumber(values.shippingFold),
+  );
   const imageCount = values.images
     .split("\n")
     .map((line) => line.trim())
@@ -292,11 +305,44 @@ export default function ManualProductForm({
       </div>
 
       <p className="rounded-2xl bg-brand-soft px-4 py-3 text-sm text-navy">
-        سعر العرض للعميل = التكلفة + العمولة · المعروض الآن:{" "}
+        سعر العرض للعميل = التكلفة + العمولة
+        {values.shippingIncluded ? " + الشحن المضمّن" : ""} · المعروض الآن:{" "}
         <span className="font-extrabold text-brand">
-          {previewPrice.toLocaleString("ar-EG", { maximumFractionDigits: 2 })} ج.م
+          {storefrontPriceDisplay.toLocaleString("ar-EG", { maximumFractionDigits: 2 })} ج.م
         </span>
+        {values.shippingIncluded ? " — «شحن مجاني»" : ""}
       </p>
+
+      <div className="rounded-2xl border border-navy/10 bg-slate-50/60 p-3">
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-navy">
+          <input
+            type="checkbox"
+            checked={values.shippingIncluded}
+            onChange={(event) => update("shippingIncluded", event.target.checked)}
+            className="size-4 accent-brand"
+          />
+          تضمين الشحن في السعر — «شحن مجاني»
+        </label>
+        <div className="mt-2 flex items-center gap-1 rounded-2xl border border-navy/15 bg-white px-4 py-2.5 focus-within:border-brand">
+          <input
+            id="manual-shipping-fold"
+            type="number"
+            min="0"
+            step="0.01"
+            inputMode="decimal"
+            value={values.shippingFold}
+            onChange={(event) => update("shippingFold", event.target.value)}
+            disabled={!values.shippingIncluded}
+            placeholder="قيمة تضمين الشحن (مثال: 85)"
+            className="w-full bg-transparent text-sm text-navy outline-none disabled:opacity-40"
+          />
+          <span className="text-xs text-navy-soft">ج.م</span>
+        </div>
+        <p className="mt-1.5 text-xs text-navy-soft">
+          تُضاف على السعر المعروض فقط، ولا تُغيّر الطلب أو الفاتورة — الشحن يظهر
+          مجانًا في السلة ما دامت كل المنتجات مضمّنة.
+        </p>
+      </div>
 
       <div className="flex flex-wrap items-end gap-4">
         <div className="w-40">
