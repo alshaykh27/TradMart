@@ -164,6 +164,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <OrderNowButton
                   productId={product.id}
                   dict={dict}
+                  mode="buy"
                   full={false}
                   productName={product.name}
                   price={Number(product.price)}
@@ -171,6 +172,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <OrderNowButton
                   productId={product.id}
                   dict={dict}
+                  mode="add"
                   variant="ghost"
                   full={false}
                   productName={product.name}
@@ -302,6 +304,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <OrderNowButton
               productId={product.id}
               dict={dict}
+              mode="buy"
               full
               productName={product.name}
               price={Number(product.price)}

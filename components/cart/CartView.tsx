@@ -211,6 +211,20 @@ export default function CartView({ dict }: { dict: Dictionary }) {
     });
   }, [items.length, lines, subtotal, count]);
 
+  // "اطلب الآن" navigates here with #checkout. On mobile the line items sit
+  // above the form, so once they finish loading (the form only exists after
+  // that) pull it into view. On desktop the form is already beside the lines,
+  // so leave the scroll alone.
+  const checkoutJumped = useRef(false);
+  useEffect(() => {
+    if (checkoutJumped.current || items.length === 0 || lines.length === 0) return;
+    if (typeof window === "undefined" || window.location.hash !== "#checkout") return;
+    checkoutJumped.current = true;
+    if (!window.matchMedia("(min-width: 1024px)").matches) {
+      document.getElementById("checkout")?.scrollIntoView({ block: "start" });
+    }
+  }, [items.length, lines.length]);
+
   function placeOrder() {
     startTransition(async () => {
       setError(null);
@@ -560,10 +574,11 @@ function CheckoutForm({
 
   return (
     <motion.aside
+      id="checkout"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: 0.1 }}
-      className="h-fit rounded-card border border-slate-200/80 bg-white p-6 shadow-lift lg:sticky lg:top-28"
+      className="h-fit scroll-mt-24 rounded-card border border-slate-200/80 bg-white p-6 shadow-lift lg:sticky lg:top-28"
     >
       <h2 className="text-lg font-extrabold text-navy">{dict.checkout.title}</h2>
       <p className="mt-1 text-sm leading-6 text-slate-500">{dict.checkout.subtitle}</p>

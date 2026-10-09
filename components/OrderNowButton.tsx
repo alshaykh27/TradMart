@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartProvider";
 import { trackMarketingEvent } from "@/lib/marketing/browser";
 import type { Dictionary } from "@/i18n";
@@ -10,6 +11,7 @@ export default function OrderNowButton({
   dict,
   variant = "primary",
   full = false,
+  mode = "buy",
   productName,
   price,
 }: {
@@ -17,6 +19,12 @@ export default function OrderNowButton({
   dict: Dictionary;
   variant?: "primary" | "ghost";
   full?: boolean;
+  /**
+   * "buy" (the default) is the express path: add the product then jump the
+   * customer straight to the cart's checkout form. "add" only puts the product
+   * in the cart and stays put.
+   */
+  mode?: "add" | "buy";
   /**
    * Optional product facts for the AddToCart event. The detail page passes
    * them; anywhere else (e.g. the sticky bar without props) the event still
@@ -26,6 +34,9 @@ export default function OrderNowButton({
   price?: number;
 }) {
   const { add } = useCart();
+  const router = useRouter();
+
+  const isBuy = mode === "buy";
 
   function handleClick() {
     add(productId, 1);
@@ -35,6 +46,9 @@ export default function OrderNowButton({
       value: typeof price === "number" ? price : null,
       numItems: 1,
     });
+    // "اطلب الآن" goes one step further than a plain add: land the customer on
+    // the checkout form so they can complete the order without another click.
+    if (isBuy) router.push("/cart#checkout");
   }
 
   return (
@@ -52,7 +66,7 @@ export default function OrderNowButton({
             }`
       }
     >
-      {variant === "primary" ? dict.products.orderNow : dict.products.addToCart}
+      {isBuy ? dict.products.orderNow : dict.products.addToCart}
     </motion.button>
   );
 }
