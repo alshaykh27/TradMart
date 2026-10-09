@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sanitizeHtmlDescription } from "@/lib/sanitize";
 import { buildManualProduct } from "@/lib/admin/manual-product";
+import { isMissingFoldColumns, withoutFoldKeys } from "@/lib/products/fold-columns";
 
 /**
  * POST /api/admin/products/manual — creates a product by hand.
@@ -30,11 +31,28 @@ export async function POST(request: Request) {
   }
 
   const admin = createAdminClient();
-  const { data, error } = await admin
+  const selectColumns =
+    "id, name, price, cost_price, commission, stock, is_published, status, source, category_id";
+
+  let payload = built.value;
+  let result = await admin
     .from("products")
-    .insert(built.value)
-    .select("id, name, price, cost_price, commission, stock, is_published, status, source, category_id")
+    .insert(payload)
+    .select(selectColumns)
     .single();
+
+  if (isMissingFoldColumns(result.error)) {
+    // The fold columns are not in the schema yet: write the product without
+    // them so manual products can still be created on a pre-migration project.
+    payload = withoutFoldKeys(payload);
+    result = await admin
+      .from("products")
+      .insert(payload)
+      .select(selectColumns)
+      .single();
+  }
+
+  const { data, error } = result;
 
   if (error || !data) {
     return NextResponse.json(

@@ -10,6 +10,7 @@ import TrackViewContent from "@/components/marketing/TrackViewContent";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeHtmlDescription } from "@/lib/sanitize";
 import { shippingFoldApplied, storefrontPrice } from "@/lib/products/pricing";
+import { withFoldFallback } from "@/lib/products/fold-columns";
 import { defaultLocale, getDictionary } from "@/i18n";
 
 type ProductPageProps = PageProps<"/products/[id]">;
@@ -61,12 +62,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const dict = getDictionary(defaultLocale);
   const client = await createClient();
 
-  const { data: product, error } = await client
-    .from("products")
-    .select("id, name, description, price, image_url, stock, is_published, images, variants, updated_at, shipping_included, shipping_fold")
-    .eq("id", id)
-    .eq("is_published", true)
-    .maybeSingle();
+  const { data: product, error } = await withFoldFallback(
+    () =>
+      client
+        .from("products")
+        .select("id, name, description, price, image_url, stock, is_published, images, variants, updated_at, shipping_included, shipping_fold")
+        .eq("id", id)
+        .eq("is_published", true)
+        .maybeSingle(),
+    () =>
+      client
+        .from("products")
+        .select("id, name, description, price, image_url, stock, is_published, images, variants, updated_at")
+        .eq("id", id)
+        .eq("is_published", true)
+        .maybeSingle(),
+  );
 
   if (error || !product) {
     notFound();
@@ -98,13 +109,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ? (product.variants as unknown as VariantLike[])
       : [];
 
-  const { data: relatedData } = await client
-    .from("products")
-    .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
-    .eq("is_published", true)
-    .neq("id", id)
-    .order("updated_at", { ascending: false })
-    .limit(4);
+  const { data: relatedData } = await withFoldFallback(
+    () =>
+      client
+        .from("products")
+        .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
+        .eq("is_published", true)
+        .neq("id", id)
+        .order("updated_at", { ascending: false })
+        .limit(4),
+    () =>
+      client
+        .from("products")
+        .select("id, name, price, image_url, stock, updated_at")
+        .eq("is_published", true)
+        .neq("id", id)
+        .order("updated_at", { ascending: false })
+        .limit(4),
+  );
 
   const related = (relatedData ?? []).map((item) => ({
     ...item,

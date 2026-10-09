@@ -9,6 +9,7 @@ import { useCart } from "@/components/cart/CartProvider";
 import { createClient } from "@/lib/supabase/client";
 import { trackMarketingEvent } from "@/lib/marketing/browser";
 import { allLinesFolded, shippingFoldApplied, storefrontPrice } from "@/lib/products/pricing";
+import { withFoldFallback } from "@/lib/products/fold-columns";
 import type { Dictionary } from "@/i18n";
 
 type GovernorateOption = {
@@ -80,16 +81,24 @@ export default function CartView({ dict }: { dict: Dictionary }) {
     if (ids.length === 0) return;
 
     const supabase = createClient();
-    supabase
-      .from("products")
-      .select("id, name, price, image_url, stock, shipping_included, shipping_fold")
-      .eq("is_published", true)
-      .in("id", ids)
-      .then(({ data, error }) => {
-        if (cancelled) return;
-        setProducts(error ? [] : (data ?? []));
-        setLoadedKey(idsKey);
-      });
+    withFoldFallback(
+      () =>
+        supabase
+          .from("products")
+          .select("id, name, price, image_url, stock, shipping_included, shipping_fold")
+          .eq("is_published", true)
+          .in("id", ids),
+      () =>
+        supabase
+          .from("products")
+          .select("id, name, price, image_url, stock")
+          .eq("is_published", true)
+          .in("id", ids),
+    ).then(({ data, error }) => {
+      if (cancelled) return;
+      setProducts(error ? [] : (data ?? []));
+      setLoadedKey(idsKey);
+    });
 
     return () => {
       cancelled = true;

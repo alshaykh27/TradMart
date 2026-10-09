@@ -3,6 +3,7 @@ import {
   createAdminClient,
 } from "@/lib/supabase/admin";
 import { SETTINGS_ID } from "@/lib/settings";
+import { withFoldFallback } from "@/lib/products/fold-columns";
 import SettingsForm from "@/components/admin/SettingsForm";
 
 export const metadata: Metadata = {
@@ -12,11 +13,20 @@ export const metadata: Metadata = {
 
 export default async function AdminSettingsPage() {
   const admin = createAdminClient();
-  const { data } = await admin
-    .from("settings")
-    .select("shipping_markup, shipping_fold_default")
-    .eq("id", SETTINGS_ID)
-    .maybeSingle();
+  const { data } = await withFoldFallback(
+    () =>
+      admin
+        .from("settings")
+        .select("shipping_markup, shipping_fold_default")
+        .eq("id", SETTINGS_ID)
+        .maybeSingle(),
+    () =>
+      admin
+        .from("settings")
+        .select("shipping_markup")
+        .eq("id", SETTINGS_ID)
+        .maybeSingle(),
+  );
 
   const markup = Number(data?.shipping_markup ?? 0);
   const foldDefault = Number(data?.shipping_fold_default ?? 85);

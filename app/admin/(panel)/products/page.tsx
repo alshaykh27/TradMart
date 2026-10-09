@@ -4,6 +4,7 @@ import AddManualProduct from "@/components/admin/AddManualProduct";
 import AdminProductList from "@/components/admin/AdminProductList";
 import type { CategoryOption } from "@/lib/products/category";
 import { buildProductSearchOrFilter } from "@/lib/products/category";
+import { withFoldFallback } from "@/lib/products/fold-columns";
 
 export const metadata: Metadata = {
   title: "المنتجات",
@@ -61,37 +62,72 @@ export default async function AdminProductsPage({
       ? categories.find((option) => option.slug === category)?.id ?? null
       : null;
 
-  let query = admin
-    .from("products")
-    .select(
-      "id, name, description, price, cost_price, commission, is_published, status, safka_product_id, image_url, images, stock, source, category_id, safka_suggested_price, safka_suggested_commission, shipping_included, shipping_fold",
-      { count: "exact" },
-    )
-    .order("is_published", { ascending: false })
-    .order("created_at", { ascending: false });
-
-  if (source) {
-    query = query.eq("source", source);
-  }
-
-  if (category === "none") {
-    query = query.is("category_id", null);
-  } else if (categoryId) {
-    query = query.eq("category_id", categoryId);
-  }
-
-  if (q) {
-    // `.or()` takes a raw PostgREST filter string, so the term is validated and
-    // its LIKE wildcards escaped by the builder. An unexpressible term (e.g.
-    // one carrying `,` or `.`) degrades to "no filter" rather than erroring.
-    const searchFilter = buildProductSearchOrFilter(q);
-    if (searchFilter) {
-      query = query.or(searchFilter);
-    }
-  }
-
   const from = (page - 1) * LIMIT;
-  const { data: products, error, count } = await query.range(from, from + LIMIT - 1);
+
+  const { data: products, error, count } = await withFoldFallback(
+    () => {
+      let query = admin
+        .from("products")
+        .select(
+          "id, name, description, price, cost_price, commission, is_published, status, safka_product_id, image_url, images, stock, source, category_id, safka_suggested_price, safka_suggested_commission, shipping_included, shipping_fold",
+          { count: "exact" },
+        )
+        .order("is_published", { ascending: false })
+        .order("created_at", { ascending: false });
+
+      if (source) {
+        query = query.eq("source", source);
+      }
+
+      if (category === "none") {
+        query = query.is("category_id", null);
+      } else if (categoryId) {
+        query = query.eq("category_id", categoryId);
+      }
+
+      if (q) {
+        // `.or()` takes a raw PostgREST filter string, so the term is validated
+        // and its LIKE wildcards escaped by the builder. An unexpressible term
+        // (e.g. one carrying `,` or `.`) degrades to "no filter" rather than
+        // erroring.
+        const searchFilter = buildProductSearchOrFilter(q);
+        if (searchFilter) {
+          query = query.or(searchFilter);
+        }
+      }
+
+      return query.range(from, from + LIMIT - 1);
+    },
+    () => {
+      let query = admin
+        .from("products")
+        .select(
+          "id, name, description, price, cost_price, commission, is_published, status, safka_product_id, image_url, images, stock, source, category_id, safka_suggested_price, safka_suggested_commission",
+          { count: "exact" },
+        )
+        .order("is_published", { ascending: false })
+        .order("created_at", { ascending: false });
+
+      if (source) {
+        query = query.eq("source", source);
+      }
+
+      if (category === "none") {
+        query = query.is("category_id", null);
+      } else if (categoryId) {
+        query = query.eq("category_id", categoryId);
+      }
+
+      if (q) {
+        const searchFilter = buildProductSearchOrFilter(q);
+        if (searchFilter) {
+          query = query.or(searchFilter);
+        }
+      }
+
+      return query.range(from, from + LIMIT - 1);
+    },
+  );
 
   // The real per-governorate Safka fees, so each row can show the fold against
   // the actual spread (min / max / typical) and warn when it sits below the

@@ -4,6 +4,11 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { SETTINGS_ID } from "@/lib/settings";
 import type { TablesUpdate } from "@/types/database";
 import {
+  isMissingFoldColumns,
+  withFoldFallback,
+  withoutFoldKeys,
+} from "@/lib/products/fold-columns";
+import {
   cleanPixelId,
   isValidAccessToken,
   isValidMetaPixelId,
@@ -140,14 +145,44 @@ export async function PATCH(request: Request) {
   }
 
   const admin = createAdminClient();
-  const { data, error } = await admin
-    .from("settings")
-    .update(update)
-    .eq("id", SETTINGS_ID)
-    .select("shipping_markup, shipping_fold_default, meta_pixel_id, tiktok_pixel_id")
-    .maybeSingle();
 
-  if (error || !data) {
+  // The write and the read are separate on purpose: an `update().select()` with
+  // the fold column still errors 42703 when the column is absent, so the write
+  // runs bare (its fold entry stripped on that error) and the typed read-back
+  // uses withFoldFallback.
+  let payload = update;
+  let writeError = (await admin.from("settings").update(payload).eq("id", SETTINGS_ID)).error;
+
+  if (isMissingFoldColumns(writeError)) {
+    // The flat fold default column is not in the schema yet: persist the rest
+    // (markup + pixels) without it so the settings form keeps working.
+    payload = withoutFoldKeys(payload);
+    if (Object.keys(payload).length === 0) {
+      return NextResponse.json({ ok: true, tokens: { metaCapiToken: false, tiktokApiToken: false } });
+    }
+    writeError = (await admin.from("settings").update(payload).eq("id", SETTINGS_ID)).error;
+  }
+
+  if (writeError) {
+    return NextResponse.json({ ok: false, error: "تعذّر الحفظ" }, { status: 502 });
+  }
+
+  const { data } = await withFoldFallback(
+    () =>
+      admin
+        .from("settings")
+        .select("shipping_markup, shipping_fold_default, meta_pixel_id, tiktok_pixel_id")
+        .eq("id", SETTINGS_ID)
+        .maybeSingle(),
+    () =>
+      admin
+        .from("settings")
+        .select("shipping_markup, meta_pixel_id, tiktok_pixel_id")
+        .eq("id", SETTINGS_ID)
+        .maybeSingle(),
+  );
+
+  if (!data) {
     return NextResponse.json({ ok: false, error: "تعذّر الحفظ" }, { status: 502 });
   }
 
@@ -164,7 +199,7 @@ export async function PATCH(request: Request) {
   return NextResponse.json({
     ok: true,
     shippingMarkup: Number(data.shipping_markup),
-    shippingFoldDefault: Number(data.shipping_fold_default),
+    shippingFoldDefault: data.shipping_fold_default == null ? 85 : Number(data.shipping_fold_default),
     saved: {
       metaPixelId: data.meta_pixel_id ?? null,
       tiktokPixelId: data.tiktok_pixel_id ?? null,

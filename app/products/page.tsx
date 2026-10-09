@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { createClient } from "@/lib/supabase/server";
+import { withFoldFallback } from "@/lib/products/fold-columns";
 import { defaultLocale, getDictionary } from "@/i18n";
 import { isValidSlug, escapeLikePattern } from "@/lib/products/category";
 
@@ -46,25 +47,49 @@ export default async function ProductsPage({
 
   // The filter runs in the database, after the slug has been resolved to a real
   // id. An unknown slug is treated as "no filter" so a stale bookmark still
-  // shows the shop instead of an empty listing.
-  let builder = client
-    .from("products")
-    .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
-    .eq("is_published", true)
-    .order("updated_at", { ascending: false });
+  // shows the shop instead of an empty listing. The chain is written twice —
+  // once with the fold columns and once without — so each Supabase query keeps
+  // its literal column list (and inferred row type); only the first is normally
+  // used.
+  const { data, error } = await withFoldFallback(
+    () => {
+      let builder = client
+        .from("products")
+        .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
+        .eq("is_published", true)
+        .order("updated_at", { ascending: false });
 
-  if (query) {
-    // `.ilike()` takes a single value (no filter grammar to break out of), but
-    // the LIKE wildcards are still neutralised so a search for "%" cannot turn
-    // into a match-everything scan.
-    builder = builder.ilike("name", `%${escapeLikePattern(query)}%`);
-  }
+      if (query) {
+        // `.ilike()` takes a single value (no filter grammar to break out of),
+        // but the LIKE wildcards are still neutralised so a search for "%"
+        // cannot turn into a match-everything scan.
+        builder = builder.ilike("name", `%${escapeLikePattern(query)}%`);
+      }
 
-  if (selectedCategory) {
-    builder = builder.eq("category_id", selectedCategory.id);
-  }
+      if (selectedCategory) {
+        builder = builder.eq("category_id", selectedCategory.id);
+      }
 
-  const { data, error } = await builder.limit(96);
+      return builder.limit(96);
+    },
+    () => {
+      let builder = client
+        .from("products")
+        .select("id, name, price, image_url, stock, updated_at")
+        .eq("is_published", true)
+        .order("updated_at", { ascending: false });
+
+      if (query) {
+        builder = builder.ilike("name", `%${escapeLikePattern(query)}%`);
+      }
+
+      if (selectedCategory) {
+        builder = builder.eq("category_id", selectedCategory.id);
+      }
+
+      return builder.limit(96);
+    },
+  );
   const products = (error ? [] : (data ?? [])).map((product) => ({
     ...product,
     isNew: daysSince(product.updated_at) <= 30,

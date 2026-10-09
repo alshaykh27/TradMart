@@ -8,6 +8,7 @@ import {
   PRODUCT_IMAGE_BUCKET,
 } from "@/lib/products/manual";
 import type { Tables } from "@/types/database";
+import { isMissingFoldColumns, withoutFoldKeys } from "@/lib/products/fold-columns";
 
 type AdminClient = ReturnType<typeof createAdminClient>;
 
@@ -95,13 +96,32 @@ export async function PUT(
 
   // source and safka_product_id are intentionally absent from the patch: a
   // manual product can neither become a Safka row nor gain a Safka id.
-  const { data, error } = await loaded.admin
+  let payload = built.value;
+  let result = await loaded.admin
     .from("products")
-    .update(built.value)
+    .update(payload)
     .eq("id", id)
     .eq("source", "manual")
     .select(SELECT_COLUMNS)
     .maybeSingle();
+
+  if (isMissingFoldColumns(result.error)) {
+    // The fold columns are not in the schema yet: write without them. A
+    // fold-only edit then has nothing left to write, so it is refused.
+    payload = withoutFoldKeys(payload);
+    if (Object.keys(payload).length === 0) {
+      return NextResponse.json({ ok: false, error: "لا شيء لتحديثه" }, { status: 422 });
+    }
+    result = await loaded.admin
+      .from("products")
+      .update(payload)
+      .eq("id", id)
+      .eq("source", "manual")
+      .select(SELECT_COLUMNS)
+      .maybeSingle();
+  }
+
+  const { data, error } = result;
 
   if (error || !data) {
     return NextResponse.json(

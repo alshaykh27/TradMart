@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import HeroEntrance from "@/components/home/HeroEntrance";
 import HeroVisual from "@/components/hero/HeroVisual";
 import { createClient } from "@/lib/supabase/server";
+import { withFoldFallback } from "@/lib/products/fold-columns";
 import { defaultLocale, getDictionary } from "@/i18n";
 
 function TrustIcon({ kind }: { kind: string }) {
@@ -93,12 +94,22 @@ export default async function Home() {
   );
 
   const [latestResult] = await Promise.all([
-    client
-      .from("products")
-      .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
-      .eq("is_published", true)
-      .order("updated_at", { ascending: false })
-      .limit(8),
+    withFoldFallback(
+      () =>
+        client
+          .from("products")
+          .select("id, name, price, image_url, stock, updated_at, shipping_included, shipping_fold")
+          .eq("is_published", true)
+          .order("updated_at", { ascending: false })
+          .limit(8),
+      () =>
+        client
+          .from("products")
+          .select("id, name, price, image_url, stock, updated_at")
+          .eq("is_published", true)
+          .order("updated_at", { ascending: false })
+          .limit(8),
+    ),
   ]);
 
   const products = (latestResult.data ?? []).map((product) => ({

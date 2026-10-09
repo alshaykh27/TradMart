@@ -3,6 +3,11 @@ import { isAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isUuid } from "@/lib/products/category";
 import { deriveSyncedPrice, MAX_SHIPPING_FOLD } from "@/lib/products/pricing";
+import {
+  isMissingFoldColumns,
+  withFoldFallback,
+  withoutFoldKeys,
+} from "@/lib/products/fold-columns";
 import { SETTINGS_ID } from "@/lib/settings";
 
 /**
@@ -141,13 +146,29 @@ export async function PATCH(
   if ("shipping_included" in update) {
     if (update.shipping_included) {
       if (update.shipping_fold == null) {
-        const { data: settings } = await admin
-          .from("settings")
-          .select("shipping_fold_default")
-          .eq("id", SETTINGS_ID)
-          .maybeSingle();
-        const fallback = Number(settings?.shipping_fold_default);
-        if (!Number.isFinite(fallback) || fallback <= 0) {
+        const { data: settings, error: settingsError } = await withFoldFallback(
+          () =>
+            admin
+              .from("settings")
+              .select("shipping_fold_default")
+              .eq("id", SETTINGS_ID)
+              .maybeSingle(),
+          () =>
+            admin
+              .from("settings")
+              .select("id, shipping_markup")
+              .eq("id", SETTINGS_ID)
+              .maybeSingle(),
+        );
+
+        // Before the fold migration lands there is no shipping_fold_default
+        // column, so the settings read returns 42703. Degrade to the same flat
+        // default the storefront uses; once the column exists the stored value
+        // applies and a missing/unset default stays an explicit refusal.
+        let fallback = Number(settings?.shipping_fold_default);
+        if (isMissingFoldColumns(settingsError)) {
+          fallback = 85;
+        } else if (!Number.isFinite(fallback) || fallback <= 0) {
           return NextResponse.json(
             { ok: false, error: "حدّد قيمة الشحن المضمّن أو اضبط الافتراضي في الإعدادات" },
             { status: 422 },
@@ -186,16 +207,36 @@ export async function PATCH(
     update.price = price;
   }
 
-  const { data, error } = await admin
+  const fullColumns: string =
+    "id, name, price, cost_price, commission, is_published, status, safka_product_id, image_url, stock, source, category_id, shipping_included, shipping_fold";
+  const baseColumns: string =
+    "id, name, price, cost_price, commission, is_published, status, safka_product_id, image_url, stock, source, category_id";
+
+  let result = await admin
     .from("products")
     .update(update)
     .eq("id", id)
-    .select(
-      "id, name, price, cost_price, commission, is_published, status, safka_product_id, image_url, stock, source, category_id, shipping_included, shipping_fold",
-    )
+    .select(fullColumns)
     .maybeSingle();
 
-  if (error || !data) {
+  if (isMissingFoldColumns(result.error)) {
+    // The fold columns are not in the schema yet: run the same write against the
+    // base columns. A fold-only change then has nothing left to write, so it is
+    // refused rather than silently dropped.
+    const basePayload = withoutFoldKeys(update);
+    if (Object.keys(basePayload).length === 0) {
+      return NextResponse.json({ ok: false, error: "لا شيء لتحديثه" }, { status: 422 });
+    }
+    result = await admin
+      .from("products")
+      .update(basePayload)
+      .eq("id", id)
+      .select(baseColumns)
+      .maybeSingle();
+  }
+
+  const data = result.data;
+  if (result.error || !data) {
     return NextResponse.json({ ok: false, error: "المنتج غير موجود" }, { status: 404 });
   }
 
