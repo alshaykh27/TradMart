@@ -1,5 +1,6 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { normaliseSocialLinks, type SocialLinks } from "@/lib/social/links";
 
 /**
  * Reads storefront configuration from the single `settings` row.
@@ -34,4 +35,30 @@ export async function getShippingSettings(): Promise<OrderSettings> {
   return {
     shippingMarkup: Number(data.shipping_markup) || 0,
   };
+}
+
+/**
+ * Social/contact links for the storefront footer and the floating WhatsApp
+ * button (Phase 13). Never throws: an unreadable row — or a database that has
+ * not applied the Phase 13 migration yet — degrades to "no links" rather than
+ * taking the storefront down (same philosophy as getPublicMarketingConfig).
+ *
+ * The values are public by nature (they become hrefs), so nothing here is
+ * secret; the RLS-covered read still happens with the service-role client.
+ */
+export async function getSocialSettings(): Promise<SocialLinks> {
+  try {
+    const admin = createAdminClient();
+
+    const { data, error } = await admin
+      .from("settings")
+      .select("facebook_url, whatsapp_number")
+      .eq("id", SETTINGS_ID)
+      .maybeSingle();
+
+    if (error) return { facebookUrl: null, whatsappNumber: null };
+    return normaliseSocialLinks(data);
+  } catch {
+    return { facebookUrl: null, whatsappNumber: null };
+  }
 }

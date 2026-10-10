@@ -14,13 +14,20 @@ import {
   isValidMetaPixelId,
   isValidTikTokPixelId,
 } from "@/lib/marketing/config";
+import {
+  cleanFacebookUrl,
+  cleanWhatsAppNumber,
+  isMissingSocialColumns,
+  normaliseSocialLinks,
+} from "@/lib/social/links";
 
 /**
  * PATCH /api/admin/settings
  *
- * Two independent concerns share this route because they share one row:
+ * Three independent concerns share this route because they share one row:
  *   - shipping_markup        (order totals)
  *   - the four marketing fields (pixels)
+ *   - facebook_url / whatsapp_number (public contact links, Phase 13)
  *
  * TOKEN SEMANTICS — this is the security-critical part.
  *
@@ -45,6 +52,8 @@ type MarketingBody = {
   tiktokPixelId?: unknown;
   tiktokApiToken?: unknown;
   clearTiktokApiToken?: unknown;
+  facebookUrl?: unknown;
+  whatsappNumber?: unknown;
 };
 
 export async function PATCH(request: Request) {
@@ -139,6 +148,33 @@ export async function PATCH(request: Request) {
     update.tiktok_api_token = token;
   }
 
+  // --- social / contact links (Phase 13) ----------------------------------
+  // Unlike the tokens these are public values, so an empty field legitimately
+  // means "clear the link": the cleaned result (including null) is written.
+  if (has("facebookUrl")) {
+    const raw = body.facebookUrl;
+    const cleaned = cleanFacebookUrl(raw);
+    if (raw !== null && raw !== undefined && String(raw).trim() !== "" && cleaned === null) {
+      return NextResponse.json(
+        { ok: false, error: "رابط فيسبوك غير صالح — استخدم رابطًا من facebook.com" },
+        { status: 422 },
+      );
+    }
+    update.facebook_url = cleaned;
+  }
+
+  if (has("whatsappNumber")) {
+    const raw = body.whatsappNumber;
+    const cleaned = cleanWhatsAppNumber(raw);
+    if (raw !== null && raw !== undefined && String(raw).trim() !== "" && cleaned === null) {
+      return NextResponse.json(
+        { ok: false, error: "رقم واتساب غير صالح" },
+        { status: 422 },
+      );
+    }
+    update.whatsapp_number = cleaned;
+  }
+
 // --- nothing to do ------------------------------------------------------
   if (Object.keys(update).length === 0) {
     return NextResponse.json({ ok: true, tokens: { metaCapiToken: false, tiktokApiToken: false } });
@@ -161,6 +197,19 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ ok: true, tokens: { metaCapiToken: false, tiktokApiToken: false } });
     }
     writeError = (await admin.from("settings").update(payload).eq("id", SETTINGS_ID)).error;
+  }
+
+  // The Phase 13 social columns are not in the schema yet: say so plainly
+  // instead of the generic 502, otherwise the admin would save "successfully"
+  // into a table that never received the value.
+  if (isMissingSocialColumns(writeError)) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "أعمدة التواصل غير موجودة في قاعدة البيانات — طبّق ترحيل phase13_social_links أولًا",
+      },
+      { status: 409 },
+    );
   }
 
   if (writeError) {
@@ -196,6 +245,16 @@ export async function PATCH(request: Request) {
   const storedMeta = typeof stored?.data?.meta_capi_token === "string" && stored.data.meta_capi_token.length > 0;
   const storedTiktok = typeof stored?.data?.tiktok_api_token === "string" && stored.data.tiktok_api_token.length > 0;
 
+  // Read back the social links through the same normalisation the storefront
+  // uses, so the form can swap its state for what was actually stored (a
+  // rejected URL comes back as null rather than echoing the bad input).
+  const socialRow = await admin
+    .from("settings")
+    .select("facebook_url, whatsapp_number")
+    .eq("id", SETTINGS_ID)
+    .maybeSingle();
+  const social = normaliseSocialLinks(socialRow.error ? null : socialRow.data);
+
   return NextResponse.json({
     ok: true,
     shippingMarkup: Number(data.shipping_markup),
@@ -203,6 +262,10 @@ export async function PATCH(request: Request) {
     saved: {
       metaPixelId: data.meta_pixel_id ?? null,
       tiktokPixelId: data.tiktok_pixel_id ?? null,
+    },
+    social: {
+      facebookUrl: social.facebookUrl,
+      whatsappNumber: social.whatsappNumber,
     },
     tokens: { metaCapiToken: storedMeta, tiktokApiToken: storedTiktok },
   });

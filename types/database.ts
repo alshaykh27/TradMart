@@ -284,6 +284,10 @@ export type Database = {
           tiktok_pixel_id: string | null;
           /** Server-only. Never leaves the server. */
           tiktok_api_token: string | null;
+          /** Public. Facebook page link rendered in the footer (Phase 13). */
+          facebook_url: string | null;
+          /** Public. WhatsApp number as typed; a wa.me link is derived from it. */
+          whatsapp_number: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -296,6 +300,8 @@ export type Database = {
           meta_capi_token?: string | null;
           tiktok_pixel_id?: string | null;
           tiktok_api_token?: string | null;
+          facebook_url?: string | null;
+          whatsapp_number?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -308,6 +314,8 @@ export type Database = {
           meta_capi_token?: string | null;
           tiktok_pixel_id?: string | null;
           tiktok_api_token?: string | null;
+          facebook_url?: string | null;
+          whatsapp_number?: string | null;
           created_at?: string;
           updated_at?: string;
         };

@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/admin/products", label: "المنتجات" },
   { href: "/admin/settings", label: "الإعدادات" },
   { href: "/admin/settings/marketing", label: "التسويق" },
+  { href: "/admin/settings/social", label: "التواصل" },
 ];
 
 export default function AdminNav() {
