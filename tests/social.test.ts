@@ -172,11 +172,26 @@ describe("storefront wiring", () => {
     assert.match(source, /if \(error\) return \{ facebookUrl: null, whatsappNumber: null \}/);
   });
 
-  it("the floating button only ever renders a derived wa.me link", async () => {
-    const source = await read("components/WhatsAppFab.tsx");
-    assert.match(source, /wa\.me|href=\{href\}/);
-    assert.match(source, /fixed bottom-20/);
-    assert.equal(/href="#/.test(source), false);
+  it("renders no floating button and no visible phone number text", async () => {
+    const source = await read("components/Footer.tsx");
+    assert.equal(/WhatsAppFab/.test(source), false, "the floating button must be gone");
+    assert.equal(/fixed bottom-/.test(source), false, "no fixed sticker in the footer tree");
+    assert.equal(
+      /\{social\.whatsappNumber\}/.test(source),
+      false,
+      "the raw number must never be rendered as text",
+    );
+    // The component itself is removed from the codebase, not merely unused.
+    await assert.rejects(read("components/WhatsAppFab.tsx"));
+  });
+
+  it("the footer links open in a new tab with the derived urls", async () => {
+    const source = await read("components/Footer.tsx");
+    assert.match(source, /whatsappChatLink\(social\.whatsappNumber\)/);
+    assert.match(source, /href=\{whatsappHref\}/);
+    assert.match(source, /href=\{link\.href\}/);
+    assert.match(source, /target="_blank"/);
+    assert.match(source, /rel="noopener noreferrer"/);
   });
 });
 

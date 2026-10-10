@@ -5,7 +5,6 @@ import type { Dictionary } from "@/i18n";
 import { getSocialSettings } from "@/lib/settings";
 import { whatsappChatLink } from "@/lib/social/links";
 import { FacebookIcon, WhatsAppIcon } from "@/components/icons";
-import WhatsAppFab from "@/components/WhatsAppFab";
 
 type SocialIconEntry = {
   label: string;
@@ -77,19 +76,11 @@ export default async function Footer({ dict }: { dict: Dictionary }) {
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={dict.footer.whatsapp}
               className="mt-4 inline-flex items-center gap-2 rounded-full bg-success/15 px-4 py-2 text-sm font-semibold text-success ring-1 ring-success/30 transition-colors hover:bg-success hover:text-white"
             >
               <WhatsAppIcon size={16} />
               {dict.footer.whatsapp}
-            </a>
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              dir="ltr"
-              className="mt-2 block text-sm font-semibold text-cream/70 transition-colors hover:text-brand"
-            >
-              {social.whatsappNumber}
             </a>
           </div>
         ) : null}
@@ -129,8 +120,6 @@ export default async function Footer({ dict }: { dict: Dictionary }) {
           </p>
         </div>
       </div>
-
-      {whatsappHref ? <WhatsAppFab href={whatsappHref} label={dict.footer.whatsapp} /> : null}
     </footer>
   );
 }
